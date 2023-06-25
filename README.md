@@ -1,5 +1,7 @@
 # README
 
+This app is created to practice my Ruby skills. Here I cover some features like creating dependencies and workout with them.
+
 This README would normally document whatever steps are necessary to get the
 application up and running.
 
