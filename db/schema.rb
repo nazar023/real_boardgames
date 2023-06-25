@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_06_25_142311) do
+ActiveRecord::Schema[7.0].define(version: 2023_06_25_161510) do
   create_table "games", force: :cascade do |t|
     t.string "name"
     t.text "desc"
@@ -28,5 +28,4 @@ ActiveRecord::Schema[7.0].define(version: 2023_06_25_142311) do
     t.index ["game_id"], name: "index_participants_on_game_id"
   end
 
-  add_foreign_key "participants", "games"
 end

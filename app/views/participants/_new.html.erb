@@ -1,0 +1,7 @@
+<%= form_with(model: [game, Participant.new]) do |form| %>
+  <div> <strong> Name </strong> <%= form.text_field :name%> </div>
+  <div> <strong> Number </strong> <%= form.text_field :number%> </div>
+    <div>
+    <%= form.submit %>
+  </div>
+<% end %>
