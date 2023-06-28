@@ -4,14 +4,17 @@
     <%= game.name %>
   </p>
 
-  <p>
-    <strong>Desc:</strong>
-    <%= game.desc %>
-  </p>
+  <% unless game.desc.empty? %>
+    <p>
+      <strong>Desc:</strong>
+      <%= game.desc %>
+    </p>
+  <% end %>
 
   <p>
     <strong>Members:</strong>
-    <%= game.members %>
+    <%= game.participants.length %>/<%= game.members %>
+
   </p>
 
 </div>

@@ -1,11 +1,4 @@
-<h2> Participants </h2>
-
-<div>
-    <%= render game.participants%>
-</div>
-
 <% if game.participants.length < game.members %>
+  <h2> Wanna join ? </h2>
   <%= render "participants/new", game: game%>
-<% else %>
-  <strong> Places sold out :( </strong>
 <% end %>
