@@ -23,6 +23,8 @@ class GamesController < ApplicationController
   def create
     @game = Game.new(game_params)
     @game.creator = current_user
+    @game.participants.new(name: @game.creator.username, number: @game.creator.number)
+
     respond_to do |format|
       if @game.save
         format.html { redirect_to game_url(@game), notice: "Game was successfully created." }
