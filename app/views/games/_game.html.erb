@@ -4,6 +4,11 @@
     <%= game.name %>
   </p>
 
+  <p>
+    <strong>Creator:</strong>
+    <%= game.creator.email %>
+  </p>
+
   <% unless game.desc.empty? %>
     <p>
       <strong>Desc:</strong>
@@ -14,7 +19,6 @@
   <p>
     <strong>Members:</strong>
     <%= game.participants.length %>/<%= game.members %>
-
   </p>
 
 </div>

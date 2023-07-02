@@ -1,6 +1,6 @@
 class GamesController < ApplicationController
+  before_action :authenticate_user!, only: %i[ new edit create update destroy ]
   before_action :set_game, only: %i[ show edit update destroy ]
-
   # GET /games or /games.json
   def index
     @games = Game.all
@@ -22,7 +22,7 @@ class GamesController < ApplicationController
   # POST /games or /games.json
   def create
     @game = Game.new(game_params)
-
+    @game.creator = current_user
     respond_to do |format|
       if @game.save
         format.html { redirect_to game_url(@game), notice: "Game was successfully created." }
