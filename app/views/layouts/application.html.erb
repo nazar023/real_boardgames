@@ -13,7 +13,7 @@
   <body>
     <header style="text-align:center;">
           <div>
-            <%= link_to image_tag('boardgamelogo.png', width: "150", height: "150"), games_path%>
+            <%= link_to image_tag('yellowboardgamelogo.png', width: "150", height: "150"), games_path%>
           </div>
         <% unless user_signed_in? %>
           <%= link_to "Log in", new_user_session_path %> /  <%= link_to "Sign up", new_user_registration_path %>

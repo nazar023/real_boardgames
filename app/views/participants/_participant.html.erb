@@ -1,3 +1,6 @@
 <div>
-  <%= participant.name%> - <%= participant.number%>
+  <% if @game.creator.number == participant.number%>
+   (crown)
+  <% end %>
+   <%= participant.name%> - <%= participant.number%>
 </div>

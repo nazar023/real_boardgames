@@ -4,14 +4,7 @@
 
 <div>
   <%= render @game %>
-    <% @game.participants.each do |participant|%>
-    <div>
-      <% if participant.number == @game.creator.number %>
-        (crown)
-      <% end %>
-      <%= participant.name %> - <%= participant.number %>
-    </div>
-    <% end %>
+  <%= render @game.participants%>
     <br/>
     <br/>
 
@@ -24,4 +17,8 @@
 <br/>
 <br/>
 
-<%= render "games/participants", game: @game%>
+<% if @game.participants.length < @game.members  %>
+  <%= render "games/participants", game: @game%>
+<% else %>
+  <h2> You're in, yay! </h2>
+<% end %>
