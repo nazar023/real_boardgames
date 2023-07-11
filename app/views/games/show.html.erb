@@ -9,16 +9,27 @@
     <br/>
 
   <div>
+  <% if policy(@game).update?%>
     <%= link_to "Edit this game", edit_game_path(@game) %> |
-    <%= link_to "Back to games", games_path %>
     <%= button_to "Destroy this game", @game, method: :delete %>
+  <% end %>
+    <%= link_to "Back to games", games_path %>
   </div>
 </div>
 <br/>
 <br/>
+<br/>
 
-<% if @game.participants.length < @game.members  %>
+<% if current_user.nil? && @game.participants.length < @game.members%>
   <%= render "games/participants", game: @game%>
-<% else %>
+<% elsif @game.participants.length >= @game.members%>
+  <h2> Competition is full</h2>
+<% elsif !Participant.all.ids.include?(current_user.id) %>
+  <%= render "games/participants", game: @game%>
+<% elsif current_user == @game.creator %>
+  <h2> You're creator! </h2>
+<% elsif @game.participants.all.ids.include?(current_user.id) %>
   <h2> You're in, yay! </h2>
+<% elsif Participant.all.ids.include?(current_user.id) %>
+  <h2> You're already participating somewhere </h2>
 <% end %>

@@ -11,4 +11,6 @@
   <% end %>
 </div>
 
-<%= link_to "New game", new_game_path %>
+<% unless !user_signed_in? || Participant.all.ids.include?(current_user.id) %>
+  <%= link_to "New game", new_game_path %>
+<% end %>

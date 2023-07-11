@@ -1,3 +1,7 @@
-  <h2> Wanna join ? </h2>
-  <%= render "participants/new", game: game%>
+  <% unless user_signed_in? %>
+    <h2> Wanna join ? </h2>
+    <%= render "participants/new", game: game%>
+  <% else %>
+    <%= render "participants/autorized", game: game%>
+  <% end %>
 

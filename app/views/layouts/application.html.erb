@@ -18,7 +18,11 @@
         <% unless user_signed_in? %>
           <%= link_to "Log in", new_user_session_path %> /  <%= link_to "Sign up", new_user_registration_path %>
         <% else %>
-          <%= current_user.email %> | <%= button_to "Exit", destroy_user_session_path, method: :delete %>
+          <%= current_user.email %>
+          <div>
+            Remember, you may participate only in one game!
+          </div>
+          <%= button_to "Exit", destroy_user_session_path, method: :delete %>
         <% end %>
     </header>
     <p class="notice"><%= notice %></p>
