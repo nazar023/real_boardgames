@@ -20,6 +20,11 @@
 <br/>
 <br/>
 
-<% if current_user.nil? || !@game.participants.where(number: current_user.number)%>
-  <%= render "games/participants", game: @game%>
+<% if @game.participants.length < @game.members && (current_user.nil? || @game.participants.where(number: current_user.number).empty?) %>
+    <%= render "games/participants", game: @game%>
 <% end %>
+
+<% if user_signed_in? && @game.participants.length < @game.members %>
+  <h2> Wanna add friend ? </h2>
+  <%= render "participants/new", game: @game%>
+<% end%>
