@@ -18,9 +18,17 @@
         <% unless user_signed_in? %>
           <%= link_to "Log in", new_user_session_path %> /  <%= link_to "Sign up", new_user_registration_path %>
         <% else %>
-          <%= current_user.email %>
           <div>
-            Remember, you may participate only in one game!
+            <% if current_user.avatar.attached? %>
+              <%= image_tag(current_user.avatar,
+                            style: "display: height: 50px;
+                                            width:50px;
+                                            border-radius: 50%;
+                                            object-fit: cover;")%>
+            <% end %>
+            <div>
+            <%= link_to current_user.email, edit_user_registration_path%>
+            </div>
           </div>
           <%= button_to "Exit", destroy_user_session_path, method: :delete %>
         <% end %>

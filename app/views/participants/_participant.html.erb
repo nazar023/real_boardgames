@@ -1,6 +1,18 @@
 <div>
+
   <% if @game.creator.number == participant.number%>
-   (crown)
+    <%= image_tag "crown.png", style: "display: height:30px;
+                                                width: 30px;"%>
   <% end %>
+
+  <% unless User.all.where(number: participant.number).empty? %>
+    <%= image_tag (User.all.where(number: participant.number).first.avatar),
+                 style: "display: height: 35px;
+                                  width:35px;" %>
+  <% else %>
+    <%= image_tag "guestavatar1.png",style: "display: height: 35px;
+                                           width:35px;" %>
+  <% end %>
+
    <%= participant.name%> - <%= participant.number%>
 </div>

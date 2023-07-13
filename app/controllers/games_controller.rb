@@ -29,8 +29,6 @@ class GamesController < ApplicationController
     @game = Game.new(game_params)
     @game.creator = current_user
     @creator = @game.participants.new(name: @game.creator.username, number: @game.creator.number)
-    @creator.id = @game.creator.id
-    @creator.save
 
     respond_to do |format|
       if @game.save
