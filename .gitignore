@@ -33,3 +33,6 @@
 
 # Ignore master key for decrypting credentials and more.
 /config/master.key
+
+# Allows RSpec to persist some state between runs
+/spec/examples.txt
