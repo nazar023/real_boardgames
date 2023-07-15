@@ -3,15 +3,15 @@
 require 'rails_helper'
 
 RSpec.describe 'Games', type: :request do
-  before do
-    @user = User.create!(email: 'jon@snow.com', password: 'i-know-nothing')
-    @game = Game.create!(name: 'Fief', members: 5, creator: @user)
-  end
+  let(:game) { create(:game) }
 
   describe 'GET /games/:id' do
     it 'returns http success' do
-      get "/games/#{@game.id}"
-      expect(response).to have_http_status(200)
+      get "/games/#{game.id}"
+      expect(response).to have_http_status(:success)
     end
   end
+
+  # Mission: create tests for all actions
 end
+
