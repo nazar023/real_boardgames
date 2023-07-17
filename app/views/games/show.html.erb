@@ -3,11 +3,13 @@
 </p>
 
 <div>
+  <div>
+  <%= render "games/join", game: @game%>
   <%= render @game %>
+  </div>
   <%= render @game.participants%>
     <br/>
     <br/>
-
   <div>
   <% if policy(@game).update?%>
     <%= link_to "Edit this game", edit_game_path(@game) %> |
@@ -20,11 +22,4 @@
 <br/>
 <br/>
 
-<% if @game.participants.length < @game.members && (current_user.nil? || @game.participants.where(number: current_user.number).empty?) %>
-    <%= render "games/participants", game: @game%>
-<% end %>
 
-<% if user_signed_in? && @game.participants.length < @game.members %>
-  <h2> Wanna add friend ? </h2>
-  <%= render "participants/new", game: @game%>
-<% end%>

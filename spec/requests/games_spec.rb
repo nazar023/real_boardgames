@@ -12,6 +12,7 @@ RSpec.describe 'Games', type: :request do
     end
   end
 
-  # Mission: create tests for all actions
+  # TODO: Mission: create tests for all actions
+
 end
 

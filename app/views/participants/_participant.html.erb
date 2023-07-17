@@ -5,8 +5,11 @@
                                                 width: 30px;"%>
   <% end %>
 
-  <% unless User.all.where(number: participant.number).empty? %>
-    <%= image_tag (User.all.where(number: participant.number).first.avatar),
+  <%# TODO: Переробити щоб передавалась змінна з-зовні %>
+  <% user = User.find_by(number: participant.number) %>
+
+  <% if user&.avatar&.present? %>
+    <%= image_tag (user.avatar),
                  style: "display: height: 35px;
                                   width:35px;" %>
   <% else %>

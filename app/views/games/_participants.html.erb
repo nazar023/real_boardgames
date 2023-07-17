@@ -1,5 +1,5 @@
   <% unless user_signed_in? %>
-    <h2> Wanna join ? </h2>
+    <h3> Wanna join ? </h3>
     <%= render "participants/new", game: game%>
   <% else %>
     <%= render "participants/autorized", game: game%>

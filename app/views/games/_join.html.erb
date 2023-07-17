@@ -1,0 +1,14 @@
+<% if game.participants.length < game.members %>
+  <aside>
+    <p>
+    <% if current_user.nil? || game.participants.where(number: current_user.number).empty? %>
+        <%= render "games/participants", game: game%>
+    <% end %>
+
+    <% if user_signed_in? %>
+      <h3> Wanna add friend ? </h3>
+      <%= render "participants/new", game: game%>
+    <% end %>
+    </p>
+  </aside>
+<% end %>

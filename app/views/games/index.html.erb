@@ -4,10 +4,12 @@
 
 <div id="games">
   <% @games.each do |game| %>
+  <article>
     <%= render game %>
     <p>
       <%= link_to "Show this game", game %>
     </p>
+  </article>
   <% end %>
 </div>
 
