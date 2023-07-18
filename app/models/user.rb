@@ -10,5 +10,6 @@ class User < ApplicationRecord # :nodoc:
 
   validates :username, :number, presence: true
 
+  has_one :profile
   has_one_attached :avatar
 end

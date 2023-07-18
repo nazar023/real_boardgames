@@ -20,25 +20,29 @@
         <%= link_to "Log in", new_user_session_path %> /  <%= link_to "Sign up", new_user_registration_path %>
       <% else %>
         <div>
-          <% if current_user.avatar.attached? %>
+          <% if current_user&.avatar&.attached? %>
             <%= image_tag(current_user.avatar,
                           style: "display: height: 50px;
                                           width:50px;
                                           border-radius: 50%;
                                           object-fit: cover;")%>
+          <% else %>
+            <%= image_tag "guestavatar1.png",style: "display: height: 50px;
+                                                              width:50px;" %>
           <% end %>
           <details>
             <summary><%= current_user.email%></summary>
-
-            <p> Profile </p>
-            <p> <%= link_to "Edit " ,edit_user_registration_path%> </p>
+            <p> <%= link_to "Profile" ,user_profile_path(current_user.id)%> </p>
+            <p> <%= link_to "Edit" ,edit_user_registration_path%> </p>
             <p> <%= button_to "Exit", destroy_user_session_path, method: :delete %> </p>
           </details>
         </div>
       <% end %>
     </header>
-    <p class="notice"><%= notice %></p>
-    <p class="alert"><%= alert %></p>
+    <%if notice.present? || alert.present?%>
+      <p class="notice", style ="color: green"><%= notice %></p>
+      <p class="alert", style ="color: red"><%= alert %></p>
+    <%end%>
     <%= yield %>
   </body>
 </html>
