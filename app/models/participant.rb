@@ -1,7 +1,8 @@
 class Participant < ApplicationRecord
-  validates_presence_of :name, :number
-  belongs_to :game
-  has_many :users
+  validates :name, :number, presence: true
 
-  scope :already_joined?, ->(user) { includes(id: user.id) }
+  belongs_to :game
+
+  has_one_attached :avatar
+  has_many :users
 end

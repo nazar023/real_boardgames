@@ -1,21 +1,21 @@
 <div>
+  <% participants.each do |participant|%>
+  <div>
+    <% if game.creator.number == participant.number%>
+      <%= image_tag "crown.png", style: "display: height:30px;
+                                                  width: 30px;"%>
+    <% end %>
 
-  <% if @game.creator.number == participant.number%>
-    <%= image_tag "crown.png", style: "display: height:30px;
-                                                width: 30px;"%>
+    <% if participant&.avatar&.attached? %>
+      <%= image_tag (participant.avatar),
+                  style: "display: height: 35px;
+                                    width:35px;" %>
+    <% else %>
+      <%= image_tag "guestavatar1.png",style: "display: height: 35px;
+                                                        width:35px;" %>
+    <% end %>
+
+    <%= participant.name%> - <%= participant.number%>
+  </div>
   <% end %>
-
-  <%# TODO: Переробити щоб передавалась змінна з-зовні %>
-  <% user = User.find_by(number: participant.number) %>
-
-  <% if user&.avatar&.present? %>
-    <%= image_tag (user.avatar),
-                 style: "display: height: 35px;
-                                  width:35px;" %>
-  <% else %>
-    <%= image_tag "guestavatar1.png",style: "display: height: 35px;
-                                           width:35px;" %>
-  <% end %>
-
-   <%= participant.name%> - <%= participant.number%>
 </div>

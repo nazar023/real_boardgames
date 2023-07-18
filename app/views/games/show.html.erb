@@ -1,13 +1,9 @@
-<p style="color: green">
-  <%= notice %>
-</p>
-
 <div>
   <div>
   <%= render "games/join", game: @game%>
   <%= render @game %>
   </div>
-  <%= render @game.participants%>
+  <%= render "participants/participant", game: @game, participants: @game.participants%>
     <br/>
     <br/>
   <div>

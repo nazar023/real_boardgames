@@ -28,7 +28,7 @@ class GamesController < ApplicationController
     authorize Game
     @game = Game.new(game_params)
     @game.creator = current_user
-    @creator = @game.participants.new(name: @game.creator.username, number: @game.creator.number)
+    @creator = @game.participants.new(name: @game.creator.username, number: @game.creator.number, avatar: @game.creator.avatar_blob)
 
     respond_to do |format|
       if @game.save
