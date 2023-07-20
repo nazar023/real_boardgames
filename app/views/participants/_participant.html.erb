@@ -6,15 +6,11 @@
                                                   width: 30px;"%>
     <% end %>
 
-    <% if participant&.avatar&.attached? %>
-      <%= image_tag (participant.avatar),
-                  style: "display: height: 35px;
-                                    width:35px;" %>
+    <% if participant.profile.present?%>
+      <%= render "participants/autorized_avatar", participant: participant %>
     <% else %>
-      <%= image_tag "guestavatar1.png",style: "display: height: 35px;
-                                                        width:35px;" %>
+      <%= render "participants/guest_avatar" %>
     <% end %>
-
     <%= participant.name%> - <%= participant.number%>
   </div>
   <% end %>
