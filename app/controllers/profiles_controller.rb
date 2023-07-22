@@ -8,6 +8,10 @@ class ProfilesController < ApplicationController
   def show
     @user = User.find(params[:user_id])
     @profile = @user.profile
+
+    if (query = params[:query])
+      @users = User.where('username LIKE ?', "#{params[:query]}%")
+    end
   end
 
   private

@@ -1,11 +1,24 @@
-<h2> <%= @user.username %> Profile </h2>
-<div><%= link_to "Back to games", games_path %></div>
-<% if @user&.avatar&.attached? %>
-  <%= image_tag(@user.avatar,
-                              style: "display: height: 200px;
-                                              width: 200px;
-                                              object-fit: cover;")%>
-<% else %>
-  <%= image_tag "guestavatar1.png",style: "display: height: 200px;
-                                                    width: 200px;" %>
-<% end %>
+<h3> <%= link_to "Back to games", games_path %> </h3>
+<h2><%= @user.username %> Profile </h2>
+<div>
+  <% if @user&.avatar&.attached? %>
+    <%= image_tag(@user.avatar,
+                                style: "display: height: 200px;
+                                                width: 200px;
+                                                object-fit: cover;")%>
+  <% else %>
+    <%= image_tag "guestavatar1.png",style: "display: height: 200px;
+                                                      width: 200px;" %>
+  <% end %>
+
+  <aside>
+    <%= form_with method: :get do |form| %>
+      <%= form.label :query, "Search for player:" %>
+      <%= form.text_field :query, value: params[:query] %>
+      <%= form.submit "Search" %>
+    <% end %>
+    <% if @users.present? %>
+      <%= render 'profiles/profile_search', users: @users %>
+    <% end %>
+  </aside>
+</div>
