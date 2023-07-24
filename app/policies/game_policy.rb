@@ -1,4 +1,6 @@
-class GamePolicy < ApplicationPolicy
+# frozen_string_literal: true
+
+class GamePolicy < ApplicationPolicy # :nodoc:
 
   def index?
     true
