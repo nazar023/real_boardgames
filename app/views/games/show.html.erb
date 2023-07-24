@@ -3,10 +3,12 @@
   <%= render "games/join", game: @game%>
   <%= render @game %>
   </div>
+  <%# TODO: Winrate system for user's %>
   <%= render "participants/participant", game: @game, participants: @game.participants%>
     <br/>
     <br/>
   <div>
+
   <% if policy(@game).update?%>
     <%= link_to "Edit this game", edit_game_path(@game) %> |
     <%= button_to "Destroy this game", @game, method: :delete %>

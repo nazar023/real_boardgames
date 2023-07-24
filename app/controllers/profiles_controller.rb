@@ -9,8 +9,8 @@ class ProfilesController < ApplicationController
     @user = User.find(params[:user_id])
     @profile = @user.profile
 
-    if (query = params[:query])
-      @users = User.where('username LIKE ?', "#{params[:query]}%")
+    if params[:query].present?
+      @users = User.where('username LIKE ?', "#{params[:query].squish}%").or(User.where(number: "#{params[:query]}"))
     end
   end
 

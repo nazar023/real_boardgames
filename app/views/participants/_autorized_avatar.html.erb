@@ -1,8 +1,9 @@
 <% if participant&.avatar&.attached? %>
   <%=link_to (image_tag (participant.avatar),
-              style: "display: height: 35px;
-                                 width:35px;"), "/profiles/#{participant.profile}" %>
+                            class: "avatar"),
+                            "/profiles/#{participant.profile}" %>
 <% else %>
-  <%= link_to (image_tag "guestavatar1.png",style: "display: height: 35px;
-                                                             width:35px;"), "/profiles/#{participant.profile}"%>
+  <%= link_to (image_tag "guestavatar1.png",
+                           class: "avatar"),
+                           "/profiles/#{participant.profile}"%>
 <% end %>

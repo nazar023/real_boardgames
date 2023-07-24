@@ -76,3 +76,5 @@ end
 gem "devise", "~> 4.9"
 
 gem "pundit", "~> 2.3"
+
+# TODO: Replace Active Storage with Shrine gem
