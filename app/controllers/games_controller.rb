@@ -1,4 +1,6 @@
-class GamesController < ApplicationController
+# frozen_string_literal: true
+
+class GamesController < ApplicationController # :nodoc:
   before_action :authenticate_user!, only: %i[ new edit create update destroy ]
   before_action :set_game, only: %i[ show edit update destroy ]
   # GET /games or /games.json
@@ -73,13 +75,13 @@ class GamesController < ApplicationController
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_game
-      @game = Game.find(params[:id])
-    end
+  # Use callbacks to share common setup or constraints between actions.
+  def set_game
+    @game = Game.find(params[:id])
+  end
 
-    # Only allow a list of trusted parameters through.
-    def game_params
-      params.require(:game).permit(:name, :desc, :members)
-    end
+  # Only allow a list of trusted parameters through.
+  def game_params
+    params.require(:game).permit(:name, :desc, :members)
+  end
 end

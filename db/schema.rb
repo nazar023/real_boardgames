@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_07_23_130345) do
+ActiveRecord::Schema[7.0].define(version: 2023_07_25_114341) do
   create_table "active_storage_attachments", force: :cascade do |t|
     t.string "name", null: false
     t.string "record_type", null: false
@@ -39,12 +39,22 @@ ActiveRecord::Schema[7.0].define(version: 2023_07_23_130345) do
     t.index ["blob_id", "variation_digest"], name: "index_active_storage_variant_records_uniqueness", unique: true
   end
 
+  create_table "friend_requests", force: :cascade do |t|
+    t.string "username"
+    t.string "number"
+    t.integer "friend_id"
+    t.integer "profile_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "friends", force: :cascade do |t|
     t.integer "profile_id", null: false
     t.string "username"
     t.string "number"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "user_id"
     t.index ["profile_id"], name: "index_friends_on_profile_id"
   end
 

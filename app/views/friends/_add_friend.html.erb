@@ -1,0 +1,10 @@
+<%= form_with(model: [profile, FriendRequest.new]) do |form| %>
+      <%= form.hidden_field :username, value: current_user.username%>
+      <%= form.hidden_field :number, value: current_user.number%>
+      <%= form.hidden_field :friend_id, value: current_user.id%>
+      <%= form.hidden_field :profile_id, value: profile.user_id%>
+  <div>
+    <%= form.submit "Add friend" %>
+  </div>
+
+<% end %>

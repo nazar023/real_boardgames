@@ -9,7 +9,7 @@ class ParticipantsController < ApplicationController # :nodoc:
     if current_user.number == @participant.number && current_user&.avatar&.attached?
       @participant.avatar.attach(current_user.avatar_blob)
     end
-      redirect_to @game
+    redirect_to @game
   end
 
   private

@@ -1,27 +1,17 @@
-class ProfilesController < ApplicationController
+# frozen_string_literal: true
 
-  def new
-    @user = current_user
-    @profile = Profile.new
-  end
+class ProfilesController < ApplicationController # :nodoc:
 
   def show
     @user = User.find(params[:user_id])
     @profile = @user.profile
+    @friends = @profile.friends
+    @friend_requests = @profile.friend_requests
 
-    if params[:query].present?
-      @users = User.where('username LIKE ?', "#{params[:query].squish}%").or(User.where(number: "#{params[:query]}"))
-    end
-  end
 
-  private
+    return unless params[:query].present?
 
-  def set_profile
-    @profile = current_user.profile
-  end
-
-  def set_user
-    @user = current_user
+    @users = User.where('username LIKE ?', "#{params[:query].squish}%").or(User.where(number: "#{params[:query]}"))
   end
 
 end

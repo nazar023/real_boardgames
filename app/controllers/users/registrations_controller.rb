@@ -13,6 +13,8 @@ class Users::RegistrationsController < Devise::RegistrationsController
   def create
     super
     current_user.profile = Profile.new(user_id: current_user.id)
+    current_user.profile.id = current_user.id
+    current_user.profile.save
   end
 
   # GET /resource/edit

@@ -2,10 +2,9 @@
 <h2><%= @user.username %> Profile </h2>
 <div>
   <% if @user&.avatar&.attached? %>
-    <%= image_tag(@user.avatar,
-                                style: "display: height: 200px;
-                                                width: 200px;
-                                                object-fit: cover;")%>
+    <%= image_tag(@user.avatar, style: "display: height: 200px;
+                                                 width: 200px;
+                                                 object-fit: cover;")%>
   <% else %>
     <%= image_tag "guestavatar1.png",style: "display: height: 200px;
                                                       width: 200px;
@@ -25,7 +24,24 @@
     <% end %>
   </aside>
 </div>
- <h4> <%= @user.username%> Friends </h4>
- <div>
+
+
+<h4> <%= @user.username%> Friends </h4>
+<div>
   <%= render @profile.friends%>
- </div>
+  <% unless current_user == @user ||
+            @profile.friends.find_by(number: current_user.number).present? ||
+            @profile.friend_requests.find_by(number: current_user.number).present? ||
+            current_user.profile.friends.find_by(number: @user.number).present? ||
+            current_user.profile.friend_requests.find_by(number: @user.number).present?
+             %>
+    <%= render 'friends/add_friend', profile: @profile%>
+  <% end %>
+</div>
+
+<% if current_user == @user && @profile.friend_requests.present?%>
+  <div>
+    <h4> Friend requests </h4>
+    <%= render @profile.friend_requests, profile: @profile%>
+  </div>
+<% end %>

@@ -1,15 +1,19 @@
+# frozen_string_literal: true
+
 Rails.application.routes.draw do
+  resources :friend_requests
   resources :friends
-  # resources :profiles
+  resources :profile do
+    resources :friend_requests
+    resources :friends
+  end
+
   devise_for :users, controllers: { registrations: 'users/registrations' }
 
   resources :games do
     resources :participants
   end
 
-  # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
-  root to: redirect("games")
+  root to: redirect('games')
   get 'profiles/:user_id', to: 'profiles#show', as: :user_profile
-  # Defines the root path route ("/")
-  # root "articles#index"
 end

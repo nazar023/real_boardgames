@@ -34,7 +34,7 @@
             <summary><%= current_user.email%></summary>
             <p> <%= link_to "Profile" ,user_profile_path(current_user.id)%> </p>
             <p> <%= link_to "Edit" ,edit_user_registration_path%> </p>
-            <p> <%= button_to "Exit", destroy_user_session_path, method: :delete %> </p>
+            <p> <%= link_to "Exit", destroy_user_session_path, data: { turbo_method: :delete } %> </p>
           </details>
         </div>
       <% end %>

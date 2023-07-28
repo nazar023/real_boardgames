@@ -1,4 +1,8 @@
 <div>
-<%= friend.username%>
-
+<% if friend&.avatar&.attached? %>
+    <%= link_to (image_tag friend.avatar, class: "avatar"), "/profiles/#{friend.user_id}"%>
+  <% else %>
+    <%= link_to (image_tag "guestavatar1.png", class: "avatar"), "/profiles/#{friend.user_id}" %>
+  <% end %>
+<%= friend.username %>
 </div>
