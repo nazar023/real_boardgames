@@ -4,5 +4,6 @@ class Game < ApplicationRecord # :nodoc:
   belongs_to :creator, class_name: 'User'
 
   validates :name, :members, presence: true
-  has_many :participants
+
+  has_many :participants, dependent: :destroy
 end

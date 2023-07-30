@@ -82,10 +82,6 @@ class GamesController < ApplicationController # :nodoc:
     authorize @game
     @game.destroy
 
-    @game.participants.each do |one|
-      one.destroy
-    end
-
     respond_to do |format|
       format.html { redirect_to games_url, notice: "Game was successfully destroyed." }
       format.json { head :no_content }
