@@ -1,6 +1,16 @@
 <h3> <%= link_to "Back to games", games_path %> </h3>
 <h2><%= @user.username %> Profile </h2>
 <div>
+  <aside>
+    <%= form_with method: :get do |form| %>
+      <%= form.label :query, "Search for player:" %>
+      <%= form.text_field :query, value: params[:query] %>
+      <%= form.submit "Search" %>
+    <% end %>
+    <% if @users.present? %>
+      <%= render 'profiles/profile_search', users: @users %>
+    <% end %>
+  </aside>
   <% if @user&.avatar&.attached? %>
     <%= image_tag(@user.avatar, style: "display: height: 200px;
                                                  width: 200px;
@@ -13,16 +23,11 @@
  <%# TODO: Winrate system %>
  <%# TODO: Friends system %>
 
-  <aside>
-    <%= form_with method: :get do |form| %>
-      <%= form.label :query, "Search for player:" %>
-      <%= form.text_field :query, value: params[:query] %>
-      <%= form.submit "Search" %>
-    <% end %>
-    <% if @users.present? %>
-      <%= render 'profiles/profile_search', users: @users %>
-    <% end %>
-  </aside>
+    <h4>
+    <div>Winrate <%= (@profile.wins/@profile.games)*100%>% </div>
+    <div>Games played <%= @profile.games%> </div>
+    <div>Wins <%= @profile.wins%> </div>
+    </h4>
 </div>
 
 

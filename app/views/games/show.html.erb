@@ -1,13 +1,21 @@
 <div>
   <div>
-  <%= render "games/join", game: @game%>
-  <%= render @game %>
+    <% unless @game.winner_id.present? %>
+      <%= render "games/join", game: @game%>
+    <% end %>
+    <%= render @game %>
   </div>
   <%# TODO: Winrate system for user's %>
   <%= render "participants/participant", game: @game, participants: @game.participants%>
     <br/>
     <br/>
+
+  <% unless @game.winner_id.present? %>
+    <%= render "participants/win_selector", game: @game, participants: @game.participants %>
+  <% end %>
   <div>
+
+
 
   <% if policy(@game).update?%>
     <%= link_to "Edit this game", edit_game_path(@game) %> |

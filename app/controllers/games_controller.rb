@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
 class GamesController < ApplicationController # :nodoc:
-  before_action :authenticate_user!, only: %i[ new edit create update destroy ]
-  before_action :set_game, only: %i[ show edit update destroy ]
+  before_action :authenticate_user!, only: %i[new edit create update destroy]
+  before_action :set_game, only: %i[show edit update destroy winner]
   # GET /games or /games.json
   def index
     authorize Game
@@ -47,8 +47,16 @@ class GamesController < ApplicationController # :nodoc:
   # PATCH/PUT /games/1 or /games/1.json
   def update
     authorize @game
+    @game.winner_id = params[:game][:winner_id]
+    Profile.find(@game.winner_id).increment(:wins, 1).save
+    users = @game.participants.where.not(profile: nil)
+
+    users.each do |user|
+      Profile.find(user.profile).increment(:games, 1).save
+    end
+
     respond_to do |format|
-      if @game.update(game_params)
+      if @game.update(game_params) && @game.save
         format.html { redirect_to game_url(@game), notice: "Game was successfully updated." }
         format.json { render :show, status: :ok, location: @game }
       else
@@ -75,6 +83,7 @@ class GamesController < ApplicationController # :nodoc:
   end
 
   private
+
   # Use callbacks to share common setup or constraints between actions.
   def set_game
     @game = Game.find(params[:id])

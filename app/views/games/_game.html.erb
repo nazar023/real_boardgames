@@ -1,4 +1,9 @@
 <div id="<%= dom_id game %>">
+  <% if game.winner_id.present?%>
+    <h3> Finished </h3>
+  <% end %>
+
+
   <p>
     <strong>Name:</strong>
     <%= game.name %>
