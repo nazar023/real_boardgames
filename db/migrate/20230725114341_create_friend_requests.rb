@@ -3,8 +3,8 @@ class CreateFriendRequests < ActiveRecord::Migration[7.0]
     create_table :friend_requests do |t|
       t.string :username
       t.string :number
-      t.integer :friend_id
-      t.integer :profile_id
+      t.belongs_to :friend, foreign_key: { to_table: :users }
+      t.belongs_to :profile, foreign_key: { to_table: :users }
 
       t.timestamps
     end

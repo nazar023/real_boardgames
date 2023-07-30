@@ -46,6 +46,8 @@ ActiveRecord::Schema[7.0].define(version: 2023_07_30_093502) do
     t.integer "profile_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["friend_id"], name: "index_friend_requests_on_friend_id"
+    t.index ["profile_id"], name: "index_friend_requests_on_profile_id"
   end
 
   create_table "friends", force: :cascade do |t|
@@ -56,6 +58,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_07_30_093502) do
     t.datetime "updated_at", null: false
     t.integer "user_id"
     t.index ["profile_id"], name: "index_friends_on_profile_id"
+    t.index ["user_id"], name: "index_friends_on_user_id"
   end
 
   create_table "games", force: :cascade do |t|
@@ -67,6 +70,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_07_30_093502) do
     t.integer "creator_id"
     t.integer "winner_id"
     t.index ["creator_id"], name: "index_games_on_creator_id"
+    t.index ["winner_id"], name: "index_games_on_winner_id"
   end
 
   create_table "participants", force: :cascade do |t|
@@ -75,9 +79,9 @@ ActiveRecord::Schema[7.0].define(version: 2023_07_30_093502) do
     t.string "number"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.integer "profile"
+    t.integer "profile_id"
     t.index ["game_id"], name: "index_participants_on_game_id"
-    t.index ["profile"], name: "index_participants_on_profile"
+    t.index ["profile_id"], name: "index_participants_on_profile_id"
   end
 
   create_table "profiles", force: :cascade do |t|
@@ -105,7 +109,11 @@ ActiveRecord::Schema[7.0].define(version: 2023_07_30_093502) do
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
+  add_foreign_key "friend_requests", "users", column: "friend_id"
+  add_foreign_key "friend_requests", "users", column: "profile_id"
   add_foreign_key "friends", "profiles"
+  add_foreign_key "games", "participants", column: "winner_id"
   add_foreign_key "games", "users", column: "creator_id"
+  add_foreign_key "participants", "games"
   add_foreign_key "profiles", "users"
 end
