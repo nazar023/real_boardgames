@@ -2,6 +2,6 @@
 
 FactoryBot.define do
   factory :profile do
-    user { nil }
+    user
   end
 end

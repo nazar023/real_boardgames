@@ -3,12 +3,12 @@
 require 'rails_helper'
 
 RSpec.describe 'Profiles', type: :request do
-let(:user) { create(:user) }
+  let(:profile) { create(:profile) }
 
-
-  describe "GET /profiles/:user_id" do
+  describe 'GET /profiles/:user_id' do
     it 'returns http success' do
-      get "/profiles/#{user.id}"
+      get "/profiles/#{profile.user_id}"
+      expect(response).to have_http_status(:success)
     end
   end
 end
