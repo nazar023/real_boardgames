@@ -1,7 +1,7 @@
  <% if current_user == game.creator%>
     <%= form_with(model: game, method: "patch") do |form| %>
       <h3>  Choose a winner </h3>
-        <%= form.select :winner_id, participants.each.map { |one| [one.name, one.profile] } %>
+        <%= form.select :winner_id, participants.each.map { |one| [one.name, one.id] } %>
       <div><%= form.submit "Finish" %></div>
       </p>
     <% end %>

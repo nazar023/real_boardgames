@@ -12,6 +12,10 @@ class GamesController < ApplicationController # :nodoc:
   # GET /games/1 or /games/1.json
   def show
     authorize @game
+
+    if @game.winner_id.present?
+      @winner = @game.participants.find(@game.winner_id)
+    end
   end
 
   # GET /games/new
@@ -30,8 +34,9 @@ class GamesController < ApplicationController # :nodoc:
     authorize Game
     @game = Game.new(game_params)
     @game.creator = current_user
-    @creator = @game.participants.new(name: @game.creator.username, number: @game.creator.number, avatar: @game.creator.avatar_blob)
-    @creator.profile = current_user.id
+    @creator = @game.participants.new(profile: @game.creator.id, name: @game.creator.username,
+                                      number: @game.creator.number, avatar: @game.creator.avatar_blob)
+    @creator.save
 
     respond_to do |format|
       if @game.save
@@ -47,12 +52,18 @@ class GamesController < ApplicationController # :nodoc:
   # PATCH/PUT /games/1 or /games/1.json
   def update
     authorize @game
-    @game.winner_id = params[:game][:winner_id]
-    Profile.find(@game.winner_id).increment(:wins, 1).save
-    users = @game.participants.where.not(profile: nil)
 
-    users.each do |user|
-      Profile.find(user.profile).increment(:games, 1).save
+    if game_params[:winner_id].present?
+      @game.winner_id = game_params[:winner_id]
+      @winner = @game.participants.find(game_params[:winner_id])
+
+      Profile.find(@winner.profile).increment(:wins, 1).save if @winner.profile.present?
+
+      users = @game.participants.where.not(profile: nil)
+
+      users.each do |user|
+        Profile.find(user.profile).increment(:games, 1).save
+      end
     end
 
     respond_to do |format|
@@ -75,7 +86,6 @@ class GamesController < ApplicationController # :nodoc:
       one.destroy
     end
 
-
     respond_to do |format|
       format.html { redirect_to games_url, notice: "Game was successfully destroyed." }
       format.json { head :no_content }
@@ -91,6 +101,6 @@ class GamesController < ApplicationController # :nodoc:
 
   # Only allow a list of trusted parameters through.
   def game_params
-    params.require(:game).permit(:name, :desc, :members)
+    params.require(:game).permit(:winner_id, :name, :desc, :members)
   end
 end

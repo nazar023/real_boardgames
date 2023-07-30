@@ -4,13 +4,20 @@
       <%= render "games/join", game: @game%>
     <% end %>
     <%= render @game %>
+
+    <% if @winner&.profile&.avatar&.present? %>
+      <h3> Winner <div> <%= image_tag (@winner.avatar), class: "avatar" %> - <%= @winner.name %> </div> <h3>
+    <% elsif @winner&.profile&.present?%>
+      <h3> Winner <div> <%= image_tag "guestavatar1.png",class: "avatar" %> - <%= @winner.name %> </div><h3>
+    <% elsif @winner.present?%>
+     <h3> Winner <div> <%= image_tag "guestavatar1.png",class: "avatar" %> - <%= @winner.name %> </div><h3>
+    <% end %>
   </div>
-  <%# TODO: Winrate system for user's %>
   <%= render "participants/participant", game: @game, participants: @game.participants%>
     <br/>
     <br/>
 
-  <% unless @game.winner_id.present? %>
+  <% if @game.participants.length > 1 && !@game.winner_id.present? %>
     <%= render "participants/win_selector", game: @game, participants: @game.participants %>
   <% end %>
   <div>

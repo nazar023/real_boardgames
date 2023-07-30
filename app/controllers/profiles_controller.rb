@@ -7,7 +7,7 @@ class ProfilesController < ApplicationController # :nodoc:
     @profile = @user.profile
     @friends = @profile.friends
     @friend_requests = @profile.friend_requests
-
+    @winrate = (@profile.wins / Float(@profile.games)) * 100
 
     return unless params[:query].present?
 

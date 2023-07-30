@@ -24,9 +24,11 @@
  <%# TODO: Friends system %>
 
     <h4>
-    <div>Winrate <%= (@profile.wins/@profile.games)*100%>% </div>
     <div>Games played <%= @profile.games%> </div>
     <div>Wins <%= @profile.wins%> </div>
+    <% if !@winrate.nan?%>
+      <div>Winrate <%= @winrate %>% </div>
+    <% end %>
     </h4>
 </div>
 
