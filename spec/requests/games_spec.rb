@@ -16,3 +16,6 @@ RSpec.describe 'Games', type: :request do
 
 end
 
+# Homework -> Easy rails blog (video)
+# Homework -> Draw Database structure for project
+# Homework -> betterspecs.org (Всі дії (show update ...))

@@ -1,9 +1,9 @@
 <% if participant&.avatar&.attached? %>
   <%=link_to (image_tag (participant.avatar),
                             class: "avatar"),
-                            "/profiles/#{participant.profile}" %>
+                            "/id/#{participant.user_id}" %>
 <% else %>
   <%= link_to (image_tag "guestavatar1.png",
                            class: "avatar"),
-                           "/profiles/#{participant.profile}"%>
+                           "/id/#{participant.user_id}"%>
 <% end %>

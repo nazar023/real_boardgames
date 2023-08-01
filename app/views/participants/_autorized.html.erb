@@ -1,7 +1,7 @@
 <%= form_with(model: [game, Participant.new]) do |form| %>
       <%= form.hidden_field :name, value: current_user.username%>
       <%= form.hidden_field :number, value: current_user.number%>
-      <%= form.hidden_field :profile, value: current_user.id%>
+      <%= form.hidden_field :user_id, value: current_user.id%>
   <div>
     <%= form.submit "Join" %>
   </div>

@@ -34,9 +34,13 @@ class GamesController < ApplicationController # :nodoc:
     authorize Game
     @game = Game.new(game_params)
     @game.creator = current_user
-    @creator = @game.participants.new(profile: @game.creator.id, name: @game.creator.username,
-                                      number: @game.creator.number, avatar: @game.creator.avatar_blob)
-    @creator.save
+    @game.save
+    creator = @game.participants.create!(user_id: @game.creator.id,
+                                         name: @game.creator.username,
+                                         number: @game.creator.number)
+
+    creator.avatar.attach(@game.creator.avatar_blob) if @game.creator.avatar.attached?
+    creator.save
 
     respond_to do |format|
       if @game.save
@@ -55,14 +59,18 @@ class GamesController < ApplicationController # :nodoc:
 
     if game_params[:winner_id].present?
       @game.winner_id = game_params[:winner_id]
+
       @winner = @game.participants.find(game_params[:winner_id])
 
-      Profile.find(@winner.profile).increment(:wins, 1).save if @winner.profile.present?
+      if @winner.user_id.present?
+        @user_winner = User.find(@winner.user_id)
+        @user_winner.increment(:wins_count, 1).save if @winner.user_id.present?
+      end
 
-      users = @game.participants.where.not(profile: nil)
+      users = @game.participants.where.not(user_id: nil)
 
       users.each do |user|
-        Profile.find(user.profile).increment(:games, 1).save
+        User.find(user.user_id).increment(:games_count, 1).save
       end
     end
 

@@ -5,10 +5,10 @@
     <% end %>
     <%= render @game %>
 
-    <% if @winner&.profile&.avatar&.present? %>
-      <h3> Winner <div> <%= image_tag (@winner.avatar), class: "avatar" %> - <%= @winner.name %> </div> <h3>
-    <% elsif @winner&.profile&.present?%>
-      <h3> Winner <div> <%= image_tag "guestavatar1.png",class: "avatar" %> - <%= @winner.name %> </div><h3>
+    <% if @winner&.avatar&.present? && @winner.user_id %>
+      <h3> Winner <div> <%= link_to (image_tag (@winner.avatar), class: "avatar"), "/id/#{@winner.user_id}" %> - <%= @winner.name %> </div> <h3>
+    <% elsif @winner && @winner.user_id %>
+      <h3> Winner <div> <%= link_to (image_tag "guestavatar1.png",class: "avatar"), "/id/#{@winner.user_id}" %> - <%= @winner.name %> </div><h3>
     <% elsif @winner.present?%>
      <h3> Winner <div> <%= image_tag "guestavatar1.png",class: "avatar" %> - <%= @winner.name %> </div><h3>
     <% end %>

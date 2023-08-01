@@ -6,7 +6,7 @@
                                                   width: 30px;"%>
     <% end %>
 
-    <% if participant.profile.present?%>
+    <% if participant.user_id.present?%>
       <%= render "participants/autorized_avatar", participant: participant %>
     <% else %>
       <%= render "participants/guest_avatar" %>
