@@ -12,4 +12,7 @@ class User < ApplicationRecord # :nodoc:
 
   has_one :profile
   has_one_attached :avatar
+  has_many :friends
+  has_many :friend_requests
+
 end

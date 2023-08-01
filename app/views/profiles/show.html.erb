@@ -24,8 +24,8 @@
  <%# TODO: Friends system %>
 
     <h4>
-    <div>Games played <%= @profile.games%> </div>
-    <div>Wins <%= @profile.wins%> </div>
+    <div>Games played <%= @user.games_count%> </div>
+    <div>Wins <%= @user.wins_count%> </div>
     <% if !@winrate.nan?%>
       <div>Winrate <%= @winrate %>% </div>
     <% end %>
@@ -35,20 +35,22 @@
 
 <h4> <%= @user.username%> Friends </h4>
 <div>
-  <%= render @profile.friends%>
-  <% if current_user && current_user != @user &&
-        @profile.friends.find_by(number: current_user.number).nil? &&
-        @profile.friend_requests.find_by(number: current_user.number).nil? &&
-        current_user.profile.friends.find_by(number: @user.number).nil? &&
-        current_user.profile.friend_requests.find_by(number: @user.number).nil? %>
+  <%= render @user.friends.where(request: false)%>
+</div>
 
-    <%= render 'friends/add_friend', profile: @profile%>
+<div>
+  <% if current_user && current_user != @user &&
+        @user.friends.find_by(whoSent_id: current_user.id, user_id: @user.id).nil? &&
+        current_user.friends.find_by(whoSent_id: @user.id, user_id: current_user.id).nil? %>
+
+    <%= render 'friends/add_friend', user: @user%>
+
   <% end %>
 </div>
 
-<% if current_user == @user && @profile.friend_requests.present?%>
+<% if current_user == @user && @user.friends.where(request: true).present? &&%>
   <div>
     <h4> Friend requests </h4>
-    <%= render @profile.friend_requests, profile: @profile%>
+    <%= render @user.friends.where(request:true), user: @user%>
   </div>
 <% end %>

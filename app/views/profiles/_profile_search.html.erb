@@ -4,10 +4,10 @@
     <% if user&.avatar&.attached? %>
       <%=link_to (image_tag (user.avatar),
                   style: "display: height: 35px;
-                                  width:35px;"), "/profiles/#{user.id}" %>
+                                  width:35px;"), "/id/#{user.id}" %>
     <% else %>
       <%= link_to (image_tag "guestavatar1.png",style: "display: height: 35px;
-                                                                width:35px;"), "/profiles/#{user.id}"%>
+                                                                width:35px;"), "/id/#{user.id}"%>
     <% end %>
     <%= user.username %>
   </div>

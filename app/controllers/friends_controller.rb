@@ -1,27 +1,42 @@
 # frozen_string_literal: true
 
 class FriendsController < ApplicationController # :nodoc:
-  before_action :set_profile
+  before_action :set_profile, only: [ :create ]
 
   def create
-    f1 = @profile.friends.create! params.required(:friend).permit(:user_id, :username, :number, :profile_id)
+    request = @user.friends.create! params.required(:friend).permit(:username, :number, :user_id, :whoSent_id, :request)
 
-    f2 = @f_profile.friends.create!(user_id: params[:friend][:profile_id],
-                                    username: User.find(params[:friend][:profile_id]).username,
-                                    number: User.find(params[:friend][:profile_id]).number,
-                                    profile_id: params[:friend][:user_id])
+    request.avatar.attach(current_user.avatar_blob) if User.find(current_user.id).avatar.attached?
 
-    f1.avatar.attach(User.find(@f_profile.id).avatar_blob) if User.find(@f_profile.id).avatar.attached?
-    f2.avatar.attach(User.find(@profile.id).avatar_blob) if User.find(@profile.id).avatar.attached?
+    redirect_to @user, notice: 'Friend request was successfully send' if request.save
 
-    redirect_to @profile, notice: 'Congrats with new friend!' if f1.save && f2.save && @request.destroy
+  end
+
+  def update
+    @request = Friend.find(params[:id])
+    user = User.find(@request.user_id)
+
+    if params[:friend][:request] == 'true'
+      @request.request = false
+      who_sent = User.find(@request.whoSent_id)
+      friend = who_sent.friends.create!(username: user.username,
+                                        number: user.number,
+                                        user_id: who_sent.id,
+                                        whoSent_id: user.id,
+                                        request: false)
+
+      friend.avatar.attach(user.avatar_blob) if user.avatar.attached?
+
+      redirect_to user, notice: 'Friend request was succsesfully accepted' if @request.save
+    else
+      @request.destroy
+      redirect_to user, notice: 'Friend request was succsesfully declined' if @request.save
+    end
   end
 
   private
 
   def set_profile
-    @profile = Profile.find(params[:profile_id])
-    @f_profile = Profile.find(params[:friend][:user_id])
-    @request = FriendRequest.find_by(friend_id: params[:friend][:user_id], profile_id: params[:friend][:profile_id])
+    @user = User.find(params[:friend][:user_id])
   end
 end

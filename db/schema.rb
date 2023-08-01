@@ -41,14 +41,14 @@ ActiveRecord::Schema[7.0].define(version: 2023_07_30_093502) do
 
   create_table "friends", force: :cascade do |t|
     t.integer "user_id", null: false
-    t.integer "friendOf_id", null: false
+    t.integer "whoSent_id", null: false
     t.string "username"
     t.string "number"
     t.boolean "request"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["friendOf_id"], name: "index_friends_on_friendOf_id"
     t.index ["user_id"], name: "index_friends_on_user_id"
+    t.index ["whoSent_id"], name: "index_friends_on_whoSent_id"
   end
 
   create_table "games", force: :cascade do |t|
@@ -84,8 +84,8 @@ ActiveRecord::Schema[7.0].define(version: 2023_07_30_093502) do
     t.datetime "updated_at", null: false
     t.string "username"
     t.string "number"
-    t.integer "games", default: 0
-    t.integer "wins", default: 0
+    t.integer "games_count", default: 0
+    t.integer "wins_count", default: 0
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
@@ -93,7 +93,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_07_30_093502) do
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
   add_foreign_key "friends", "users"
-  add_foreign_key "friends", "users", column: "friendOf_id"
+  add_foreign_key "friends", "users", column: "whoSent_id"
   add_foreign_key "games", "participants", column: "winner_id"
   add_foreign_key "games", "users", column: "creator_id"
   add_foreign_key "participants", "games"
