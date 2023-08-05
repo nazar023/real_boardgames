@@ -2,7 +2,8 @@
 
 FactoryBot.define do
   factory :game do
-    name { 'GOT' }
+    winner_id { nil }
+    sequence(:name) { |n| "Game#{n}" }
     members { 6 }
     creator factory: :user
   end

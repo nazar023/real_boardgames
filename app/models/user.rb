@@ -6,13 +6,11 @@ class User < ApplicationRecord # :nodoc:
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :validatable
 
-  has_many :games, inverse_of: :creator
-
   validates :username, :number, presence: true
 
-  has_one :profile
+  has_many :games, inverse_of: :creator
+
   has_one_attached :avatar
-  has_many :friends
-  has_many :friend_requests
+  has_many :friends, dependent: :destroy
 
 end

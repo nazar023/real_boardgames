@@ -5,5 +5,6 @@ class Game < ApplicationRecord # :nodoc:
 
   validates :name, :members, presence: true
 
+  has_one :winner, class_name: 'Participant', dependent: :destroy
   has_many :participants, dependent: :destroy
 end

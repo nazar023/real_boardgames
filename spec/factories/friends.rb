@@ -2,8 +2,10 @@
 
 FactoryBot.define do
   factory :friend do
-    profile { nil }
+    user_id { nil }
+    whoSent_id factory: :user
     username { "MyString" }
     number { "MyString" }
+    request { true }
   end
 end
