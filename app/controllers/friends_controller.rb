@@ -4,9 +4,7 @@ class FriendsController < ApplicationController # :nodoc:
   before_action :set_profile, only: [ :create ]
 
   def create
-    request = @user.friends.create! params.required(:friend).permit(:username, :number, :user_id, :whoSent_id, :request)
-
-    request.avatar.attach(current_user.avatar_blob) if User.find(current_user.id).avatar.attached?
+    request = Friend.create! params.required(:friend).permit(:user_id, :whoSent_id, :request)
 
     redirect_to @user, notice: 'Friend request was successfully send' if request.save
 
@@ -18,15 +16,6 @@ class FriendsController < ApplicationController # :nodoc:
 
     if params[:friend][:request] == 'true'
       @request.request = false
-      who_sent = User.find(@request.whoSent_id)
-      friend = who_sent.friends.create!(username: user.username,
-                                        number: user.number,
-                                        user_id: who_sent.id,
-                                        whoSent_id: user.id,
-                                        request: false)
-
-      friend.avatar.attach(user.avatar_blob) if user.avatar.attached?
-
       redirect_to user, notice: 'Friend request was succsesfully accepted' if @request.save
     else
       @request.destroy

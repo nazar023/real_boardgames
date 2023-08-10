@@ -25,13 +25,9 @@ class Users::RegistrationsController < Devise::RegistrationsController
   # end
 
   # DELETE /resource
-  def destroy
-    Friend.where(user_id: current_user.id).or(Friend.where(whoSent_id: current_user.id)).each(&:destroy)
-    Participant.where(user_id: current_user.id).each(&:destroy)
-    Game.where(creator: current_user).each(&:destroy)
-
-    super
-  end
+  # def destroy
+  #   super
+  # end
 
   # GET /resource/cancel
   # Forces the session data which is usually expired after sign

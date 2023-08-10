@@ -1,12 +1,12 @@
 <% if friend.request == true %>
 
   <div>
-    <% if friend&.avatar&.attached? %>
-        <%= link_to (image_tag friend.avatar, class: "avatar"), "/id/#{friend.whoSent_id}"%>
+    <% if friend.whoSent&.avatar&.attached? %>
+        <%= link_to (image_tag friend.whoSent.avatar, class: "avatar"), "/id/#{friend.whoSent_id}"%>
       <% else %>
         <%= link_to (image_tag "guestavatar1.png", class: "avatar"), "/id/#{friend.whoSent_id}" %>
       <% end %>
-    <%= friend.username %>
+    <%= friend.whoSent.username %>
 
     <%= form_with(model: friend, method: "patch") do |form| %>
         <div><%= form.hidden_field :request, value: true %></div>
@@ -22,12 +22,12 @@
 <% else %>
 
   <div>
-  <% if friend&.avatar&.attached? %>
-      <%= link_to (image_tag friend.avatar, class: "avatar"), "/id/#{friend.whoSent_id}"%>
+  <% if friend.whoSent&.avatar&.attached? %>
+      <%= link_to (image_tag friend.whoSent.avatar, class: "avatar"), "/id/#{friend.whoSent_id}"%>
     <% else %>
       <%= link_to (image_tag "guestavatar1.png", class: "avatar"), "/id/#{friend.whoSent_id}" %>
     <% end %>
-  <%= friend.username %>
+  <%= friend %>
   </div>
 
 <% end %>
