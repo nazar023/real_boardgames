@@ -4,8 +4,10 @@ class ProfilesController < ApplicationController # :nodoc:
 
   def show
     @user = User.find(params[:id])
-    @friends = @user.friends
     @winrate = (@user.wins_count / Float(@user.games_count)) * 100
+
+    @friends = @user.friends
+    @friends_reqs = @user.friends_reqs
 
     return unless params[:query].present?
 

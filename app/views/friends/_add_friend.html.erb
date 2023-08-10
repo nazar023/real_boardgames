@@ -1,6 +1,4 @@
 <%= form_with(model: [user, Friend.new]) do |form| %>
-      <%= form.hidden_field :username, value: current_user.username%>
-      <%= form.hidden_field :number, value: current_user.number%>
       <%= form.hidden_field :whoSent_id, value: current_user.id%>
       <%= form.hidden_field :user_id, value: user.id%>
       <%= form.hidden_field :request, value: true%>

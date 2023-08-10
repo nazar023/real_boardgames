@@ -20,8 +20,6 @@
                                                       width: 200px;
                                                       object-fit: cover;" %>
   <% end %>
- <%# TODO: Winrate system %>
- <%# TODO: Friends system %>
 
     <h4>
     <div>Games played <%= @user.games_count%> </div>
@@ -35,7 +33,8 @@
 
 <h4> <%= @user.username%> Friends </h4>
 <div>
-  <%= render @user.friends.where(request: false)%>
+  <%= render @user.friends.where(request: false), user: @user%>
+  <%= render @user.friends_reqs.where(request: false), user: @user%>
 </div>
 
 <div>

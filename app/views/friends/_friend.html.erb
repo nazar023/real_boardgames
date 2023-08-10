@@ -1,33 +1,41 @@
-<% if friend.request == true %>
+  <% if friend.request == true %>
+      <div>
+        <% if friend.whoSent&.avatar&.attached? %>
+            <%= link_to (image_tag friend.whoSent.avatar, class: "avatar"), "/id/#{friend.whoSent_id}"%>
+          <% else %>
+            <%= link_to (image_tag "guestavatar1.png", class: "avatar"), "/id/#{friend.whoSent_id}" %>
+          <% end %>
+        <%= friend.whoSent.username %>
 
-  <div>
-    <% if friend.whoSent&.avatar&.attached? %>
-        <%= link_to (image_tag friend.whoSent.avatar, class: "avatar"), "/id/#{friend.whoSent_id}"%>
-      <% else %>
-        <%= link_to (image_tag "guestavatar1.png", class: "avatar"), "/id/#{friend.whoSent_id}" %>
-      <% end %>
-    <%= friend.whoSent.username %>
+        <%= form_with(model: friend, method: "patch") do |form| %>
+            <div><%= form.hidden_field :request, value: true %></div>
+            <div><%= form.submit 'Accept' %></div>
+          <% end %>
+        <%= form_with(model: friend, method: "patch") do |form| %>
+            <div><%= form.hidden_field :request, value: false %></div>
+            <div><%= form.submit 'Decline' %></div>
+          <% end %>
+      </div>
+  <% else %>
 
-    <%= form_with(model: friend, method: "patch") do |form| %>
-        <div><%= form.hidden_field :request, value: true %></div>
-        <div><%= form.submit 'Accept' %></div>
-      <% end %>
-    <%= form_with(model: friend, method: "patch") do |form| %>
-        <div><%= form.hidden_field :request, value: false %></div>
-        <div><%= form.submit 'Decline' %></div>
-      <% end %>
-
-  </div>
-
-<% else %>
-
-  <div>
-  <% if friend.whoSent&.avatar&.attached? %>
-      <%= link_to (image_tag friend.whoSent.avatar, class: "avatar"), "/id/#{friend.whoSent_id}"%>
+    <% if friend.user == user %>
+      <div>
+      <% if friend.whoSent&.avatar&.attached? %>
+          <%= link_to (image_tag friend.whoSent.avatar, class: "avatar"), "/id/#{friend.whoSent_id}"%>
+        <% else %>
+          <%= link_to (image_tag "guestavatar1.png", class: "avatar"), "/id/#{friend.whoSent_id}" %>
+        <% end %>
+      <%= friend.whoSent.username %>
+      </div>
     <% else %>
-      <%= link_to (image_tag "guestavatar1.png", class: "avatar"), "/id/#{friend.whoSent_id}" %>
+      <% if friend.user&.avatar&.attached? %>
+      <div>
+          <%= link_to (image_tag friend.user.avatar, class: "avatar"), "/id/#{friend.user_id}"%>
+        <% else %>
+          <%= link_to (image_tag "guestavatar1.png", class: "avatar"), "/id/#{friend.user_id}" %>
+        <% end %>
+      <%= friend.user.username %>
+      </div>
     <% end %>
-  <%= friend %>
-  </div>
 
-<% end %>
+  <% end %>
