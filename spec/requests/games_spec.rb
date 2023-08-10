@@ -4,33 +4,43 @@ require 'rails_helper'
 
 RSpec.describe 'Games', type: :request do
   let(:game) { create(:game) }
+  let(:creator_p) do
+    create(:participant, name: game.creator.username,
+                         number: game.creator.number,
+                         game_id: game.id)
+  end
+  let(:participant1) { create(:participant, game_id: game.id) }
+  let(:participant2) { create(:participant, game_id: game.id) }
+  let(:participant3) { create(:participant, game_id: game.id) }
 
   describe 'GET /games/:id' do
-
-    context 'when 1 participants' do
+    context 'has participants, not finished' do
       it 'returns http success' do
         get "/games/#{game.id}"
         expect(response).to have_http_status(:success)
       end
 
       it 'has creator participant' do
-        creator = game.creator
-        create(:participant, name: creator.username,
-                             number: creator.number,
-                             game_id: game.id)
-        expect(game.participants.first.number).to eq(game.creator.number)
+        expect(creator_p.number).to eq(game.creator.number)
       end
 
+      it 'destroy?' do
+        expect(game.destroy).to be(game)
+      end
     end
   end
 
   describe '/games/:id/edit' do
     context 'can edit' do
-
       it 'gets success' do
         sign_in game.creator
         get edit_game_path(game)
         expect(response).to have_http_status(:success)
+      end
+
+      it 'gets redirect' do
+        get edit_game_path(game)
+        expect(response).to have_http_status(302)
       end
 
       it 'updates info' do
@@ -39,19 +49,22 @@ RSpec.describe 'Games', type: :request do
         expect(game.desc).to eq('lalalal')
         expect(game.name).to eq('Fief')
       end
+    end
   end
-end
-
 
   describe 'with winner' do
     it 'can destroy' do
-      creator = game.creator
-      create(:participant, game_id: game.id)
-      winner = create(:participant, game_id: game.id, name: creator.username, number: creator.number, user_id: creator.id)
-      game.update(winner_id: winner.id)
-      game.winner_id = nil
-      game.save
+      game.update(winner_id: participant1.id)
       expect(game.destroy).to be(game)
+    end
+
+    it 'not update' do
+      sign_in game.creator
+      get edit_game_path(game)
+      expect(response).to have_http_status(:success)
+      game.update(winner_id: participant2.id)
+      get edit_game_path(game)
+      expect(response).to have_http_status(302)
     end
   end
 
