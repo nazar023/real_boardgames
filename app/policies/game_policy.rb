@@ -15,17 +15,21 @@ class GamePolicy < ApplicationPolicy # :nodoc:
   end
 
   def update?
-    creator?
+    creator? && winner?
   end
 
   def destroy?
-    update?
+    creator?
   end
 
   private
 
   def creator?
     user == record.creator
+  end
+
+  def winner?
+    record.winner_id.blank?
   end
 
 end

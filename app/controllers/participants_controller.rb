@@ -4,7 +4,7 @@ class ParticipantsController < ApplicationController # :nodoc:
   before_action :set_game
 
   def create
-    @participant = @game.participants.create! params.required(:participant).permit(:user_id ,:name, :number)
+    @participant = @game.participants.create! params.required(:participant).permit(:game_id, :user_id, :name, :number)
 
     if current_user.number == @participant.number && current_user&.avatar&.attached?
       @participant.avatar.attach(current_user.avatar_blob)

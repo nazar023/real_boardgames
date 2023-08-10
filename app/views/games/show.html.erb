@@ -26,6 +26,8 @@
 
   <% if policy(@game).update?%>
     <%= link_to "Edit this game", edit_game_path(@game) %> |
+  <% end %>
+  <% if policy(@game).destroy?%>
     <%= button_to "Destroy this game", @game, method: :delete %>
   <% end %>
     <%= link_to "Back to games", games_path %>

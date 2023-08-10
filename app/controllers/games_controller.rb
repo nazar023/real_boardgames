@@ -88,8 +88,8 @@ class GamesController < ApplicationController # :nodoc:
   # DELETE /games/1 or /games/1.json
   def destroy
     authorize @game
-    @game.winner_id = nil
-    @game.save
+    # @game.winner_id = nil
+    # @game.save
     @game.destroy
 
     respond_to do |format|
