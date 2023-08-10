@@ -42,8 +42,6 @@ ActiveRecord::Schema[7.0].define(version: 2023_07_30_093502) do
   create_table "friends", force: :cascade do |t|
     t.integer "user_id", null: false
     t.integer "whoSent_id", null: false
-    t.string "username"
-    t.string "number"
     t.boolean "request"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -94,7 +92,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_07_30_093502) do
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
   add_foreign_key "friends", "users"
   add_foreign_key "friends", "users", column: "whoSent_id"
-  add_foreign_key "games", "participants", column: "winner_id"
   add_foreign_key "games", "users", column: "creator_id"
   add_foreign_key "participants", "games"
+  add_foreign_key "participants", "users"
 end
