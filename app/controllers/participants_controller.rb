@@ -1,4 +1,4 @@
-# frozen_string_literal: true
+  # frozen_string_literal: true
 
 class ParticipantsController < ApplicationController # :nodoc:
   before_action :set_game
@@ -15,6 +15,6 @@ class ParticipantsController < ApplicationController # :nodoc:
   private
 
   def set_game
-    @game = Game.find(params[:game_id])
+    @game = Game.find(params[:id])
   end
 end

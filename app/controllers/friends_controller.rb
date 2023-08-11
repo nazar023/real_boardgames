@@ -6,7 +6,7 @@ class FriendsController < ApplicationController # :nodoc:
   def create
     request = Friend.create! params.required(:friend).permit(:user_id, :whoSent_id, :request)
 
-    redirect_to @user, notice: 'Friend request was successfully send' if request.save
+    redirect_to "/id/#{@user.id}", notice: 'Friend request was successfully send' if request.save
 
   end
 
@@ -16,10 +16,10 @@ class FriendsController < ApplicationController # :nodoc:
 
     if params[:friend][:request] == 'true'
       @request.request = false
-      redirect_to user, notice: 'Friend request was succsesfully accepted' if @request.save
+      redirect_to "/id/#{user.id}", notice: 'Friend request was succsesfully accepted' if @request.save
     else
       @request.destroy
-      redirect_to user, notice: 'Friend request was succsesfully declined' if @request.save
+      redirect_to "/id/#{user.id}", notice: 'Friend request was succsesfully declined' if @request.save
     end
   end
 
