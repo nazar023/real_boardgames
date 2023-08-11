@@ -6,16 +6,14 @@ class GamesController < ApplicationController # :nodoc:
   # GET /games or /games.json
   def index
     authorize Game
-    @games = Game.all
+    @games = Game.all.with_participants
   end
 
   # GET /games/1 or /games/1.json
   def show
     authorize @game
-
-    if @game.winner_id.present?
-      @winner = @game.participants.find(@game.winner_id)
-    end
+    @participants = @game.participants
+    @winner = @game.participants.find(@game.winner_id) if @game.winner_id.present?
   end
 
   # GET /games/new

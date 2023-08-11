@@ -13,12 +13,12 @@
      <h3> Winner <div> <%= image_tag "guestavatar1.png",class: "avatar" %> - <%= @winner.name %> </div><h3>
     <% end %>
   </div>
-  <%= render "participants/participant", game: @game, participants: @game.participants%>
+  <%= render "participants/participant", game: @game, participants: @participants%>
     <br/>
     <br/>
 
-  <% if @game.participants.length > 1 && !@game.winner_id.present? %>
-    <%= render "participants/win_selector", game: @game, participants: @game.participants %>
+  <% if @participants.length > 1 && !@game.winner_id.present? %>
+    <%= render "participants/win_selector", game: @game, participants: @participants %>
   <% end %>
   <div>
 

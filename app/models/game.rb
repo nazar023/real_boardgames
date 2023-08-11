@@ -7,4 +7,6 @@ class Game < ApplicationRecord # :nodoc:
   belongs_to :winner, class_name: 'Participant', foreign_key: 'winner_id', optional: true
 
   has_many :participants, dependent: :destroy
+
+  scope :with_participants, -> { includes(:participants) }
 end
