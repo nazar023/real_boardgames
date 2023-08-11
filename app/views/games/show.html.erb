@@ -17,7 +17,7 @@
     <br/>
     <br/>
 
-  <% if @participants.length > 1 && !@game.winner_id.present? %>
+  <% if policy(@game).choose_winner? %>
     <%= render "participants/win_selector", game: @game, participants: @participants %>
   <% end %>
   <div>
