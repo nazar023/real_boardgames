@@ -18,8 +18,7 @@ class FriendsController < ApplicationController # :nodoc:
       @request.request = false
       redirect_to "/id/#{user.id}", notice: 'Friend request was succsesfully accepted' if @request.save
     else
-      @request.destroy
-      redirect_to "/id/#{user.id}", notice: 'Friend request was succsesfully declined' if @request.save
+      redirect_to "/id/#{user.id}", notice: 'Friend request was succsesfully declined' if @request.destroy
     end
   end
 
