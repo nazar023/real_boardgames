@@ -1,7 +1,7 @@
-<% if game.participants.length < game.members %>
+<% if @participants.count < game.members %>
   <aside>
     <p>
-    <% if current_user.nil? || game.participants.where(number: current_user.number).empty? %>
+    <% if policy(game).join? %>
         <%= render "games/participants", game: game%>
     <% end %>
 

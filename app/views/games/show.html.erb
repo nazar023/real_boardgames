@@ -1,19 +1,19 @@
 <div>
   <div>
-    <% unless @game.winner_id.present? %>
+    <% if @game.winner.blank? %>
       <%= render "games/join", game: @game%>
     <% end %>
     <%= render @game %>
 
-    <% if @winner&.avatar&.present? && @winner.user_id %>
-      <h3> Winner <div> <%= link_to (image_tag (@winner.avatar), class: "avatar"), "/id/#{@winner.user_id}" %> - <%= @winner.name %> </div> <h3>
-    <% elsif @winner && @winner.user_id %>
-      <h3> Winner <div> <%= link_to (image_tag "guestavatar1.png",class: "avatar"), "/id/#{@winner.user_id}" %> - <%= @winner.name %> </div><h3>
-    <% elsif @winner.present?%>
+    <% if @user_w && @user_w&.avatar&.present? %>
+      <h3> Winner <div> <%= link_to (image_tag (@user_w.avatar), class: "avatar"), "/id/#{@user_w.id}" %> - <%= @user_w.username %> </div> <h3>
+    <% elsif @user_w %>
+      <h3> Winner <div> <%= link_to (image_tag "guestavatar1.png",class: "avatar"), "/id/#{@user_w.id}" %> - <%= @user_w.username %> </div><h3>
+    <% elsif @winner%>
      <h3> Winner <div> <%= image_tag "guestavatar1.png",class: "avatar" %> - <%= @winner.name %> </div><h3>
     <% end %>
   </div>
-  <%= render "participants/participant", game: @game, participants: @participants%>
+  <%= render @participants, game: @game%>
     <br/>
     <br/>
 

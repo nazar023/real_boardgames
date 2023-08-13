@@ -6,9 +6,9 @@ class ParticipantsController < ApplicationController # :nodoc:
   def create
     @participant = @game.participants.create! params.required(:participant).permit(:game_id, :user_id, :name, :number)
 
-    if current_user.number == @participant.number && current_user&.avatar&.attached?
-      @participant.avatar.attach(current_user.avatar_blob)
-    end
+    # if current_user && current_user.number == @participant.number && current_user&.avatar&.attached?
+    #   @participant.avatar.attach(current_user.avatar_blob)
+    # end
     redirect_to @game
   end
 

@@ -12,8 +12,12 @@ class GamesController < ApplicationController # :nodoc:
   # GET /games/1 or /games/1.json
   def show
     authorize @game
-    @participants = @game.participants
+    @participants = @game.participants.includes(user: :avatar_attachment)
+
+
+
     @winner = @game.participants.find(@game.winner_id) if @game.winner_id.present?
+    @user_w = @winner.user if @winner && @winner.user.present?
   end
 
   # GET /games/new
@@ -33,12 +37,12 @@ class GamesController < ApplicationController # :nodoc:
     @game = Game.new(game_params)
     @game.creator = current_user
     @game.save
-    creator = @game.participants.create!(user_id: @game.creator.id,
-                                         name: @game.creator.username,
-                                         number: @game.creator.number)
+    @game.participants.create!(user_id: @game.creator.id,
+                               name: @game.creator.username,
+                               number: @game.creator.number)
 
-    creator.avatar.attach(@game.creator.avatar_blob) if @game.creator.avatar.attached?
-    creator.save
+    # creator.avatar.attach(@game.creator.avatar_blob) if @game.creator.avatar.attached?
+    # creator.save
 
     respond_to do |format|
       if @game.save

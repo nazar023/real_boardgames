@@ -30,6 +30,11 @@ class GamePolicy < ApplicationPolicy # :nodoc:
      amount_participants > 1 && winner_present?
   end
 
+  def join?
+    # current_user.nil? || game.participants.where(number: current_user.number).blank?
+    user.blank? || record.participants.find_by(number: user.number).blank?
+  end
+
   private
 
   def creator?
@@ -41,7 +46,7 @@ class GamePolicy < ApplicationPolicy # :nodoc:
   end
 
   def amount_participants
-    record.participants.length
+    record.participants.count
   end
 
 end
