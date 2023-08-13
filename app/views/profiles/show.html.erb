@@ -33,8 +33,7 @@
 
 <h4> <%= @user.username%> Friends </h4>
 <div>
-  <%= render @user.friends.where(request: false), user: @user%>
-  <%= render @user.friends_reqs.where(request: false), user: @user%>
+  <%= render @friends, user: @user%>
 </div>
 
 <div>
@@ -45,9 +44,9 @@
   <% end %>
 </div>
 
-<% if current_user == @user && @user.friends.where(request: true).present? &&%>
+<% if policy(@user).user? %>
   <div>
     <h4> Friend requests </h4>
-    <%= render @user.friends.where(request:true), user: @user%>
+    <%= render @requests, user: @user%>
   </div>
 <% end %>
