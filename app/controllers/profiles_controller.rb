@@ -9,8 +9,7 @@ class ProfilesController < ApplicationController # :nodoc:
     # friends = @user.friends.where(request: false).includes(user: :avatar_attachment)
     # friends_reqs = @user.friends_reqs.where(request: false).includes(whoSent: :avatar_attachment)
 
-    @friends = @user.friends.where(request: false).includes(user: :avatar_attachment) +
-               @user.friends_reqs.where(request: false).includes(whoSent: :avatar_attachment)
+    @friends = @user.friends.not_request.with_users_avatars + @user.friends_reqs.not_request.with_users_avatars
 
     @requests = @user.friends.where(request: true).includes(whoSent: :avatar_attachment)
 
