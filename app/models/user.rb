@@ -12,6 +12,6 @@ class User < ApplicationRecord # :nodoc:
   has_one_attached :avatar, dependent: :destroy
   has_many :participants, dependent: :destroy
 
-  has_many :friends, inverse_of: :user, dependent: :destroy
-  has_many :friends_reqs, inverse_of: :whoSent, class_name: 'Friend', foreign_key: 'whoSent_id', dependent: :destroy
+  has_many :friends, dependent: :destroy
+  has_many :friends_reqs, class_name: 'Friend', foreign_key: 'whoSent_id', dependent: :destroy
 end

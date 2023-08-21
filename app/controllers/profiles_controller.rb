@@ -4,7 +4,7 @@ class ProfilesController < ApplicationController # :nodoc:
 
   def show
     @user = User.find(params[:id])
-    @winrate = (@user.wins_count / Float(@user.games_count)) * 100
+    @winrate = ((@user.wins_count / Float(@user.games_count)) * 100).round(1)
 
     # friends = @user.friends.where(request: false).includes(user: :avatar_attachment)
     # friends_reqs = @user.friends_reqs.where(request: false).includes(whoSent: :avatar_attachment)
