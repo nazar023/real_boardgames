@@ -13,7 +13,8 @@
      <h3> Winner <div> <%= image_tag "guestavatar1.png",class: "avatar" %> - <%= @winner.name %> </div><h3>
     <% end %>
   </div>
-  <%= render @participants, game: @game%>
+  <%# TODO: Add little popups of User's profiles with info %>
+  <%= render "participants/participant", game: @game, participants: @participants%>
     <br/>
     <br/>
 

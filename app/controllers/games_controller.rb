@@ -36,13 +36,12 @@ class GamesController < ApplicationController # :nodoc:
     authorize Game
     @game = Game.new(game_params)
     @game.creator = current_user
-    @game.save
-    @game.participants.create!(user_id: @game.creator.id,
-                               name: @game.creator.username,
-                               number: @game.creator.number)
 
-    # creator.avatar.attach(@game.creator.avatar_blob) if @game.creator.avatar.attached?
-    # creator.save
+    if @game.save
+      @game.participants.create!(user_id: @game.creator.id,
+                                 name: @game.creator.username,
+                                 number: @game.creator.number)
+    end
 
     respond_to do |format|
       if @game.save

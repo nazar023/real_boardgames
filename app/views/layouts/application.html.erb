@@ -39,10 +39,11 @@
         </div>
       <% end %>
     </header>
-    <%if notice.present? || alert.present?%>
+    <% if notice.present? %>
       <p class="notice", style ="color: green"><%= notice %></p>
+    <% elsif alert.present? %>
       <p class="alert", style ="color: red"><%= alert %></p>
-    <%end%>
+    <% end %>
     <%= yield %>
   </body>
 </html>

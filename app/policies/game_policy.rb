@@ -23,7 +23,7 @@ class GamePolicy < ApplicationPolicy # :nodoc:
   end
 
   def full?
-    record.participants.length
+    record.participants.count < record.members
   end
 
   def choose_winner?
