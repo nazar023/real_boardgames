@@ -15,7 +15,7 @@
       <div>
         <%= link_to image_tag('yellowboardgamelogo.png', width: "150", height: "150"), games_path%>
       </div>
-          <%# TODO: Clickable avatar profile %>
+          <%# TODO: Add notification Noticed Gem %>
       <% unless user_signed_in? %>
         <%= link_to "Log in", new_user_session_path %> /  <%= link_to "Sign up", new_user_registration_path %>
       <% else %>

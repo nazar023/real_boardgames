@@ -1,19 +1,13 @@
-<%= turbo_frame_tag "participants" do %>
-  <% participants.each do |participant| %>
-    <%= turbo_frame_tag(dom_id(participant)) do %>
-      <div>
-        <% if game.creator.number == participant.number%>
-          <%= image_tag "crown.png", style: "display: height:30px;
-                                                      width: 30px;"%>
-        <% end %>
-
-        <% if participant.user.present?%>
-          <%= render "participants/autorized_avatar", user: participant.user %>
-        <% else %>
-          <%= render "participants/guest_avatar" %>
-        <% end %>
-        <%= participant.name%> - <%= participant.number%>
-      </div>
-    <% end %>
+<div id = <%= dom_id(participant) %> >
+  <% if game.creator.number == participant.number%>
+    <%= image_tag "crown.png", style: "display: height:30px;
+                                                width: 30px;"%>
   <% end %>
-<% end %>
+
+  <% if participant.user.present?%>
+    <%= render "participants/autorized_avatar", user: participant.user %>
+  <% else %>
+    <%= render "participants/guest_avatar" %>
+  <% end %>
+  <%= participant.name%> - <%= participant.number%>
+</div>

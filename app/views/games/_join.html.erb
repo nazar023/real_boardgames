@@ -1,4 +1,5 @@
-<% if @participants.count < game.members %>
+
+<% if game.winner.blank? && participants.count < game.members %>
   <aside>
     <p>
     <% if policy(game).join? %>
@@ -7,7 +8,7 @@
 
     <% if user_signed_in? %>
       <h3> Wanna add friend ? </h3>
-      <%= render "participants/new", game: game%>
+      <%= render "participants/new", game: game, participant: Participant.new%>
     <% end %>
     </p>
   </aside>

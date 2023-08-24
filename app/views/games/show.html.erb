@@ -1,38 +1,29 @@
 <div>
+
   <div>
-    <% if @game.winner.blank? %>
-      <%= render "games/join", game: @game%>
-    <% end %>
+    <div id = "joining">
+        <%= render "games/join", game: @game, participants: @participants%>
+    </div>
     <%= render @game %>
-
-    <% if @user_w && @user_w&.avatar&.present? %>
-      <h3> Winner <div> <%= link_to (image_tag (@user_w.avatar), class: "avatar"), "/id/#{@user_w.id}" %> - <%= @user_w.username %> </div> <h3>
-    <% elsif @user_w %>
-      <h3> Winner <div> <%= link_to (image_tag "guestavatar1.png",class: "avatar"), "/id/#{@user_w.id}" %> - <%= @user_w.username %> </div><h3>
-    <% elsif @winner%>
-     <h3> Winner <div> <%= image_tag "guestavatar1.png",class: "avatar" %> - <%= @winner.name %> </div><h3>
-    <% end %>
+    <%= render '/participants/winner'%>
+    <div id = "participants">
+    <%= render @participants, game: @game%>
+    </div>
   </div>
-  <%# TODO: Add little popups of User's profiles with info %>
-  <%= render "participants/participant", game: @game, participants: @participants%>
-    <br/>
-    <br/>
 
+  <%# TODO: Add little popups of User's profiles with info %>
+  <br/>
+  <br/>
   <% if policy(@game).choose_winner? %>
     <%= render "participants/win_selector", game: @game, participants: @participants %>
   <% end %>
+
   <div>
-
-
-
-  <% if policy(@game).update?%>
-    <%= link_to "Edit this game", edit_game_path(@game) %> |
-  <% end %>
-  <% if policy(@game).destroy?%>
-    <%= button_to "Destroy this game", @game, method: :delete %>
-  <% end %>
+    <%= link_to "Edit this game", edit_game_path(@game) if policy(@game).update?%>
+    <%= button_to "Destroy this game", @game, method: :delete if policy(@game).destroy? %>
     <%= link_to "Back to games", games_path %>
   </div>
+
 </div>
 <br/>
 <br/>
