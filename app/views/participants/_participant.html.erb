@@ -1,4 +1,4 @@
-<div id = <%= dom_id(participant) %> >
+<%= turbo_frame_tag dom_id(participant) do %>
   <% if game.creator.number == participant.number%>
     <%= image_tag "crown.png", style: "display: height:30px;
                                                 width: 30px;"%>
@@ -10,4 +10,4 @@
     <%= render "participants/guest_avatar" %>
   <% end %>
   <%= participant.name%> - <%= participant.number%>
-</div>
+<% end %>

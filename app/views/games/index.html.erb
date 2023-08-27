@@ -10,6 +10,11 @@
   </article>
   <% end %>
 </div>
+<div>
+  <%= turbo_frame_tag "notifications" do %>
+    <%= render "notifications/notifications", user: current_user, notifications: @notifications%>
+  <% end %>
+</div>
 
   <%= link_to "New game", new_game_path %>
 

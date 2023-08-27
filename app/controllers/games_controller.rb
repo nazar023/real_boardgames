@@ -7,6 +7,11 @@ class GamesController < ApplicationController # :nodoc:
   def index
     authorize Game
     @games = Game.all.with_participants
+
+    return unless current_user
+
+    current_user.notifications.mark_as_read!
+    @notifications = current_user.notifications.newest_first
   end
 
   # GET /games/1 or /games/1.json
@@ -14,9 +19,8 @@ class GamesController < ApplicationController # :nodoc:
     authorize @game
     @participants = @game.participants.includes(user: :avatar_attachment)
 
-
-
     @winner = @game.participants.find(@game.winner_id) if @game.winner_id.present?
+
     @user_w = @winner.user if @winner && @winner.user.present?
   end
 
@@ -45,7 +49,7 @@ class GamesController < ApplicationController # :nodoc:
 
     respond_to do |format|
       if @game.save
-        format.html { redirect_to game_url(@game), notice: "Game was successfully created." }
+        format.html { redirect_to game_url(@game), notice: 'Game was successfully created.' }
         format.json { render :show, status: :created, location: @game }
       else
         format.html { render :new, status: :unprocessable_entity }
@@ -77,7 +81,7 @@ class GamesController < ApplicationController # :nodoc:
 
     respond_to do |format|
       if @game.update(game_params) && @game.save
-        format.html { redirect_to game_url(@game), notice: "Game was successfully updated." }
+        format.html { redirect_to game_url(@game), notice: 'Game was successfully updated.' }
         format.json { render :show, status: :ok, location: @game }
       else
         format.html { render :edit, status: :unprocessable_entity }
@@ -89,12 +93,15 @@ class GamesController < ApplicationController # :nodoc:
   # DELETE /games/1 or /games/1.json
   def destroy
     authorize @game
-    # @game.winner_id = nil
-    # @game.save
-    @game.destroy
 
+    @game.creator.notifications.each do |notification|
+      params = notification.to_notification
+      notification.destroy if params.params[:message].game == @game
+    end
+
+    @game.destroy
     respond_to do |format|
-      format.html { redirect_to games_url, notice: "Game was successfully destroyed." }
+      format.html { redirect_to games_url, notice: 'Game was successfully destroyed.' }
       format.json { head :no_content }
     end
   end

@@ -14,4 +14,6 @@ class User < ApplicationRecord # :nodoc:
 
   has_many :friends, dependent: :destroy
   has_many :friends_reqs, class_name: 'Friend', foreign_key: 'whoSent_id', dependent: :destroy
+
+  has_many :notifications, as: :recipient, dependent: :destroy
 end

@@ -10,4 +10,6 @@ Rails.application.routes.draw do
   get '/id/:id', to: 'profiles#show', as: :user_profile
   post '/id/:id', to: 'friends#create', as: :user_friends
   patch '/id/:id', to: 'friends#update', as: :friend
+  delete '/notification/:id', to: 'notifications#destroy', as: :notification_destroy
+
 end

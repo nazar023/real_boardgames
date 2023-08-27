@@ -14,12 +14,12 @@ class ParticipantsController < ApplicationController # :nodoc:
 
     respond_to do |format|
       if @participant.save
-        format.turbo_stream do
-          if @participant.user.present? || !policy(@game).full?
-            redirect_to @game
-          else
+        if @participant.user
+          redirect_to @game
+        else
+          format.turbo_stream do
             render turbo_stream:
-            turbo_stream.append(:participants,
+            turbo_stream.append("participants_game_#{@game.id}",
                                 partial: 'participants/participant',
                                 locals: { game: @game, participant: @participant })
           end

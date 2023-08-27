@@ -1,0 +1,13 @@
+<% if participant %>
+<div>
+  <% if unread %>
+    <span> Unread </span>
+  <% end %>
+  <span>
+    <%= participant.name %> joined your game <%= game.name %> |
+    <% if notification %>
+      <%= link_to "Close", notification_destroy_path(notification), data: {turbo_method: :delete} %>
+    <% end %>
+  </span>
+</div>
+<% end %>

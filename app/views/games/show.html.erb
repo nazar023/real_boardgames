@@ -6,10 +6,13 @@
     </div>
     <%= render @game %>
     <%= render '/participants/winner'%>
-    <div id = "participants">
-    <%= render @participants, game: @game%>
-    </div>
+
+    <%= turbo_stream_from "participants_#{dom_id(@game)}"%>
+    <%= turbo_frame_tag "participants_#{dom_id(@game)}" do %>
+      <%= render @participants, game: @game%>
+    <% end %>
   </div>
+
 
   <%# TODO: Add little popups of User's profiles with info %>
   <br/>
