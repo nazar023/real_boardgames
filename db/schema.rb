@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_08_25_200401) do
+ActiveRecord::Schema[7.0].define(version: 2023_08_28_122844) do
   create_table "active_storage_attachments", force: :cascade do |t|
     t.string "name", null: false
     t.string "record_type", null: false
@@ -47,6 +47,18 @@ ActiveRecord::Schema[7.0].define(version: 2023_08_25_200401) do
     t.datetime "updated_at", null: false
     t.index ["user_id"], name: "index_friends_on_user_id"
     t.index ["whoSent_id"], name: "index_friends_on_whoSent_id"
+  end
+
+  create_table "game_invites", force: :cascade do |t|
+    t.integer "game_id", null: false
+    t.integer "whoSent_id", null: false
+    t.integer "whoGet_id", null: false
+    t.string "desc"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["game_id"], name: "index_game_invites_on_game_id"
+    t.index ["whoGet_id"], name: "index_game_invites_on_whoGet_id"
+    t.index ["whoSent_id"], name: "index_game_invites_on_whoSent_id"
   end
 
   create_table "games", force: :cascade do |t|
@@ -104,6 +116,9 @@ ActiveRecord::Schema[7.0].define(version: 2023_08_25_200401) do
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
   add_foreign_key "friends", "users"
   add_foreign_key "friends", "users", column: "whoSent_id"
+  add_foreign_key "game_invites", "games"
+  add_foreign_key "game_invites", "users", column: "whoGet_id"
+  add_foreign_key "game_invites", "users", column: "whoSent_id"
   add_foreign_key "games", "users", column: "creator_id"
   add_foreign_key "participants", "games"
   add_foreign_key "participants", "users"
