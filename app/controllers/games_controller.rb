@@ -2,12 +2,12 @@
 
 class GamesController < ApplicationController # :nodoc:
   before_action :authenticate_user!, only: %i[new edit create update destroy]
-  before_action :set_game, only: %i[show edit update destroy winner]
+  before_action :set_game, only: %i[show edit update destroy winner create_user_invite]
   # GET /games or /games.json
   def index
     authorize Game
     @games = Game.all.with_participants
-
+    @user = current_user
     return unless current_user
 
     current_user.notifications.mark_as_read!
@@ -19,8 +19,20 @@ class GamesController < ApplicationController # :nodoc:
     authorize @game
     @participants = @game.participants.includes(user: :avatar_attachment)
 
-    @winner = @game.participants.find(@game.winner_id) if @game.winner_id.present?
+    return unless current_user
 
+    @user = current_user
+
+    invited_to_game = GameInvite.where(game_id: @game.id).map(&:whoGet_id)
+
+    participants_users_ids = @game.participants.map(&:user_id)
+    @eligible_friends = @user.friends.where.not(user_id: participants_users_ids).or(@user.friends_reqs.where.not(whoSent_id: participants_users_ids)).and(@user.friends.where.not(user_id: invited_to_game).or(@user.friends_reqs.where.not(whoSent_id: invited_to_game)))
+
+    @friends = @eligible_friends
+
+    return unless @game.winner
+
+    @winner = @game.participants.find(@game.winner_id) if @game.winner_id.present?
     @user_w = @winner.user if @winner && @winner.user.present?
   end
 
@@ -93,10 +105,13 @@ class GamesController < ApplicationController # :nodoc:
   # DELETE /games/1 or /games/1.json
   def destroy
     authorize @game
+    users = (@game.participants.pluck(:user_id) + @game.game_invites.pluck(:whoGet_id)).compact.map { |id| User.find(id) }
 
-    @game.creator.notifications.each do |notification|
-      params = notification.to_notification
-      notification.destroy if params.params[:message].game == @game
+    users.each do |user|
+      user.notifications.each do |notification|
+        params = notification.to_notification
+        notification.destroy if params.params[:message].game == @game
+      end
     end
 
     @game.destroy
@@ -116,5 +131,9 @@ class GamesController < ApplicationController # :nodoc:
   # Only allow a list of trusted parameters through.
   def game_params
     params.require(:game).permit(:winner_id, :name, :desc, :members)
+  end
+
+  def user_invite_params
+    params.require(:game_invite).permit(:whoSent_id, :whoGet_id, :game_id, :desc)
   end
 end

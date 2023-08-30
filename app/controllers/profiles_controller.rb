@@ -11,7 +11,7 @@ class ProfilesController < ApplicationController # :nodoc:
 
     @friends = @user.friends.not_request.with_users_avatars + @user.friends_reqs.not_request.with_users_avatars
 
-    @requests = @user.friends.where(request: true).includes(whoSent: :avatar_attachment)
+    @requests = @user.friends_reqs.where(request: true).includes(whoSent: :avatar_attachment)
 
     return unless params[:query].present?
 

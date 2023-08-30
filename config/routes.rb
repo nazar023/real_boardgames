@@ -12,4 +12,8 @@ Rails.application.routes.draw do
   patch '/id/:id', to: 'friends#update', as: :friend
   delete '/notification/:id', to: 'notifications#destroy', as: :notification_destroy
 
+  post '/games/:id/game_invites', to: 'notifications#create_user_invite', as: :game_invites
+
+  post '/game_invites/:id/accept', to: 'notifications#accept_invite', as: :accept_invite
+  delete '/game_invites/:id/decline', to: 'notifications#decline_invite', as: :decline_invite
 end

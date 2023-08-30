@@ -12,8 +12,10 @@ class User < ApplicationRecord # :nodoc:
   has_one_attached :avatar, dependent: :destroy
   has_many :participants, dependent: :destroy
 
-  has_many :friends, dependent: :destroy
-  has_many :friends_reqs, class_name: 'Friend', foreign_key: 'whoSent_id', dependent: :destroy
+  has_many :friends, class_name: 'Friend', foreign_key: 'whoSent_id', dependent: :destroy
+  has_many :friends_reqs, class_name: 'Friend', foreign_key: 'user_id', dependent: :destroy
+
+  has_many :game_invites, foreign_key: 'whoGet_id', dependent: :destroy
 
   has_many :notifications, as: :recipient, dependent: :destroy
 end

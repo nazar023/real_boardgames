@@ -1,0 +1,5 @@
+<%= image_tag whoSent.avatar, class: 'avatar'%> <%= whoSent.username%> invited you to play
+<%= link_to game.name, game, data: { turbo: :false }%>
+
+<%= button_to "Accpet", accept_invite_path(notification.id), data: { turbo: :false }%>
+<%= button_to "Decline", decline_invite_path(notification.id), method: :delete%>

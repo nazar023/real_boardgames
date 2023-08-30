@@ -6,9 +6,14 @@
         <%= render "games/participants", game: game%>
     <% end %>
 
-    <% if user_signed_in? %>
+    <% if current_user %>
       <h3> Wanna add friend ? </h3>
       <%= render "participants/new", game: game, participant: Participant.new%>
+    <% end %>
+
+    <% if current_user %>
+      <%= turbo_stream_from "user_#{user.id}_friends" %>
+        <%= render "games/game_invites/invite_friends", user: @user, friends: @eligible_friends, game: game %>
     <% end %>
     </p>
   </aside>

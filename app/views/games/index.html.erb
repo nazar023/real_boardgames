@@ -4,12 +4,11 @@
   <% @games.each do |game| %>
   <article>
     <%= render game %>
-    <p>
-      <%= link_to "Show this game", game %>
-    </p>
+    <p> <%= link_to "Show this game", game %> </p>
   </article>
   <% end %>
 </div>
+
 <div>
   <%= turbo_frame_tag "notifications" do %>
     <%= render "notifications/notifications", user: current_user, notifications: @notifications%>

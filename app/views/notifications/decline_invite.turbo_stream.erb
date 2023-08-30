@@ -1,0 +1,4 @@
+
+<%= turbo_stream.replace "notifications_#{@user.id}",
+                          partial:"notifications/notifications",
+                          locals: { notifications: @notifications, user: @user } %>

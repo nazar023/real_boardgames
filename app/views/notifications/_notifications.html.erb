@@ -1,15 +1,11 @@
-<% if current_user %>
-<div>
-  <%= turbo_stream_from "notifications_#{user.id}" %>
-    <%= turbo_frame_tag "notifications_#{user.id}" do %>
-      <% notifications.each do |notification| %>
-        <%= render notification,
-            participant: notification.to_notification.participant ,
-            name: notification.to_notification.name,
-            game: notification.to_notification.game,
-            unread: notification.unread?,
-            notification: notification.to_notification %>
+<% if current_user && @user.notifications.present? %>
+  <div>
+    <%= turbo_stream_from "notifications_#{user.id}" %>
+      <%= turbo_frame_tag "notifications_#{user.id}" do %>
+        <h4> You got <%= current_user.notifications.count %> notifications! </h4>
+        <% notifications.each do |notification| %>
+          <%= render "notifications/notification_classifying", notification: notification, user: user%>
+        <% end %>
       <% end %>
-    <% end %>
-</div>
+  </div>
 <% end %>

@@ -2,7 +2,7 @@
 
   <div>
     <div id = "joining">
-        <%= render "games/join", game: @game, participants: @participants%>
+        <%= render "games/join", game: @game, participants: @participants, user: current_user%>
     </div>
     <%= render @game %>
     <%= render '/participants/winner'%>
