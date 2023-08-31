@@ -11,6 +11,9 @@
 # It's strongly recommended that you check this file into your version control system.
 
 ActiveRecord::Schema[7.0].define(version: 2023_08_28_122844) do
+  # These are extensions that must be enabled in order to support this database
+  enable_extension "plpgsql"
+
   create_table "active_storage_attachments", force: :cascade do |t|
     t.string "name", null: false
     t.string "record_type", null: false
@@ -40,8 +43,8 @@ ActiveRecord::Schema[7.0].define(version: 2023_08_28_122844) do
   end
 
   create_table "friends", force: :cascade do |t|
-    t.integer "user_id", null: false
-    t.integer "whoSent_id", null: false
+    t.bigint "user_id", null: false
+    t.bigint "whoSent_id", null: false
     t.boolean "request", default: true
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -50,9 +53,9 @@ ActiveRecord::Schema[7.0].define(version: 2023_08_28_122844) do
   end
 
   create_table "game_invites", force: :cascade do |t|
-    t.integer "game_id", null: false
-    t.integer "whoSent_id", null: false
-    t.integer "whoGet_id", null: false
+    t.bigint "game_id", null: false
+    t.bigint "whoSent_id", null: false
+    t.bigint "whoGet_id", null: false
     t.string "desc"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -67,15 +70,15 @@ ActiveRecord::Schema[7.0].define(version: 2023_08_28_122844) do
     t.integer "members"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.integer "creator_id"
-    t.integer "winner_id"
+    t.bigint "creator_id"
+    t.bigint "winner_id"
     t.index ["creator_id"], name: "index_games_on_creator_id"
     t.index ["winner_id"], name: "index_games_on_winner_id"
   end
 
   create_table "notifications", force: :cascade do |t|
     t.string "recipient_type", null: false
-    t.integer "recipient_id", null: false
+    t.bigint "recipient_id", null: false
     t.string "type", null: false
     t.json "params"
     t.datetime "read_at"
@@ -86,12 +89,12 @@ ActiveRecord::Schema[7.0].define(version: 2023_08_28_122844) do
   end
 
   create_table "participants", force: :cascade do |t|
-    t.integer "game_id", null: false
+    t.bigint "game_id", null: false
     t.string "name"
     t.string "number"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.integer "user_id"
+    t.bigint "user_id"
     t.index ["game_id"], name: "index_participants_on_game_id"
     t.index ["user_id"], name: "index_participants_on_user_id"
   end
