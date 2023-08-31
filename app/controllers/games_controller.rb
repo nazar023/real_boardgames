@@ -24,9 +24,12 @@ class GamesController < ApplicationController # :nodoc:
     @user = current_user
 
     invited_to_game = GameInvite.where(game_id: @game.id).map(&:whoGet_id)
-
     participants_users_ids = @game.participants.map(&:user_id)
-    @eligible_friends = @user.friends.where.not(user_id: participants_users_ids).or(@user.friends_reqs.where.not(whoSent_id: participants_users_ids)).and(@user.friends.where.not(user_id: invited_to_game).or(@user.friends_reqs.where.not(whoSent_id: invited_to_game)))
+    user_friends_reqs = @user.friends_reqs.where(request: true).pluck(:whoSent_id) + @user.friends.where(request: true).pluck(:user_id)
+
+    @not_eligible = (invited_to_game + participants_users_ids + user_friends_reqs).compact.uniq
+
+    @eligible_friends = @user.friends.where.not(user_id: @not_eligible).with_users_avatars + @user.friends_reqs.where.not(whoSent_id: @not_eligible).with_users_avatars
 
     @friends = @eligible_friends
 
