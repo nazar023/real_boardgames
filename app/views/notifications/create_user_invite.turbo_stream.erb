@@ -2,3 +2,7 @@
 <%= turbo_stream.replace "user_#{@user.id}_friends",
                          partial: "games/game_invites/invite_friends",
                          locals: { user: @user, friends: @eligible_friends, game: @invite.game } %>
+
+ <%= turbo_stream.update('flash_messages',
+                            partial: 'layouts/flash_messages',
+                            locals: { notice: "Succsessfuly send to #{@invite.whoGet.username}"})%>

@@ -1,0 +1,17 @@
+<% if @participant.id.present? %>
+  <%= turbo_stream.append("participants_game_#{@game.id}",
+                          partial: 'participants/participant',
+                          locals: { game: @game, participant: @participant })%>
+<% else %>
+  <%= turbo_stream.update('flash_messages',
+                            partial: 'layouts/flash_messages',
+                            locals: { alert: "Can't join this game, number and username can't be blank"})%>
+<% end %>
+
+<%= turbo_stream.update("game_#{@game.id}_counter",
+                         partial: 'participants/member_counter',
+                         locals: { game: @game })%>
+
+<%= turbo_stream.update("game_#{@game.id}_joining",
+                        partial: 'games/join',
+                        locals: { game: @game, user: current_user, friends: @eligible_friends }) %>

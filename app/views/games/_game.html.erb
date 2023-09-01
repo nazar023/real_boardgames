@@ -16,9 +16,10 @@
     </p>
   <% end %>
 
-  <p>
-    <strong>Members:</strong>
-    <%= game.participants.count %>/<%= game.members %>
-  </p>
-
+    <p>
+      <strong>Members:</strong>
+      <%= turbo_frame_tag "#{dom_id(game)}_counter" do %>
+        <%= game.participants.count %>/<%= game.members %>
+      <% end %>
+    </p>
 </div>

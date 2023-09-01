@@ -4,9 +4,9 @@
 
       <%= turbo_frame_tag "#{dom_id(user)}_friend_#{friend.whoSent.id}" do %>
         <% if friend.whoSent&.avatar&.attached? %>
-            <%= link_to (image_tag friend.whoSent.avatar, class: "avatar"), "/id/#{friend.whoSent_id}"%>
+            <%= link_to (image_tag friend.whoSent.avatar, class: "avatar"), "/id/#{friend.whoSent_id}", data: { turbo: false }%>
           <% else %>
-            <%= link_to (image_tag "guestavatar1.png", class: "avatar"), "/id/#{friend.whoSent_id}" %>
+            <%= link_to (image_tag "guestavatar1.png", class: "avatar"), "/id/#{friend.whoSent_id}", data: { turbo: false } %>
           <% end %>
         <%= friend.whoSent.username %>
 
@@ -22,9 +22,9 @@
 
       <%= turbo_frame_tag "#{dom_id(user)}_friend_#{friend.user.id}" do %>
           <% if friend.user&.avatar&.attached? %>
-            <%= link_to (image_tag friend.user.avatar, class: "avatar"), "/id/#{friend.user_id}"%>
+            <%= link_to (image_tag friend.user.avatar, class: "avatar"), "/id/#{friend.user_id}", data: { turbo: false }%>
           <% else %>
-            <%= link_to (image_tag "guestavatar1.png", class: "avatar"), "/id/#{friend.user_id}" %>
+            <%= link_to (image_tag "guestavatar1.png", class: "avatar"), "/id/#{friend.user_id}", data: { turbo: false } %>
           <% end %>
 
           <%= friend.user.username %>

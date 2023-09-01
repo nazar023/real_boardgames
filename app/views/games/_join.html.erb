@@ -1,5 +1,5 @@
 
-<% if game.winner.blank? && participants.count < game.members %>
+<% if game.winner.blank? && policy(game).full?%>
   <aside>
     <p>
     <% if policy(game).join? %>
@@ -13,7 +13,7 @@
 
     <% if current_user %>
       <%= turbo_stream_from "user_#{user.id}_friends" %>
-        <%= render "games/game_invites/invite_friends", user: @user, friends: @eligible_friends, game: game %>
+        <%= render "games/game_invites/invite_friends", user: user, friends: friends, game: game %>
     <% end %>
     </p>
   </aside>

@@ -18,10 +18,8 @@
       <%# TODO: Add notification Noticed Gem %>
       <%= render "layouts/session_manager"%>
     </header>
-    <% if notice.present? %>
-      <p class="notice", style ="color: green"><%= notice %></p>
-    <% elsif alert.present? %>
-      <p class="alert", style ="color: red"><%= alert %></p>
+    <%= turbo_frame_tag 'flash_messages' do %>
+      <%= render "layouts/flash_messages", alert: alert, notice: notice %>
     <% end %>
     <%= yield %>
   </body>

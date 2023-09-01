@@ -1,9 +1,9 @@
 <div>
 
   <div>
-    <div id = "joining">
-        <%= render "games/join", game: @game, participants: @participants, user: current_user%>
-    </div>
+    <%= turbo_frame_tag "#{dom_id(@game)}_joining" do %>
+        <%= render "games/join", game: @game, user: current_user, friends: @eligible_friends%>
+    <% end %>
     <%= render @game %>
     <%= render '/participants/winner'%>
 
@@ -17,9 +17,8 @@
   <%# TODO: Add little popups of User's profiles with info %>
   <br/>
   <br/>
-  <% if policy(@game).choose_winner? %>
+    <%= turbo_frame_tag "#{dom_id(@game)}_win_selector"%>
     <%= render "participants/win_selector", game: @game, participants: @participants %>
-  <% end %>
 
   <div>
     <%= link_to "Edit this game", edit_game_path(@game) if policy(@game).update?%>

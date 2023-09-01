@@ -6,26 +6,26 @@ class ParticipantsController < ApplicationController # :nodoc:
   def create
     authorize @game, :full?
     @participant = @game.participants.new(participant_params)
+    @user = current_user
 
-    # if current_user && current_user.number == @participant.number && current_user&.avatar&.attached?
-    #   @participant.avatar.attach(current_user.avatar_blob)
-    # end
-    # redirect_to @game
+    if current_user
+      invited_to_game = GameInvite.where(game_id: @game.id).map(&:whoGet_id)
+      participants_users_ids = @game.participants.map(&:user_id)
+      user_friends_reqs = @user.friends_reqs.where(request: true).pluck(:whoSent_id) + @user.friends.where(request: true).pluck(:user_id)
+      @not_eligible = (invited_to_game + participants_users_ids + user_friends_reqs).compact.uniq
+      @eligible_friends = @user.friends.where.not(user_id: @not_eligible).with_users_avatars + @user.friends_reqs.where.not(whoSent_id: @not_eligible).with_users_avatars
+    end
 
     respond_to do |format|
       if @participant.save
         if @participant.user
           redirect_to @game
         else
-          format.turbo_stream do
-            render turbo_stream:
-            turbo_stream.append("participants_game_#{@game.id}",
-                                partial: 'participants/participant',
-                                locals: { game: @game, participant: @participant })
-          end
+          format.turbo_stream
         end
         format.json { render :show, status: :created, location: @game }
       else
+        format.turbo_stream
         format.html { redirect_to @game, status: :unprocessable_entity, alert: "Can't join this game, number and username can't be blank" }
         format.json { render json: @game.errors, status: :unprocessable_entity }
       end
