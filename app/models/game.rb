@@ -9,5 +9,16 @@ class Game < ApplicationRecord # :nodoc:
   has_many :participants, dependent: :delete_all
   has_many :game_invites, dependent: :delete_all
 
+  after_create_commit { create_creator_participant }
+
   scope :with_participants, -> { includes(:participants) }
+
+  private
+
+  def create_creator_participant
+    Participant.create!(name: creator.username,
+                        number: creator.number,
+                        user_id: creator.id,
+                        game_id: self.id)
+  end
 end

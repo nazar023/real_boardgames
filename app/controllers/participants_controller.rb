@@ -18,11 +18,7 @@ class ParticipantsController < ApplicationController # :nodoc:
 
     respond_to do |format|
       if @participant.save
-        if @participant.user
-          redirect_to @game
-        else
-          format.turbo_stream
-        end
+        format.turbo_stream
         format.json { render :show, status: :created, location: @game }
       else
         format.turbo_stream

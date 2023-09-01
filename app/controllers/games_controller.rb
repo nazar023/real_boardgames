@@ -23,13 +23,13 @@ class GamesController < ApplicationController # :nodoc:
 
     @user = current_user
 
-    invited_to_game = GameInvite.where(game_id: @game.id).map(&:whoGet_id)
-    participants_users_ids = @game.participants.map(&:user_id)
-    user_friends_reqs = @user.friends_reqs.where(request: true).pluck(:whoSent_id) + @user.friends.where(request: true).pluck(:user_id)
-
-    @not_eligible = (invited_to_game + participants_users_ids + user_friends_reqs).compact.uniq
-
-    @eligible_friends = @user.friends.where.not(user_id: @not_eligible).with_users_avatars + @user.friends_reqs.where.not(whoSent_id: @not_eligible).with_users_avatars
+    if current_user
+      invited_to_game = GameInvite.where(game_id: @game.id).map(&:whoGet_id)
+      participants_users_ids = @game.participants.map(&:user_id)
+      user_friends_reqs = @user.friends_reqs.where(request: true).pluck(:whoSent_id) + @user.friends.where(request: true).pluck(:user_id)
+      @not_eligible = (invited_to_game + participants_users_ids + user_friends_reqs).compact.uniq
+      @eligible_friends = @user.friends.where.not(user_id: @not_eligible).with_users_avatars + @user.friends_reqs.where.not(whoSent_id: @not_eligible).with_users_avatars
+    end
 
     @friends = @eligible_friends
 
@@ -55,12 +55,6 @@ class GamesController < ApplicationController # :nodoc:
     authorize Game
     @game = Game.new(game_params)
     @game.creator = current_user
-
-    if @game.save
-      @game.participants.create!(user_id: @game.creator.id,
-                                 name: @game.creator.username,
-                                 number: @game.creator.number)
-    end
 
     respond_to do |format|
       if @game.save
