@@ -5,4 +5,4 @@
 
  <%= turbo_stream.update('flash_messages',
                             partial: 'layouts/flash_messages',
-                            locals: { notice: "Succsessfuly send to #{@invite.whoGet.username}"})%>
+                            locals: { notice: "Succsessfuly send to #{@invite.receiver.username}"})%>

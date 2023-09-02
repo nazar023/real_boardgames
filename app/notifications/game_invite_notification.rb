@@ -21,12 +21,12 @@ class GameInviteNotification < Noticed::Base
     params[:message]
   end
 
-  def whoGet
-    game_invite.whoGet
+  def receiver
+    game_invite.receiver
   end
 
-  def whoSent
-    game_invite.whoSent
+  def sender
+    game_invite.sender
   end
 
   def game

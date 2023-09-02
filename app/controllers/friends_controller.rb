@@ -4,7 +4,7 @@ class FriendsController < ApplicationController # :nodoc:
   before_action :set_profile, only: [ :create ]
 
   def create
-    request = Friend.create! params.required(:friend).permit(:user_id, :whoSent_id, :request)
+    request = Friend.create! params.required(:friend).permit(:receiver_id, :sender_id, :request)
 
     redirect_to "/id/#{@user.id}", notice: 'Friend request was successfully send' if request.save
 
@@ -12,7 +12,7 @@ class FriendsController < ApplicationController # :nodoc:
 
   def update
     @request = Friend.find(params[:id])
-    user = User.find(@request.user_id)
+    user = User.find(@request.receiver_id)
 
     if params[:friend][:request] == 'true'
       @request.request = false
@@ -25,6 +25,6 @@ class FriendsController < ApplicationController # :nodoc:
   private
 
   def set_profile
-    @user = User.find(params[:friend][:user_id])
+    @user = User.find(params[:id])
   end
 end

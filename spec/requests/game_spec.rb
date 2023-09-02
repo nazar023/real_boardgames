@@ -9,7 +9,13 @@ RSpec.describe 'Game', type: :request do
   let(:participant3) { create(:participant, game_id: game.id) }
 
   describe 'games/:id' do
-    it 'returns http success' do
+    it 'returns http success when guest' do
+      get "/games/#{game.id}"
+      expect(response).to have_http_status(:success)
+    end
+
+    it 'returns http success when signed in' do
+      sign_in game.creator
       get "/games/#{game.id}"
       expect(response).to have_http_status(:success)
     end

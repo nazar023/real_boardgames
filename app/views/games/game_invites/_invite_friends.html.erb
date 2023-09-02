@@ -1,18 +1,18 @@
 <%= turbo_frame_tag "user_#{user.id}_friends" do %>
   <% friends.each do |friend| %>
-    <% if friend.user == user %>
+    <% if friend.receiver == user %>
 
-      <%= turbo_frame_tag "#{dom_id(user)}_friend_#{friend.whoSent.id}" do %>
-        <% if friend.whoSent&.avatar&.attached? %>
-            <%= link_to (image_tag friend.whoSent.avatar, class: "avatar"), "/id/#{friend.whoSent_id}", data: { turbo: false }%>
+      <%= turbo_frame_tag "#{dom_id(user)}_friend_#{friend.sender.id}" do %>
+        <% if friend.sender&.avatar&.attached? %>
+            <%= link_to (image_tag friend.sender.avatar, class: "avatar"), "/id/#{friend.sender_id}", data: { turbo: false }%>
           <% else %>
-            <%= link_to (image_tag "guestavatar1.png", class: "avatar"), "/id/#{friend.whoSent_id}", data: { turbo: false } %>
+            <%= link_to (image_tag "guestavatar1.png", class: "avatar"), "/id/#{friend.sender_id}", data: { turbo: false } %>
           <% end %>
-        <%= friend.whoSent.username %>
+        <%= friend.sender.username %>
 
         <%= form_with(model: GameInvite.new, url: :game_invites) do |form| %>
-          <%= form.hidden_field :whoSent_id, value: user.id %>
-          <%= form.hidden_field :whoGet_id, value: friend.whoSent.id %>
+          <%= form.hidden_field :sender_id, value: user.id %>
+          <%= form.hidden_field :receiver_id, value: friend.sender.id %>
           <%= form.hidden_field :game_id, value: game.id %>
           <%= form.submit 'Invite' %>
         <% end %>
@@ -20,18 +20,18 @@
 
     <% else %>
 
-      <%= turbo_frame_tag "#{dom_id(user)}_friend_#{friend.user.id}" do %>
-          <% if friend.user&.avatar&.attached? %>
-            <%= link_to (image_tag friend.user.avatar, class: "avatar"), "/id/#{friend.user_id}", data: { turbo: false }%>
+      <%= turbo_frame_tag "#{dom_id(user)}_friend_#{friend.receiver.id}" do %>
+          <% if friend.receiver&.avatar&.attached? %>
+            <%= link_to (image_tag friend.receiver.avatar, class: "avatar"), "/id/#{friend.receiver_id}", data: { turbo: false }%>
           <% else %>
-            <%= link_to (image_tag "guestavatar1.png", class: "avatar"), "/id/#{friend.user_id}", data: { turbo: false } %>
+            <%= link_to (image_tag "guestavatar1.png", class: "avatar"), "/id/#{friend.receiver_id}", data: { turbo: false } %>
           <% end %>
 
-          <%= friend.user.username %>
+          <%= friend.receiver.username %>
 
         <%= form_with(model: GameInvite.new, url: :game_invites) do |form| %>
-          <%= form.hidden_field :whoSent_id, value: user.id %>
-          <%= form.hidden_field :whoGet_id, value: friend.user.id %>
+          <%= form.hidden_field :sender_id, value: user.id %>
+          <%= form.hidden_field :receiver_id, value: friend.receiver.id %>
           <%= form.hidden_field :game_id, value: game.id %>
           <%= form.submit 'Invite' %>
         <% end %>

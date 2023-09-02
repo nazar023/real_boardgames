@@ -6,12 +6,9 @@ class ProfilesController < ApplicationController # :nodoc:
     @user = User.find(params[:id])
     @winrate = ((@user.wins_count / Float(@user.games_count)) * 100).round(1)
 
-    # friends = @user.friends.where(request: false).includes(user: :avatar_attachment)
-    # friends_reqs = @user.friends_reqs.where(request: false).includes(whoSent: :avatar_attachment)
-
     @friends = @user.friends.not_request.with_users_avatars + @user.friends_reqs.not_request.with_users_avatars
 
-    @requests = @user.friends_reqs.where(request: true).includes(whoSent: :avatar_attachment)
+    @requests = @user.friends_reqs.where(request: true).includes(sender: :avatar_attachment)
 
     return unless params[:query].present?
 

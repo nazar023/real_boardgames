@@ -8,7 +8,7 @@
         notification: notification %>
   <% elsif notification.type == "GameInviteNotification"%>
     <%= render 'notifications/game_invite_notification',
-        whoSent: notification.to_notification.whoSent,
+        sender: notification.to_notification.sender,
         game: notification.to_notification.game,
         notification: notification%>
   <% end %>

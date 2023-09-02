@@ -2,8 +2,8 @@
 
 FactoryBot.define do
   factory :friend do
-    user_id { nil }
-    whoSent_id factory: :user
+    receiver_id { nil }
+    sender_id factory: :user
     request { false }
   end
 end
