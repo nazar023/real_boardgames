@@ -35,6 +35,10 @@ class GamePolicy < ApplicationPolicy # :nodoc:
     user.blank? || record.participants.find_by(number: user.number).blank?
   end
 
+  def current_user_participates?
+    record.participants.pluck(:user_id).include?(user.id)
+  end
+
   private
 
   def creator?

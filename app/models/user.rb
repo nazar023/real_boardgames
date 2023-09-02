@@ -25,4 +25,10 @@ class User < ApplicationRecord # :nodoc:
 
   has_many :notifications, as: :recipient, dependent: :destroy
 
+  def send_game_invite(user, game)
+    game.game_invites.create!(sender_id: self.id,
+                              receiver_id: user.id,
+                              game_id: game.id)
+  end
+
 end
