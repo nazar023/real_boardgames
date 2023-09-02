@@ -14,6 +14,13 @@ class Participant < ApplicationRecord # :nodoc:
   def broadcast_notifications
     return if user == game.creator
 
+    if game.game_invites.pluck(:receiver_id).include?(self.user.id)
+      self.user.notifications.each do |notification|
+        params = notification.to_notification
+        notification.destroy if params.params[:message].game == game
+      end
+    end
+
     ParticipantNotification.with(message: self).deliver_later(game.creator)
   end
 end

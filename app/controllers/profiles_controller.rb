@@ -8,7 +8,7 @@ class ProfilesController < ApplicationController # :nodoc:
 
     @friends = @user.friends.not_request.with_users_avatars + @user.friends_reqs.not_request.with_users_avatars
 
-    @requests = @user.friends_reqs.where(request: true).includes(sender: :avatar_attachment)
+    @requests = @user.friends_reqs.where.not(sender_id: @user.id)
 
     return unless params[:query].present?
 
