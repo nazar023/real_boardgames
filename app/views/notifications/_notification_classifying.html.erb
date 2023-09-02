@@ -1,12 +1,12 @@
 <%= turbo_frame_tag "#{dom_id(notification)}" do %>
-  <% if notification.type == "ParticipantNotification"%>
+  <% if notification.type == ParticipantNotification.name %>
     <%= render 'notifications/participant_notification',
         participant: notification.to_notification.participant ,
         name: notification.to_notification.name,
         game: notification.to_notification.game,
         unread: notification.unread?,
         notification: notification %>
-  <% elsif notification.type == "GameInviteNotification"%>
+  <% elsif notification.type == GameInviteNotification.name %>
     <%= render 'notifications/game_invite_notification',
         sender: notification.to_notification.sender,
         game: notification.to_notification.game,

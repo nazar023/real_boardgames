@@ -31,4 +31,29 @@ class User < ApplicationRecord # :nodoc:
                               game_id: game.id)
   end
 
+  def accept_game_invite(user, game)
+    self.notifications.where(type: GameInviteNotification.name).each do |notification|
+      game_invite = notification.to_notification.params[:message]
+      next unless game_invite.sender == user && game_invite.receiver == self && game_invite.game == game
+
+      Participant.create!(name: self.username,
+                          number: self.number,
+                          user_id: self.id,
+                          game_id: game.id)
+
+      game_invite.destroy
+      notification.destroy
+    end
+  end
+
+  def decline_game_invite(user, game)
+    self.notifications.where(type: GameInviteNotification.name).each do |notification|
+      game_invite = notification.to_notification.params[:message]
+      next unless game_invite.sender == user && game_invite.receiver == self && game_invite.game == game
+
+      game_invite.destroy
+      notification.destroy
+    end
+  end
+
 end
