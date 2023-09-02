@@ -2,7 +2,7 @@
 
 class GamesController < ApplicationController # :nodoc:
   before_action :authenticate_user!, only: %i[new edit create update destroy]
-  before_action :set_game, only: %i[show edit update destroy winner create_user_invite]
+  before_action :set_game, only: %i[show edit update destroy winner create_user_invite choose_winner]
   # GET /games or /games.json
   def index
     authorize Game
@@ -33,11 +33,6 @@ class GamesController < ApplicationController # :nodoc:
       @eligible_friends = @user.friends.where(receiver_id: friends).or(@user.friends.where(sender_id: friends))
     end
 
-
-    return unless @game.winner
-
-    @winner = @game.participants.find(@game.winner_id) if @game.winner_id.present?
-    @user_w = @winner.user if @winner && @winner.user.present?
   end
 
   # GET /games/new
@@ -68,26 +63,33 @@ class GamesController < ApplicationController # :nodoc:
     end
   end
 
+  def choose_winner
+    return unless game_params[:winner_id].present?
+
+    @game.winner_id = game_params[:winner_id]
+
+    @winner = @game.participants.find(game_params[:winner_id])
+
+    if @winner.user_id.present?
+      @user_winner = User.find(@winner.user_id)
+      @user_winner.increment(:wins_count, 1).save if @winner.user_id.present?
+    end
+
+    users = @game.participants.where.not(user_id: nil)
+
+    users.each do |user|
+      User.find(user.user_id).increment(:games_count, 1).save
+    end
+
+    respond_to do |format|
+      if @game.save
+        format.turbo_stream
+      end
+    end
+  end
   # PATCH/PUT /games/1 or /games/1.json
   def update
     authorize @game
-
-    if game_params[:winner_id].present?
-      @game.winner_id = game_params[:winner_id]
-
-      @winner = @game.participants.find(game_params[:winner_id])
-
-      if @winner.user_id.present?
-        @user_winner = User.find(@winner.user_id)
-        @user_winner.increment(:wins_count, 1).save if @winner.user_id.present?
-      end
-
-      users = @game.participants.where.not(user_id: nil)
-
-      users.each do |user|
-        User.find(user.user_id).increment(:games_count, 1).save
-      end
-    end
 
     respond_to do |format|
       if @game.update(game_params) && @game.save

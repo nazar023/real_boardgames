@@ -6,6 +6,7 @@ Rails.application.routes.draw do
 
   root to: redirect('games')
 
+  patch '/games/:id/choose_winner', to: 'games#choose_winner', as: :choose_winner
   post '/games/:id', to: 'participants#create', as: :game_participants
   get '/id/:id', to: 'profiles#show', as: :user_profile
   post '/id/:id', to: 'friends#create', as: :user_friends

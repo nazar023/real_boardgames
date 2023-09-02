@@ -1,0 +1,7 @@
+
+<%= turbo_stream.replace("game_#{@game.id}_winner",
+                         partial: "/participants/winner",
+                         locals: { winner: @game.winner})%>
+
+<%= turbo_stream.remove("game_#{@game.id}_joining") %>
+<%= turbo_stream.remove("game_#{@game.id}_win_selector") %>
