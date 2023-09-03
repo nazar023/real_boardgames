@@ -2,8 +2,8 @@
 
 FactoryBot.define do
   factory :game_invite do
-    whoSent factory: :user
-    whoGet factory: :user
+    sender factory: :user
+    receiver factory: :user
     game factory: :game
   end
 end

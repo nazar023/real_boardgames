@@ -2,9 +2,9 @@
 
 FactoryBot.define do
   factory :participant do
-    game_id { nil }
-    user_id { nil }
-    sequence(:name) { |n| "Joe#{n}" }
-    sequence(:number) { |n| "111111#{n}" }
+    game { nil }
+    user factory: :user
+    name { user.username }
+    number { user.number }
   end
 end
