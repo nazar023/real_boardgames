@@ -12,13 +12,13 @@ class User < ApplicationRecord # :nodoc:
   has_one_attached :avatar, dependent: :destroy
   has_many :participants, dependent: :destroy
 
-  has_many :friends_reqs, ->(user) { unscope(where: :receiver_id).where('sender_id = ? AND request = true OR receiver_id = ? AND request = true', user.id, user.id) }, class_name: 'Friend',
-                                                                                                                                                                       foreign_key: 'receiver_id',
-                                                                                                                                                                       dependent: :destroy
+  has_many :friends_reqs, -> { where(request: true) }, class_name: 'Friend',
+                                                       foreign_key: 'receiver_id',
+                                                       dependent: :destroy
 
-  has_many :friends, ->(user) { unscope(where: :sender_id).where('sender_id = ? AND request = false OR receiver_id = ? AND request = false', user.id, user.id) }, class_name: 'Friend',
-                                                                                                                                                                  foreign_key: 'sender_id',
-                                                                                                                                                                  dependent: :destroy
+  has_many :friends, ->(user) { unscope(where: :sender_id).where(request: false).where('sender_id = ? OR receiver_id = ?', user.id, user.id) }, class_name: 'Friend',
+                                                                                                                                                foreign_key: 'sender_id',
+                                                                                                                                                dependent: :destroy
 
 
   has_many :game_invites, foreign_key: 'receiver_id', dependent: :destroy
