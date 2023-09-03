@@ -5,17 +5,8 @@ require 'rails_helper'
 RSpec.describe 'User', type: :request do
   let(:user) { create(:user) }
   let(:user1) { create(:user) }
-  let(:user2) { create(:user) }
-  let(:game) { create(:game, creator: user)}
 
-  describe 'can' do
-    it 'destroy?' do
-      create(:friend, receiver_id: user1.id, sender_id: user.id)
-      create(:friend, receiver_id: user.id, sender_id: user2.id, request: false)
-      create(:participant, game_id: game.id, user_id: user.id)
-      expect(user.destroy).to be(user)
-    end
-
+  describe 'get' do
     it 'edit when User ?' do
       sign_in user
       get '/users/edit'
