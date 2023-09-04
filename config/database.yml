@@ -20,6 +20,10 @@ default: &default
   # For details on connection pooling, see Rails configuration guide
   # https://guides.rubyonrails.org/configuring.html#database-pooling
   pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
+  host: <%= ENV.fetch("BG_HOST") { "127.0.0.1" } %>
+  port: <%= ENV.fetch("BG_PORT") { "5432" } %>
+  username: <%= ENV.fetch("BG_USER") { "postgres" } %>
+  password: <%= ENV.fetch("BG_PASSWORD") { "postgres" } %>
 
 development:
   <<: *default
@@ -82,5 +86,3 @@ test:
 production:
   <<: *default
   database: real_boardgames_production
-  username: nazar
-  password: <%= ENV["nazar"] %>
