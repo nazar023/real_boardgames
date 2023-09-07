@@ -16,10 +16,13 @@ class User < ApplicationRecord # :nodoc:
                                                                                                                                                        foreign_key: 'sender_id',
                                                                                                                                                        dependent: :destroy
 
-  has_many :friendships_reqs, ->(user) { where(status: :pending).where('sender_id = ? OR receiver_id = ?', user.id, user.id) }, class_name: 'Friendship',
-                                                                                                                                foreign_key: 'receiver_id',
-                                                                                                                                dependent: :destroy
+  has_many :friendships_reqs, ->(user) { where(status: :pending) }, class_name: 'Friendship',
+                                                                    foreign_key: 'receiver_id',
+                                                                    dependent: :destroy
 
+  has_many :friendship_send, -> (user) { unscope(where: :receiver_id).where(status: :pending).where('sender_id = ?', user.id)}, class_name: 'Friendship',
+                                                                                                                                foreign_key: 'sender_id',
+                                                                                                                                dependent: :destroy
 
   has_many :game_invites, foreign_key: 'receiver_id', dependent: :destroy
 

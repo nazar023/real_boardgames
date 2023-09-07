@@ -15,7 +15,7 @@ RSpec.describe 'User', type: :model do
       create(:friendship, sender: user)
 
       expect { user.destroy }.to(
-        change { Friend.count }.from(2).to(0)
+        change { Friendship.count }.from(2).to(0)
       )
     end
 
