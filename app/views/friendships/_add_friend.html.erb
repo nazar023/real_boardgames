@@ -1,4 +1,4 @@
-<%= form_with(model: [user, Friend.new]) do |form| %>
+<%= form_with(model: [user, Friendship.new]) do |form| %>
       <%= form.hidden_field :sender_id, value: current_user.id%>
       <%= form.hidden_field :receiver_id, value: user.id%>
   <div>

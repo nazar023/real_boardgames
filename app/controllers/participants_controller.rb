@@ -9,11 +9,13 @@ class ParticipantsController < ApplicationController # :nodoc:
     @user = current_user
 
     if current_user
-      invited_to_game = GameInvite.where(game_id: @game.id).map(&:receiver_id)
-      participants_users_ids = @game.participants.map(&:user_id)
-      user_friends_reqs = @user.friends_reqs.where(request: true).pluck(:sender_id) + @user.friends.where(request: true).pluck(:receiver_id)
-      @not_eligible = (invited_to_game + participants_users_ids + user_friends_reqs).compact.uniq
-      @eligible_friends = @user.friends.where.not(receiver_id: @not_eligible).with_users_avatars + @user.friends_reqs.where.not(sender_id: @not_eligible).with_users_avatars
+      friendships = (@user.friendships.pluck(:receiver_id) + @user.friendships.pluck(:sender_id)).uniq
+      friendships.delete(@user.id)
+      participants_users_ids = @game.participants.pluck(:user_id).compact
+      friendships -= participants_users_ids
+      invited_to_game = GameInvite.where(game_id: @game.id).pluck(:receiver_id)
+      friendships -= invited_to_game
+      @eligible_friends = @user.friendships.where(receiver_id: friendships).or(@user.friendships.where(sender_id: friendships))
     end
 
     respond_to do |format|

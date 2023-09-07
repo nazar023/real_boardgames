@@ -1,21 +1,25 @@
 # frozen_string_literal: true
 
-class FriendsController < ApplicationController # :nodoc:
+class FriendshipsController < ApplicationController # :nodoc:
   before_action :set_profile, only: [ :create ]
 
   def create
-    request = Friend.create! params.required(:friend).permit(:receiver_id, :sender_id, :request)
-
-    redirect_to "/id/#{@user.id}", notice: 'Friend request was successfully send' if request.save
-
+    request = Friendship.new params.required(:friendship).permit(:receiver_id, :sender_id)
+    request.pending!
+    if request.save
+      redirect_to "/id/#{@user.id}", notice: 'Friend request was successfully send' if request.save
+    end
   end
 
   def update
-    @request = Friend.find(params[:id])
+    @request = Friendship.find(params[:id])
     user = User.find(@request.receiver_id)
 
-    if params[:friend][:request] == 'true'
-      @request.request = false
+    authorize user, :user?
+
+
+    if params[:friendship][:status] == "1"
+      @request.accepted!
       redirect_to "/id/#{user.id}", notice: 'Friend request was succsesfully accepted' if @request.save
     else
       redirect_to "/id/#{user.id}", notice: 'Friend request was succsesfully declined' if @request.destroy

@@ -12,13 +12,13 @@ class User < ApplicationRecord # :nodoc:
   has_one_attached :avatar, dependent: :destroy
   has_many :participants, dependent: :destroy
 
-  has_many :friends_reqs, -> { where(request: true) }, class_name: 'Friend',
-                                                       foreign_key: 'receiver_id',
-                                                       dependent: :destroy
+  has_many :friendships, ->(user) { unscope(where: :sender_id).where(status: :accepted).where('sender_id = ? OR receiver_id = ?', user.id, user.id) }, class_name: 'Friendship',
+                                                                                                                                                       foreign_key: 'sender_id',
+                                                                                                                                                       dependent: :destroy
 
-  has_many :friends, ->(user) { unscope(where: :sender_id).where(request: false).where('sender_id = ? OR receiver_id = ?', user.id, user.id) }, class_name: 'Friend',
-                                                                                                                                                foreign_key: 'sender_id',
-                                                                                                                                                dependent: :destroy
+  has_many :friendships_reqs, ->(user) { where(status: :pending).where('sender_id = ? OR receiver_id = ?', user.id, user.id) }, class_name: 'Friendship',
+                                                                                                                                foreign_key: 'receiver_id',
+                                                                                                                                dependent: :destroy
 
 
   has_many :game_invites, foreign_key: 'receiver_id', dependent: :destroy

@@ -19,13 +19,13 @@ class NotificationsController < ApplicationController # :nodoc:
     @game = @invite.game
     @eligible_friends = []
 
-    friends = (@user.friends.pluck(:receiver_id) + @user.friends.pluck(:sender_id)).uniq
-    friends.delete(@user.id)
+    friendships = (@user.friendships.pluck(:receiver_id) + @user.friendships.pluck(:sender_id)).uniq
+    friendships.delete(@user.id)
     participants_users_ids = @game.participants.pluck(:user_id).compact
-    friends -= participants_users_ids
+    friendships -= participants_users_ids
     invited_to_game = GameInvite.where(game_id: @invite.game_id).pluck(:receiver_id)
-    friends -= invited_to_game
-    @eligible_friends = @user.friends.where(receiver_id: friends).or(@user.friends.where(sender_id: friends))
+    friendships -= invited_to_game
+    @eligible_friends = @user.friendships.where(receiver_id: friendships).or(@user.friendships.where(sender_id: friendships))
 
     respond_to do |format|
       if @invite

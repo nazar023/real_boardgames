@@ -1,0 +1,41 @@
+  <% if friendship.pending? %>
+      <div>
+        <% if friendship.sender&.avatar&.attached? %>
+            <%= link_to (image_tag friendship.sender.avatar, class: "avatar"), "/id/#{friendship.sender_id}"%>
+          <% else %>
+            <%= link_to (image_tag "guestavatar1.png", class: "avatar"), "/id/#{friendship.sender_id}" %>
+          <% end %>
+        <%= friendship.sender.username %>
+
+        <%= form_with(model: friendship, method: "patch") do |form| %>
+            <div><%= form.hidden_field :status, value: 1 %></div>
+            <div><%= form.submit 'Accept' %></div>
+          <% end %>
+        <%= form_with(model: friendship, method: "patch") do |form| %>
+            <div><%= form.hidden_field :status, value: 0%></div>
+            <div><%= form.submit 'Decline' %></div>
+          <% end %>
+      </div>
+  <% else %>
+
+    <% if friendship.receiver == user %>
+      <div>
+      <% if friendship.sender&.avatar&.attached? %>
+          <%= link_to (image_tag friendship.sender.avatar, class: "avatar"), "/id/#{friendship.sender_id}"%>
+        <% else %>
+          <%= link_to (image_tag "guestavatar1.png", class: "avatar"), "/id/#{friendship.sender_id}" %>
+        <% end %>
+      <%= friendship.sender.username %>
+      </div>
+    <% else %>
+      <% if friendship.receiver&.avatar&.attached? %>
+      <div>
+          <%= link_to (image_tag friendship.receiver.avatar, class: "avatar"), "/id/#{friendship.receiver_id}"%>
+        <% else %>
+          <%= link_to (image_tag "guestavatar1.png", class: "avatar"), "/id/#{friendship.receiver_id}" %>
+        <% end %>
+      <%= friendship.receiver.username %>
+      </div>
+    <% end %>
+
+  <% end %>

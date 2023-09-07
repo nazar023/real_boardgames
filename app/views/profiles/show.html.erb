@@ -39,12 +39,12 @@
 <div>
   <% if policy(@user).friends? %>
 
-    <%= render 'friends/add_friend', user: @user%>
+    <%= render 'friendships/add_friend', user: @user%>
 
   <% end %>
 </div>
 
-<% if policy(@user).user? %>
+<% if policy(@user).has_requests? %>
   <div>
     <h4> Friend requests </h4>
     <%= render @requests, user: @user%>
