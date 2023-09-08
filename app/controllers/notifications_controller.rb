@@ -2,6 +2,7 @@
 
 class NotificationsController < ApplicationController # :nodoc:
   before_action :set_notification, except: %i[ create_user_invite ]
+  before_action :authenticate_user!
 
   def destroy
     @game = @notification.params[:message].game

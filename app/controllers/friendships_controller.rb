@@ -2,6 +2,7 @@
 
 class FriendshipsController < ApplicationController # :nodoc:
   before_action :set_profile, only: [ :create ]
+  before_action :authenticate_user!
 
   def create
     request = Friendship.new params.required(:friendship).permit(:receiver_id, :sender_id)
