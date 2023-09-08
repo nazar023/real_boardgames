@@ -5,10 +5,10 @@ module Api
     class ProfilesController < BaseController # :nodoc:
       def show
         profile = User.find(params[:id])
-        friends = profile.friends.each do |friend|
+        friends = profile.friendships.each do |friend|
                     friend.sender_id == profile.id ? friend.receiver : friend.sender
                   end
-        render json: profile, include: :friends
+        render json: profile, include: :friendships
       end
     end
   end
