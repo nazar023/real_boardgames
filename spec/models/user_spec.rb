@@ -19,7 +19,37 @@ RSpec.describe 'User', type: :model do
       )
     end
 
-    # it '
+    it 'destroys related games' do
+      game = create(:game)
+      user = game.creator
+
+      expect { user.destroy }.to(
+        change { Game.count }.from(1).to(0)
+      )
+    end
+
+    it 'destroys related game invite' do
+      game = create(:game)
+      creator = game.creator
+      user = create(:user)
+      other_user = create(:user)
+      creator.send_game_invite(user, game)
+      creator.send_game_invite(other_user, game)
+
+      expect { user.destroy }.to(
+        change { GameInvite.count }.from(2).to(1)
+      )
+    end
+  end
+
+  describe '#update' do
+    it 'updates user' do
+      user = create(:user)
+      username = user.username
+      expect { user.update(username: 'James B0nd') }.to(
+        change { user.username }.from(username).to('James B0nd')
+      )
+    end
   end
 
 
