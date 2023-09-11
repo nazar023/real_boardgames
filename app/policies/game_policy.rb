@@ -15,7 +15,7 @@ class GamePolicy < ApplicationPolicy # :nodoc:
   end
 
   def update?
-    creator? && winner_present?
+    creator? && winner_blank?
   end
 
   def destroy?
@@ -27,7 +27,7 @@ class GamePolicy < ApplicationPolicy # :nodoc:
   end
 
   def choose_winner?
-     amount_participants > 1 && winner_present?
+     amount_participants > 1 && winner_blank?
   end
 
   def join?
@@ -45,7 +45,7 @@ class GamePolicy < ApplicationPolicy # :nodoc:
     user == record.creator
   end
 
-  def winner_present?
+  def winner_blank?
     record.winner_id.blank?
   end
 

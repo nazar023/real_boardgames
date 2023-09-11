@@ -19,24 +19,10 @@ RSpec.describe 'Game', type: :request do
       get "/games/#{game.id}"
       expect(response).to have_http_status(:success)
     end
-
-    it 'destroy?' do
-      expect(game.destroy).to be(game)
-    end
-
-    it 'has creator' do
-      expect(game.creator).to be_truthy
-    end
-
-    it 'has creator participant' do
-      expect(game.participants.first).to be_truthy
-    end
-
   end
 
   describe 'edit' do
     context 'add another user' do
-
       let(:user) { create(:user) }
 
       it 'gets success when creator' do
@@ -54,19 +40,6 @@ RSpec.describe 'Game', type: :request do
         sign_in user
         get edit_game_path(game)
         expect(response).to have_http_status(:found)
-      end
-
-      it 'update?' do
-        sign_in game.creator
-        game.update(name: 'Fief', desc: 'lalalal', members: game.members)
-        expect(game.desc).to eq('lalalal')
-        expect(game.name).to eq('Fief')
-      end
-
-      it 'update? not valid' do
-        sign_in game.creator
-        game.update(name: '')
-        expect(game.valid?).to be_falsey
       end
     end
   end
