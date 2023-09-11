@@ -16,17 +16,29 @@ class User < ApplicationRecord # :nodoc:
                                                                                                                                                        foreign_key: 'sender_id',
                                                                                                                                                        dependent: :destroy
 
-  has_many :friendships_reqs, ->(user) { where(status: :pending) }, class_name: 'Friendship',
+  has_many :friendships_reqs, -> { where(status: :pending) }, class_name: 'Friendship',
                                                                     foreign_key: 'receiver_id',
                                                                     dependent: :destroy
 
-  has_many :friendship_send, -> (user) { where(status: :pending)}, class_name: 'Friendship',
+  has_many :friendship_send, -> { where(status: :pending) }, class_name: 'Friendship',
                                                                    foreign_key: 'sender_id',
                                                                    dependent: :destroy
 
   has_many :game_invites, foreign_key: 'receiver_id', dependent: :destroy
 
   has_many :notifications, as: :recipient, dependent: :destroy
+
+  def send_friendship_request(user)
+    Friendship.create!(sender_id: self.id, receiver_id: user.id)
+  end
+
+  def accept_friendship_request(user)
+    Friendship.find_by(sender_id: user.id, receiver_id: self.id).accepted!
+  end
+
+  def decline_friendship_request(user)
+    Friendship.find_by(sender_id: user.id, receiver_id: self.id).destroy
+  end
 
   def send_game_invite(user, game)
     game.game_invites.create!(sender_id: self.id,
