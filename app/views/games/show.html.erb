@@ -4,7 +4,18 @@
     <%= turbo_frame_tag "#{dom_id(@game)}_joining" do %>
         <%= render "games/join", game: @game, user: current_user, friends: @eligible_friends%>
     <% end %>
-    <%= render @game %>
+
+    <h2>
+      <%= @game.name %>
+    </h2>
+
+    <h4>
+      <%= @game.desc if @game.desc%>
+    </h4>
+
+    <h4>
+      Members: <%= @game.participants.count %>/<%= @game.members%>
+    </h4>
 
     <%= turbo_frame_tag "#{dom_id(@game)}_winner" do %>
       <%= render '/participants/winner', winner: @game.winner%>

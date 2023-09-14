@@ -1,14 +1,6 @@
 <h1>Games</h1>
-
-<div id="games">
-  <% @games.each do |game| %>
-  <article>
-    <%= render game %>
-    <p> <%= link_to "Show this game", game %> </p>
-  </article>
-  <% end %>
-</div>
-
+  <%= turbo_stream_from 'games', id: 'games'%>
+  <%= render @games %>
 <div>
   <%= turbo_frame_tag "notifications" do %>
     <%= render "notifications/notifications", user: current_user, notifications: @notifications%>

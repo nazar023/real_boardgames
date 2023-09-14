@@ -1,25 +1,28 @@
 <div id="<%= dom_id game %>">
-  <% if game.winner_id.present?%>
-    <h3> Finished </h3>
-  <% end %>
-
-
-  <p>
-    <strong>Name:</strong>
-    <%= game.name %>
-  </p>
-
-  <% if game.desc.present? %>
-    <p>
-      <strong>Desc:</strong>
-      <%= game.desc %>
-    </p>
-  <% end %>
-
-    <p>
-      <strong>Members:</strong>
-      <%= turbo_frame_tag "#{dom_id(game)}_counter" do %>
-        <%= game.participants.count %>/<%= game.members %>
+  <article>
+      <% if game.winner_id.present?%>
+        <h3> Finished </h3>
       <% end %>
-    </p>
+
+
+      <p>
+        <strong>Name:</strong>
+        <%= game.name %>
+      </p>
+
+      <% if game.desc.present? %>
+        <p>
+          <strong>Desc:</strong>
+          <%= game.desc %>
+        </p>
+      <% end %>
+
+        <p>
+          <strong>Members:</strong>
+          <%= turbo_frame_tag "#{dom_id(game)}_counter" do %>
+            <%= game.participants.count %>/<%= game.members %>
+          <% end %>
+        </p>
+      <p> <%= link_to "Show this game", game %> </p>
+  </article>
 </div>

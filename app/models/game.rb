@@ -11,6 +11,10 @@ class Game < ApplicationRecord # :nodoc:
 
   after_create_commit { create_creator_participant }
 
+  after_create_commit { broadcast_to_all }
+  after_update_commit { update_to_all }
+  after_destroy_commit { destroy_to_all }
+
   scope :with_participants, -> { includes(:participants) }
 
   private
@@ -21,4 +25,21 @@ class Game < ApplicationRecord # :nodoc:
                         user_id: creator.id,
                         game_id: self.id)
   end
+
+  def broadcast_to_all
+    broadcast_append_to 'games',
+                        partial: 'games/game',
+                        locals: { game: self }
+  end
+
+  def update_to_all
+    broadcast_update_to 'games',
+                        partial: 'games/game',
+                        locals: { game: self }
+  end
+
+  def destroy_to_all
+    broadcast_remove_to 'games'
+  end
+
 end
