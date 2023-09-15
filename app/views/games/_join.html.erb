@@ -1,4 +1,3 @@
-
 <% if game.winner.blank? && policy(game).full?%>
   <aside>
     <p>
@@ -6,14 +5,15 @@
         <%= render "games/participants", game: game%>
     <% end %>
 
-    <% if current_user %>
+    <% if user %>
       <h3> Wanna add friend ? </h3>
-      <%= render "participants/new", game: game, participant: Participant.new%>
+      <%= render "participants/new_guest_user", user: current_user, game: game, participant: Participant.new%>
     <% end %>
 
-    <% if current_user && policy(game).current_user_participates? %>
-      <%= turbo_stream_from "user_#{user.id}_friends" %>
+    <% if user && policy(game).current_user_participates? %>
+      <div id = "user_friends">
         <%= render "games/game_invites/invite_friends", user: user, friends: friends, game: game %>
+      </div>
     <% end %>
     </p>
   </aside>

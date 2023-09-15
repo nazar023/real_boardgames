@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 class Game < ApplicationRecord # :nodoc:
+  include ActionView::RecordIdentifier
+
   validates :name, :members, presence: true
 
   belongs_to :creator, class_name: 'User', foreign_key: 'creator_id'
@@ -23,7 +25,8 @@ class Game < ApplicationRecord # :nodoc:
     Participant.create!(name: creator.username,
                         number: creator.number,
                         user_id: creator.id,
-                        game_id: self.id)
+                        game_id: self.id,
+                        created_by: 1)
   end
 
   def broadcast_to_all
@@ -36,6 +39,19 @@ class Game < ApplicationRecord # :nodoc:
     broadcast_update_to 'games',
                         partial: 'games/game',
                         locals: { game: self }
+
+    return unless self.winner.present?
+
+    broadcast_update_to "#{dom_id(self)}",
+                        target: 'winner',
+                        partial: '/participants/winner',
+                        locals: { winner: self.winner }
+
+    broadcast_remove_to "#{dom_id(self)}",
+                        target: 'joining'
+
+    broadcast_remove_to "#{dom_id(self)}",
+                        target: 'win_selector'
   end
 
   def destroy_to_all

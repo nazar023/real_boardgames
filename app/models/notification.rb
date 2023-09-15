@@ -14,6 +14,10 @@ class Notification < ApplicationRecord
     broadcast_update_to 'notifications',
                         target: 'notification_counter',
                         html: self.recipient.notifications.count
+
+    broadcast_remove_to "game_#{params[:message].game_id}",
+                        target: "user_#{recipient.id}"
+
   end
 
   def broadcast_delete_notifications

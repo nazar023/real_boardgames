@@ -1,0 +1,23 @@
+<div id = "guest_form">
+  <%= form_with(model: [game, participant]) do |form| %>
+
+    <div>
+      <strong> Name </strong>
+      <div>
+        <%= form.text_field :name%>
+      </div>
+    </div>
+
+    <div>
+      <strong> Number </strong>
+      <div>
+        <%= form.text_field :number%>
+      </div>
+    </div>
+
+    <div>
+      <%= form.submit "Join" %>
+    </div>
+
+  <% end %>
+</div>

@@ -1,6 +1,6 @@
 <%= turbo_frame_tag dom_id(participant) do %>
   <div>
-  <% if game.creator.number == participant.number%>
+  <% if participant.game.creator.number == participant.number%>
     <%= image_tag "crown.png", style: "display: height:30px;
                                                 width: 30px;"%>
   <% end %>

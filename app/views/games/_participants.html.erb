@@ -1,6 +1,7 @@
   <% if !current_user %>
     <h3> Wanna join ? </h3>
-    <%= render "participants/new", game: game, participant: Participant.new%>
+    <%= render "participants/new_guest", user: current_user ,game: game, participant: Participant.new%>
+    </div>
   <% else %>
     <%= render "participants/autorized", game: game%>
   <% end %>

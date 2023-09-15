@@ -19,9 +19,7 @@
 
         <p>
           <strong>Members:</strong>
-          <%= turbo_frame_tag "#{dom_id(game)}_counter" do %>
-            <%= game.participants.count %>/<%= game.members %>
-          <% end %>
+          <span id = 'participants_counter'> <%= game.participants.count %></span>/<%= game.members %>
         </p>
       <p> <%= link_to "Show this game", game %> </p>
   </article>
