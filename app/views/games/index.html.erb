@@ -1,11 +1,6 @@
 <h1>Games</h1>
   <%= turbo_stream_from 'games', id: 'games'%>
   <%= render @games %>
-<div>
-  <%= turbo_frame_tag "notifications" do %>
-    <%= render "notifications/notifications", user: current_user, notifications: @notifications%>
-  <% end %>
-</div>
 
   <%= link_to "New game", new_game_path %>
 

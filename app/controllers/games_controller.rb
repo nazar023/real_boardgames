@@ -8,10 +8,6 @@ class GamesController < ApplicationController # :nodoc:
     authorize Game
     @games = Game.all.with_participants
     @user = current_user
-    return unless current_user
-
-    current_user.notifications.mark_as_read!
-    @notifications = current_user.notifications.newest_first
   end
 
   # GET /games/1 or /games/1.json

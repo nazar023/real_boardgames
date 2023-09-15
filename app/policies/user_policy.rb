@@ -18,6 +18,10 @@ class UserPolicy < ApplicationPolicy # :nodoc:
     profile_owner && record.friendships_reqs.present?
   end
 
+  def has_notifications?
+    profile_owner && record.notifications.present?
+  end
+
 
   private
 

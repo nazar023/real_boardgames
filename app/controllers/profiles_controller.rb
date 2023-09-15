@@ -7,9 +7,12 @@ class ProfilesController < ApplicationController # :nodoc:
     @winrate = ((@user.wins_count / Float(@user.games_count)) * 100).round(1)
 
     @friends = @user.friendships
-    # @friends = @user.friends.with_users_avatars + @user.friends_reqs.with_users_avatars
-
     @requests = @user.friendships_reqs
+
+    return unless current_user == @user
+
+    @notifications = current_user.notifications.newest_first
+    current_user.notifications.mark_as_read!
 
     return unless params[:query].present?
 

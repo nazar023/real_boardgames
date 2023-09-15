@@ -38,9 +38,7 @@
 
 <div>
   <% if policy(@user).friends? %>
-
     <%= render 'friendships/add_friend', user: @user%>
-
   <% end %>
 </div>
 
@@ -50,3 +48,11 @@
     <%= render @requests, user: @user%>
   </div>
 <% end %>
+
+<%= turbo_stream_from "notifications" %>
+<div id = 'notifications'>
+<h4> You got <span id ='notification_counter'> <%= @user.notifications.count %> </span> notifications! </h4>
+  <% if policy(@user).has_notifications? %>
+      <%= render "notifications/notifications", user: @user, notifications: @notifications%>
+  <% end %>
+</div>
