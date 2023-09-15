@@ -71,4 +71,14 @@ class User < ApplicationRecord # :nodoc:
     end
   end
 
+  def find_eligible_friends_for_game(game)
+    friendships = (self.friendships.pluck(:receiver_id) + self.friendships.pluck(:sender_id)).uniq
+    friendships.delete(self.id)
+    participants_users_ids = game.participants.pluck(:user_id).compact
+    friendships -= participants_users_ids
+    invited_to_game = GameInvite.where(game_id: game.id).pluck(:receiver_id)
+    friendships -= invited_to_game
+    self.friendships.where(receiver_id: friendships).or(self.friendships.where(sender_id: friendships))
+  end
+
 end

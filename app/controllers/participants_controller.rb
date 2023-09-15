@@ -8,19 +8,10 @@ class ParticipantsController < ApplicationController # :nodoc:
     @participant = @game.participants.new(participant_params)
     @user = current_user
 
-    if current_user
-      friendships = (@user.friendships.pluck(:receiver_id) + @user.friendships.pluck(:sender_id)).uniq
-      friendships.delete(@user.id)
-      participants_users_ids = @game.participants.pluck(:user_id).compact
-      friendships -= participants_users_ids
-      invited_to_game = GameInvite.where(game_id: @game.id).pluck(:receiver_id)
-      friendships -= invited_to_game
-      @eligible_friends = @user.friendships.where(receiver_id: friendships).or(@user.friendships.where(sender_id: friendships))
-    end
+    @eligible_friends = @user.find_eligible_friends_for_game(@game) if current_user
 
     respond_to do |format|
       if @participant.save
-        format.turbo_stream
         format.json { render :show, status: :created, location: @game }
       else
         format.turbo_stream
