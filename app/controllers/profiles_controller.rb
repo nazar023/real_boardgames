@@ -11,8 +11,8 @@ class ProfilesController < ApplicationController # :nodoc:
 
     return unless current_user == @user
 
-    @notifications = current_user.notifications.newest_first
-    current_user.notifications.mark_as_read!
+    @notifications = @user.notifications.newest_first
+    @user.notifications.mark_as_read!
 
     return unless params[:query].present?
 

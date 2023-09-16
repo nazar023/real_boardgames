@@ -1,5 +1,7 @@
 class Notification < ApplicationRecord
   include Noticed::Model
+  include ActionView::RecordIdentifier
+
   belongs_to :recipient, polymorphic: true
 
   after_create_commit { broadcast_new_notifications }
@@ -8,10 +10,10 @@ class Notification < ApplicationRecord
   private
 
   def broadcast_new_notifications
-    broadcast_append_to 'notifications',
+    broadcast_append_to "#{dom_id(recipient)}_notifications",
                         partial: 'notifications/notification_classifying',
                         locals: { notification: self }
-    broadcast_update_to 'notifications',
+    broadcast_update_to "#{dom_id(recipient)}_notifications",
                         target: 'notification_counter',
                         html: self.recipient.notifications.count
 
@@ -21,8 +23,8 @@ class Notification < ApplicationRecord
   end
 
   def broadcast_delete_notifications
-    broadcast_remove_to 'notifications'
-    broadcast_update_to 'notifications',
+    broadcast_remove_to "#{dom_id(recipient)}_notifications"
+    broadcast_update_to "#{dom_id(recipient)}_notifications",
                     target: 'notification_counter',
                     html: self.recipient.notifications.count
   end

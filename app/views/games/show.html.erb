@@ -2,9 +2,9 @@
   <%= turbo_stream_from "#{dom_id(@game)}" %>
   <div>
 
-    <div id = 'joining'>
+    <%= turbo_frame_tag 'joining' do %>
         <%= render "games/join", game: @game, user: current_user, friends: @eligible_friends%>
-    </div>
+    <% end %>
 
     <h2>
       <%= @game.name %>

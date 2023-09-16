@@ -49,12 +49,12 @@
   </div>
 <% end %>
 
-<%= turbo_stream_from "notifications" %>
-<div id = 'notifications'>
-  <% if current_user == @user%>
-    <h4> You got <span id ='notification_counter'> <%= @user.notifications.count %> </span> notifications! </h4>
-    <% if policy(@user).has_notifications? %>
-      <%= render "notifications/notifications", user: @user, notifications: @notifications%>
-    <% end %>
-  <% end %>
-</div>
+<% if current_user == @user%>
+  <%= turbo_stream_from "#{dom_id(@user)}_notifications" %>
+  <div id = 'notifications'>
+      <h4> You got <span id ='notification_counter'> <%= @user.notifications.count %> </span> notifications! </h4>
+      <% if policy(@user).has_notifications? %>
+        <%= render "notifications/notifications", user: @user, notifications: @notifications%>
+      <% end %>
+  </div>
+<% end %>
