@@ -13,7 +13,6 @@ class ParticipantsController < ApplicationController # :nodoc:
 
     respond_to do |format|
       if @participant.save
-        @participant.creator ? @participant.user! : @participant.guest!
         participants_list_stream
         win_selector_stream
         game_member_counter_stream
