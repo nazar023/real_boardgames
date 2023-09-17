@@ -26,49 +26,33 @@ class User < ApplicationRecord # :nodoc:
 
   has_many :game_invites, foreign_key: 'receiver_id', dependent: :destroy
 
-  has_many :notifications, as: :recipient, dependent: :destroy
+  def notifications
+    game_invites + friendships_reqs
+  end
 
   def send_friendship_request(user)
-    Friendship.create!(sender_id: self.id, receiver_id: user.id)
+    Friendship.create!(sender_id: id, receiver_id: user.id)
   end
 
   def accept_friendship_request(user)
-    Friendship.find_by(sender_id: user.id, receiver_id: self.id).accepted!
+    Friendship.find_by(sender_id: user.id, receiver_id: id).accepted!
   end
 
   def decline_friendship_request(user)
-    Friendship.find_by(sender_id: user.id, receiver_id: self.id).destroy
+    Friendship.find_by(sender_id: user.id, receiver_id: id).destroy
   end
 
   def send_game_invite(user, game)
-    game.game_invites.create!(sender_id: self.id,
+    game.game_invites.create!(sender_id: id,
                               receiver_id: user.id,
                               game_id: game.id)
   end
 
-  def accept_game_invite(user, game)
-    self.notifications.where(type: GameInviteNotification.name).each do |notification|
-      game_invite = notification.to_notification.params[:message]
-      next unless game_invite.sender == user && game_invite.receiver == self && game_invite.game == game
-
-      Participant.create!(name: self.username,
-                          number: self.number,
-                          user_id: self.id,
-                          game_id: game.id)
-
-      game_invite.destroy
-      notification.destroy
-    end
-  end
-
-  def decline_game_invite(user, game)
-    self.notifications.where(type: GameInviteNotification.name).each do |notification|
-      game_invite = notification.to_notification.params[:message]
-      next unless game_invite.sender == user && game_invite.receiver == self && game_invite.game == game
-
-      game_invite.destroy
-      notification.destroy
-    end
+  def friends_who_participates_in_game(game)
+    friends = friendships.pluck(:receiver_id) + friendships.pluck(:sender_id)
+    friends = friends.uniq - Array(id)
+    user_participants = game.participants.pluck(:user_id).compact.uniq
+    friends & user_participants
   end
 
   def find_eligible_friends_for_game(game)

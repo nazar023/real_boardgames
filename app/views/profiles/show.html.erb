@@ -32,7 +32,8 @@
 
 
 <h4> <%= @user.username%> Friends </h4>
-<div>
+<%= turbo_stream_from "#{dom_id(@user)}_friendships"%>
+<div id = "friendships">
   <%= render @friends, user: @user%>
 </div>
 
@@ -41,13 +42,6 @@
     <%= render 'friendships/add_friend', user: @user%>
   <% end %>
 </div>
-
-<% if policy(@user).has_requests? %>
-  <div>
-    <h4> Friend requests </h4>
-    <%= render @requests, user: @user%>
-  </div>
-<% end %>
 
 <% if current_user == @user%>
   <%= turbo_stream_from "#{dom_id(@user)}_notifications" %>

@@ -22,4 +22,8 @@ Rails.application.routes.draw do
 
   post '/game_invites/:id/accept', to: 'notifications#accept_invite', as: :accept_invite
   delete '/game_invites/:id/decline', to: 'notifications#decline_invite', as: :decline_invite
+
+  post  '/frienships/create', to: 'notifications#send_friendship_request', as: :send_friendship_request
+  patch '/friendships/:id/accept', to: 'notifications#accept_friendship', as: :accept_friendship
+  patch '/friendships/:id/decline', to: 'notifications#decline_friendship', as: :decline_friendship
 end

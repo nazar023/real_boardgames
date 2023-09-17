@@ -1,69 +1,176 @@
 # frozen_string_literal: true
 
 class NotificationsController < ApplicationController # :nodoc:
-  before_action :set_notification, except: %i[ create_user_invite ]
+  include ActionView::RecordIdentifier
+
   before_action :authenticate_user!
 
-  def destroy
-    @game = @notification.params[:message].game
-    @user = @game.creator
-    @notifications = @user.notifications.newest_first
+  # def destroy
+  #   @game = @notification.params[:message].game
+  #   @user = @game.creator
+  #   @notifications = @user.notifications.newest_first
 
-    respond_to do |format|
-      format.turbo_stream if @notification.destroy
-    end
-  end
+  #   respond_to do |format|
+  #     format.turbo_stream if @notification.destroy
+  #   end
+  # end
 
   def create_user_invite
-    @invite = GameInvite.create!(user_invite_params)
-    @user = @invite.sender
-    @game = @invite.game
+    @notification = GameInvite.create!(user_invite_params)
+    @user = @notification.sender
+    @game = @notification.game
     @eligible_friends = []
 
     @eligible_friends = @user.find_eligible_friends_for_game(@game) if @user
 
     respond_to do |format|
-      if @invite
+      if @notification
+        update_notification_counter
+        send_notification_to_receiver
+        remove_notification_possibility_for_users
         format.turbo_stream
-        format.html { redirect_to @invite.game, notice: "Successfully send to #{@invite.receiver.username}" }
+        # format.html { redirect_to @notification.game, notice: "Successfully send to #{@notification.receiver.username}" }
       end
     end
 
   end
 
   def accept_invite
-    game_invite = @notification.to_notification.params[:message]
-    user = game_invite.receiver
-    game = game_invite.game
+    @notification = GameInvite.find(params[:id])
+    @user = @notification.receiver
+    @game = @notification.game
 
-    if full?(game) && game_invite.destroy && @notification.destroy
-      redirect_to Game, alert: 'Game already full or end'
-      return
-    end
+    @participant = @notification.accept
 
-    participant = Participant.new(name: user.username,
-                                  number: user.number,
-                                  user_id: user.id,
-                                  game_id: game.id)
-
-    if participant.save && game_invite.destroy && @notification.destroy
-      redirect_to game, notice: 'Successfully accepted invite'
+    respond_to do |format|
+      if @participant
+        format.html { redirect_to @game, notice: 'Successfully accepted invite', data: { turbo: false } }
+        participants_list_stream
+        win_selector_stream
+        game_member_counter_stream
+      else
+        redirect_to Game, alert: 'Game already full or end'
+      end
     end
   end
 
   def decline_invite
-    game_invite = @notification.to_notification.params[:message]
-    @user = game_invite.receiver
-    @notifications = @user.notifications
+    @notification = GameInvite.find(params[:id])
+    @user = @notification.receiver
+    @game = @notification.game
+
     respond_to do |format|
-      format.turbo_stream  if game_invite.destroy && @notification.destroy
+      if @notification.decline
+        format.turbo_stream do
+          render turbo_stream: [
+            update_local_notification_counter,
+            remove_user_notification
+          ]
+        end
+      end
+    end
+  end
+
+  def send_friendship_request
+    @notification = Friendship.new params.required(:friendship).permit(:receiver_id, :sender_id)
+    @notification.pending!
+    @user = @notification.receiver
+
+    respond_to do |format|
+      if @notification.save
+        send_notification_to_receiver
+        update_notification_counter
+        format.html { redirect_to "/id/#{@user.id}", notice: 'Friend request was successfully send', data: { turbo: false } }
+      end
+    end
+  end
+
+  def accept_friendship
+    @notification = Friendship.find(params[:id])
+    @user = @notification.receiver
+
+    authorize @user, :user?
+
+    @notification.accept
+
+    respond_to do |format|
+      if @notification.accepted?
+        format.turbo_stream do
+          render turbo_stream: [
+            remove_user_notification,
+            update_local_notification_counter
+          ]
+        end
+        add_new_friendship_to_list
+      end
+    end
+  end
+
+  def decline_friendship
+    @notification = Friendship.find(params[:id])
+    @user = @notification.receiver
+
+    authorize @user, :user?
+
+    @notification.decline
+
+    respond_to do |format|
+      format.turbo_stream do
+        render turbo_stream: [
+          update_local_notification_counter,
+          remove_user_notification
+        ]
+      end
     end
   end
 
   private
 
-  def set_notification
-    @notification = Notification.find(params[:id])
+  def participants_list_stream
+    Turbo::StreamsChannel.broadcast_append_to "#{dom_id(@game)}", target: 'participants', partial: 'participants/participant', locals: { participant: @participant, game: @game }
+  end
+
+  def win_selector_stream
+    Turbo::StreamsChannel.broadcast_update_to "#{dom_id(@game)}", target: 'win_selector', partial: 'participants/win_selector', locals: { participants: @game.participants , game: @game }
+  end
+
+  def game_member_counter_stream
+    Turbo::StreamsChannel.broadcast_update_to 'games', target: 'participants_counter', html: @game.participants.count
+    Turbo::StreamsChannel.broadcast_update_to "#{dom_id(@game)}", target: 'participants_counter', html: @game.participants.count
+  end
+
+  def send_notification_to_receiver
+    Turbo::StreamsChannel.broadcast_append_to "#{dom_id(@notification.receiver)}_notifications", target: 'notifications', partial: "notifications/notification_classifying", locals: { notification: @notification }
+  end
+
+  def update_notification_counter
+    Turbo::StreamsChannel.broadcast_update_to "#{dom_id(@notification.receiver)}_notifications", target: 'notification_counter', html: @notification.receiver.notifications.count
+  end
+
+  def update_local_notification_counter
+    turbo_stream.update 'notification_counter', html: @user.notifications.count
+  end
+
+  def remove_user_notification
+    turbo_stream.remove "#{dom_id(@notification)}"
+  end
+
+  def add_new_friendship_to_list
+    Turbo::StreamsChannel.broadcast_append_to "#{dom_id(@notification.receiver)}_friendships", target: "friendships", partial: "friendships/friendship", locals: { friendship: @notification, user: @user }
+  end
+
+  def add_notification_possibility_for_users
+    @notification.receiver.friends_who_participates_in_game(@game).each do |id|
+      user = User.find(id)
+      Turbo::StreamsChannel.broadcast_replace_to "#{dom_id(@game)}_#{dom_id(user)}_friends", target: "#{dom_id(user)}_friends", partial: "games/notifications/invite_friends", locals: { user: user, friends: user.find_eligible_friends_for_game(@game), game: @game }
+    end
+  end
+
+  def remove_notification_possibility_for_users
+    @notification.receiver.friends_who_participates_in_game(@game).each do |id|
+      user = User.find(id)
+      Turbo::StreamsChannel.broadcast_remove_to "#{dom_id(@game)}_#{dom_id(user)}_friends", target: "#{dom_id(@notification.receiver)}"
+    end
   end
 
   def user_invite_params

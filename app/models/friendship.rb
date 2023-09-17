@@ -7,4 +7,12 @@ class Friendship < ApplicationRecord # :nodoc:
 
   scope :with_users_avatars, -> { includes(receiver: :avatar_attachment, sender: :avatar_attachment) }
   # scope :not_request, -> { where(request: false) }
+
+  def accept
+    accepted!
+  end
+
+  def decline
+    destroy
+  end
 end
