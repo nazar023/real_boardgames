@@ -3,6 +3,20 @@
 require 'rails_helper'
 
 RSpec.describe 'User', type: :model do
+  describe 'validations' do
+    subject { create(:user) }
+    it { should validate_presence_of(:username) }
+    it { should validate_presence_of(:number) }
+    it { should validate_presence_of(:email) }
+    it { should validate_presence_of(:password) }
+    it { should have_many(:games) }
+    it { should have_many(:participants) }
+    it { should have_many(:friendships) }
+    it { should have_many(:friendships_reqs) }
+    it { should have_many(:friendships_send) }
+    it { should have_many(:game_invites) }
+  end
+
   describe '#destroy' do
     it 'destroys related friendships' do
       user = create(:user)
@@ -40,25 +54,6 @@ RSpec.describe 'User', type: :model do
   end
 
   # try shoulda_matchers
-  describe '#update' do
-    it 'updates user' do
-
-      user = create(:user)
-      username = user.username
-      expect { user.update(username: 'James B0nd') }.to(
-        change { user.username }.from(username).to('James B0nd')
-      )
-    end
-  end
-
-  describe '#accept_game_invite' do
-    it "makes this user a game participant" do
-      invite = create(:game_invite)
-      user = invite.receiver
-
-      invite.accept
-    end
-  end
 end
 
 # Homework

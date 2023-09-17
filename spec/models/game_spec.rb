@@ -5,11 +5,13 @@ require 'rails_helper'
 RSpec.describe Game, type: :model do
   let(:game) { create(:game) }
 
-  context 'when creates' do
+  context 'validations' do
     subject { game }
     it { should validate_presence_of(:name) }
     it { should validate_presence_of(:members) }
     it { should have_many(:participants) }
+    it { should have_many(:game_invites) }
+    it { should belong_to(:creator).class_name('User') }
     it { expect(game.participants.count).to be(1) }
     it { expect(game.creator).to eq(game.participants.first.user) }
     it { expect(game.winner).to be_blank }
@@ -44,15 +46,4 @@ RSpec.describe Game, type: :model do
   end
 
   # try shoulda_matchers gem instead
-  describe '#update' do
-    it 'update when valid' do
-      expect { game.update(name: 'Fief') }.to(
-        change { game.name }.from(game.name).to('Fief')
-      )
-    end
-
-    it 'update when not valid' do
-      expect(game.update(name: '')).to be_falsey
-    end
-  end
 end
