@@ -16,7 +16,7 @@ class GameInvite < ApplicationRecord # :nodoc:
   end
 
   def decline
-    @game_invite.destroy
+    destroy
   end
 end
 

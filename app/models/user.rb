@@ -20,7 +20,7 @@ class User < ApplicationRecord # :nodoc:
                                                                     foreign_key: 'receiver_id',
                                                                     dependent: :destroy
 
-  has_many :friendship_send, -> { where(status: :pending) }, class_name: 'Friendship',
+  has_many :friendships_send, -> { where(status: :pending) }, class_name: 'Friendship',
                                                                    foreign_key: 'sender_id',
                                                                    dependent: :destroy
 
@@ -32,14 +32,6 @@ class User < ApplicationRecord # :nodoc:
 
   def send_friendship_request(user)
     Friendship.create!(sender_id: id, receiver_id: user.id)
-  end
-
-  def accept_friendship_request(user)
-    Friendship.find_by(sender_id: user.id, receiver_id: id).accepted!
-  end
-
-  def decline_friendship_request(user)
-    Friendship.find_by(sender_id: user.id, receiver_id: id).destroy
   end
 
   def send_game_invite(user, game)
@@ -56,13 +48,11 @@ class User < ApplicationRecord # :nodoc:
   end
 
   def find_eligible_friends_for_game(game)
-    friendships = (self.friendships.pluck(:receiver_id) + self.friendships.pluck(:sender_id)).uniq
-    friendships.delete(self.id)
-    participants_users_ids = game.participants.pluck(:user_id).compact
-    friendships -= participants_users_ids
+    eligible_friendships = (friendships.pluck(:receiver_id) + friendships.pluck(:sender_id)).compact.uniq - Array(id)
     invited_to_game = GameInvite.where(game_id: game.id).pluck(:receiver_id)
-    friendships -= invited_to_game
-    self.friendships.where(receiver_id: friendships).or(self.friendships.where(sender_id: friendships))
+    eligible_friendships -= invited_to_game
+    eligible_friendships -= friends_who_participates_in_game(game)
+    friendships.where(receiver_id: eligible_friendships).or(friendships.where(sender_id: eligible_friendships))
   end
 
 end
