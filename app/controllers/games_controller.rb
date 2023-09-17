@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 class GamesController < ApplicationController # :nodoc:
+  include ActionView::RecordIdentifier
   before_action :authenticate_user!, only: %i[new edit create update destroy]
   before_action :set_game, only: %i[show edit update destroy winner create_user_invite choose_winner]
   # GET /games or /games.json
@@ -40,7 +41,10 @@ class GamesController < ApplicationController # :nodoc:
 
     respond_to do |format|
       if @game.save
+        # format.turbo_stream
         format.html { redirect_to game_url(@game), notice: 'Game was successfully created.' }
+        # format.turbo_stream
+        broadcast_new_game
         format.json { render :show, status: :created, location: @game }
       else
         format.html { render :new, status: :unprocessable_entity }
@@ -69,7 +73,10 @@ class GamesController < ApplicationController # :nodoc:
 
     respond_to do |format|
       if @game.save
-        format.turbo_stream
+        broadcast_updated_info
+        broadcast_winner_info
+        hide_joining_win_selector
+        # format.turbo_stream
       end
     end
   end
@@ -79,6 +86,7 @@ class GamesController < ApplicationController # :nodoc:
 
     respond_to do |format|
       if @game.update(game_params) && @game.save
+        broadcast_updated_info
         format.html { redirect_to game_url(@game), notice: 'Game was successfully updated.' }
         format.json { render :show, status: :ok, location: @game }
       else
@@ -91,23 +99,37 @@ class GamesController < ApplicationController # :nodoc:
   # DELETE /games/1 or /games/1.json
   def destroy
     authorize @game
-    users = (@game.participants.pluck(:user_id) + @game.game_invites.pluck(:receiver_id)).compact.map { |id| User.find(id) }
-
-    users.each do |user|
-      user.notifications.each do |notification|
-        params = notification.to_notification
-        notification.destroy if params.params[:message].game == @game
-      end
-    end
 
     @game.destroy
     respond_to do |format|
+      broadcast_game_remove
       format.html { redirect_to games_url, notice: 'Game was successfully destroyed.' }
       format.json { head :no_content }
     end
   end
 
   private
+
+  def broadcast_new_game
+    Turbo::StreamsChannel.broadcast_append_to 'games', target: 'games', partial: 'games/game', locals: { game: @game }
+  end
+
+  def broadcast_updated_info
+    Turbo::StreamsChannel.broadcast_replace_to 'games', target: 'games' ,partial: 'games/game', locals: { game: @game }
+  end
+
+  def broadcast_winner_info
+    Turbo::StreamsChannel.broadcast_replace_to "#{dom_id(@game)}", target: 'winner', partial: '/participants/winner', locals: { winner: @game.winner }
+  end
+
+  def hide_joining_win_selector
+    Turbo::StreamsChannel.broadcast_remove_to "#{dom_id(@game)}", target: 'joining'
+    Turbo::StreamsChannel.broadcast_remove_to "#{dom_id(@game)}", target: 'win_selector'
+  end
+
+  def broadcast_game_remove
+    Turbo::StreamsChannel.broadcast_remove_to "games", target: "#{dom_id(@game)}"
+  end
 
   # Use callbacks to share common setup or constraints between actions.
   def set_game
