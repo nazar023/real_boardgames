@@ -11,7 +11,8 @@
     <% end %>
 
     <% if user && policy(game).current_user_participates? %>
-      <div id = "user_friends">
+      <%= turbo_stream_from "#{dom_id(game)}_#{dom_id(user)}_friends"%>
+      <div id = "<%="#{dom_id(user)}"%>_friends">
         <%= render "games/game_invites/invite_friends", user: user, friends: friends, game: game %>
       </div>
     <% end %>
