@@ -68,6 +68,7 @@ end
 
 group :test do
   # Use system testing [https://guides.rubyonrails.org/testing.html#system-testing]
+  gem 'shoulda-matchers', '~> 5.0'
   gem "capybara"
   gem "selenium-webdriver"
   gem "webdrivers"
@@ -79,5 +80,5 @@ gem "pundit", "~> 2.3"
 
 # TODO: Replace Active Storage with Shrine gem
 
-gem "noticed", "~> 1.6"
+# gem "noticed", "~> 1.6"
 
