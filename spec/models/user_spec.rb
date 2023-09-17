@@ -3,11 +3,6 @@
 require 'rails_helper'
 
 RSpec.describe 'User', type: :model do
-  # let(:user) { create(:user) }
-  # let(:user1) { create(:user) }
-  # let(:user2) { create(:user) }
-  # let(:game) { create(:game, creator: user) }
-
   describe '#destroy' do
     it 'destroys related friendships' do
       user = create(:user)
@@ -32,18 +27,22 @@ RSpec.describe 'User', type: :model do
       game = create(:game)
       creator = game.creator
       user = create(:user)
-      other_user = create(:user)
-      creator.send_game_invite(user, game)
-      creator.send_game_invite(other_user, game)
+
+      create(:game_invite, sender: creator, receiver: user)
+      other_game_invite = create(:game_invite, sender: creator)
 
       expect { user.destroy }.to(
         change { GameInvite.count }.from(2).to(1)
       )
+
+      expect(GameInvite.pluck(:id)).to eq([other_game_invite.id])
     end
   end
 
+  # try shoulda_matchers
   describe '#update' do
     it 'updates user' do
+
       user = create(:user)
       username = user.username
       expect { user.update(username: 'James B0nd') }.to(
@@ -52,7 +51,14 @@ RSpec.describe 'User', type: :model do
     end
   end
 
+  describe '#accept_game_invite' do
+    it "makes this user a game participant" do
+      invite = create(:game_invite)
+      user = invite.receiver
 
+      invite.accept
+    end
+  end
 end
 
 # Homework
