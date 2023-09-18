@@ -49,7 +49,8 @@ class NotificationsController < ApplicationController # :nodoc:
         win_selector_stream
         game_member_counter_stream
       else
-        redirect_to Game, alert: 'Game already full or end'
+        @notification.decline
+        format.html { redirect_to Game, alert: 'Game already full or end' }
       end
     end
   end

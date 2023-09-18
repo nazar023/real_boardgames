@@ -13,16 +13,17 @@ class ParticipantsController < ApplicationController # :nodoc:
 
     respond_to do |format|
       if @participant.save
+        format.turbo_stream do
+          render turbo_stream: [
+            guest_form_frame_tag
+          ]
+        end
         participants_list_stream
         win_selector_stream
         game_member_counter_stream
         remove_joining_aside_stream if policy(@game).full? && @game.winner.present?
         remove_user_invite_stream if @participant.user
         remove_join_user_button_stream if @participant.user
-        format.turbo_stream do
-          render turbo_stream:
-          guest_form_frame_tag
-        end
       else
         format.turbo_stream do
           render turbo_stream:

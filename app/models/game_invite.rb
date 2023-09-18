@@ -8,7 +8,7 @@ class GameInvite < ApplicationRecord # :nodoc:
   scope :with_users_avatars, -> { includes(receiver: :avatar_attachment, sender: :avatar_attachment) }
 
   def accept
-    return unless game && GamePolicy.new(nil, game).full?
+    return unless game && game.winner.blank? && GamePolicy.new(nil, game).full?
 
     game.participants.create!(name: receiver.username,
                               number: receiver.number,
