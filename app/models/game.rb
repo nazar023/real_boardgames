@@ -15,16 +15,16 @@ class Game < ApplicationRecord # :nodoc:
 
   scope :with_participants, -> { includes(:participants) }
 
-  def finish(participant)
-    self.winner = participant
+  def finish(winner_participant)
+    self.winner = winner_participant
 
+    winner.user.increment!(:wins_count) if winner&.user
     game_invites.each(&:destroy)
-    winner.user.increment(:wins_count, 1).save if winner&.user
 
-    participants.where.not(user_id: nil).each do |user|
-      User.find(user.user_id).increment(:games_count, 1).save
+    participants.where.not(user_id: nil).each do |participant|
+      User.find(participant.user_id).increment!(:games_count)
     end
-    winner
+
   end
 
   private

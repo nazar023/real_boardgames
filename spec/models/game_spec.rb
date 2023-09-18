@@ -45,5 +45,33 @@ RSpec.describe Game, type: :model do
     end
   end
 
+  describe '#finish' do
+    it 'add winner to game' do
+      participant = create(:participant, game:)
+
+      expect { game.finish(participant) }.to(
+        change { game.winner }.from(nil).to(participant)
+      )
+    end
+
+    it 'increases game counter for all user participants' do
+      game.creator
+
+      expect { game.finish(game.participants.first) }.to(
+        change { User.first.games_count }.from(0).to(1)
+      )
+    end
+
+    it 'destroys game invites' do
+      game_invite = create(:game_invite)
+      game = game_invite.game
+      participant = create(:participant, game:)
+
+      expect { game.finish(participant) }.to(
+        change { GameInvite.count }.from(1).to(0)
+      )
+    end
+  end
+
   # try shoulda_matchers gem instead
 end
