@@ -152,7 +152,7 @@ class NotificationsController < ApplicationController # :nodoc:
   end
 
   def remove_user_notification
-    turbo_stream.remove "#{dom_id(@notification)}"
+    turbo_stream.remove "#{dom_id(@notification)}_notification"
   end
 
   def add_new_friendship_to_list
