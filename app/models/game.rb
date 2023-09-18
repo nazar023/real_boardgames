@@ -15,6 +15,18 @@ class Game < ApplicationRecord # :nodoc:
 
   scope :with_participants, -> { includes(:participants) }
 
+  def finish(participant)
+    self.winner = participant
+
+    game_invites.each(&:destroy)
+    winner.user.increment(:wins_count, 1).save if winner&.user
+
+    participants.where.not(user_id: nil).each do |user|
+      User.find(user.user_id).increment(:games_count, 1).save
+    end
+    winner
+  end
+
   private
 
   def create_creator_participant

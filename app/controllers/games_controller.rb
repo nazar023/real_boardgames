@@ -54,29 +54,15 @@ class GamesController < ApplicationController # :nodoc:
   end
 
   def choose_winner
-    return unless game_params[:winner_id].present?
-
-    @game.winner_id = game_params[:winner_id]
-
-    @winner = @game.participants.find(game_params[:winner_id])
-
-    if @winner.user_id.present?
-      @user_winner = User.find(@winner.user_id)
-      @user_winner.increment(:wins_count, 1).save if @winner.user_id.present?
-    end
-
-    users = @game.participants.where.not(user_id: nil)
-
-    users.each do |user|
-      User.find(user.user_id).increment(:games_count, 1).save
-    end
+    winner = Participant.find(game_params[:winner_id])
+    @game.finish(winner)
 
     respond_to do |format|
       if @game.save
         broadcast_updated_info
         broadcast_winner_info
         hide_joining_win_selector
-        # format.turbo_stream
+        format.turbo_stream
       end
     end
   end
