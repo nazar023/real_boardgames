@@ -68,9 +68,41 @@ RSpec.describe 'User', type: :model do
       user = create(:user)
       expect(user.winrate).to eq(0)
     end
-
   end
 
+  describe '#friends_who_participates_in_game' do
+    it 'correctly returns friends count' do
+      game = create(:game, members: 8)
+      creator = game.creator
+      friendship1 = create(:friendship, receiver: creator, status: "accepted")
+      friendship2 = create(:friendship, receiver: creator, status: "accepted")
+      friendship3 = create(:friendship, receiver: creator, status: "accepted")
+      create(:participant, user: friendship1.sender, game:)
+      create(:participant, user: friendship2.sender, game:)
+      create(:participant, user: friendship3.sender, game:)
+      create(:participant, game:)
+      create(:participant, game:)
+
+      expect(creator.friends_who_participates_in_game(game).count).to eq(3)
+    end
+  end
+
+  describe '#find_eligible_friends_for_game' do
+    it 'correctly filtrates user friends' do
+      game = create(:game, members: 8)
+      creator = game.creator
+      friendship1 = create(:friendship, receiver: creator, status: "accepted")
+      friendship2 = create(:friendship, receiver: creator, status: "accepted")
+      friendship3 = create(:friendship, receiver: creator, status: "accepted")
+      creator.send_game_invite(friendship1.sender, game)
+      create(:participant, user: friendship2.sender, game:)
+
+      expect(creator.find_eligible_friends_for_game(game).count).to eq(1)
+      expect(creator.find_eligible_friends_for_game(game)).to include(friendship3)
+      expect(friendship2.sender.find_eligible_friends_for_game(game).count).to eq(0)
+      expect(friendship2.sender.find_eligible_friends_for_game(game)).to be_blank
+    end
+  end
   # try shoulda_matchers
 end
 
