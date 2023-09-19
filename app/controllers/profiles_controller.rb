@@ -1,11 +1,11 @@
 # frozen_string_literal: true
 
 class ProfilesController < ApplicationController # :nodoc:
+  before_action :set_user
 
   def show
-    @user = User.find(params[:id])
-    @winrate = ((@user.wins_count / Float(@user.games_count)) * 100).round(1)
 
+    @winrate = @user.winrate
     @friends = @user.friendships
     @requests = @user.friendships_reqs
 
@@ -18,4 +18,9 @@ class ProfilesController < ApplicationController # :nodoc:
     @users = User.where('username LIKE ?', "#{params[:query].squish}%").or(User.where(number: "#{params[:query]}"))
   end
 
+  private
+
+  def set_user
+    @user = User.find(params[:id])
+  end
 end

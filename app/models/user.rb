@@ -26,6 +26,10 @@ class User < ApplicationRecord # :nodoc:
 
   has_many :game_invites, foreign_key: 'receiver_id', dependent: :destroy
 
+  def winrate
+    ((wins_count / Float(games_count)) * 100).round(1)
+  end
+
   def notifications
     game_invites + friendships_reqs
   end
