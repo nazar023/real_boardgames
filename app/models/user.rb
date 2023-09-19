@@ -17,17 +17,18 @@ class User < ApplicationRecord # :nodoc:
                                                                                                                                                        dependent: :destroy
 
   has_many :friendships_reqs, -> { where(status: :pending) }, class_name: 'Friendship',
-                                                                    foreign_key: 'receiver_id',
-                                                                    dependent: :destroy
+                                                              foreign_key: 'receiver_id',
+                                                              dependent: :destroy
 
   has_many :friendships_send, -> { where(status: :pending) }, class_name: 'Friendship',
-                                                                   foreign_key: 'sender_id',
-                                                                   dependent: :destroy
+                                                              foreign_key: 'sender_id',
+                                                              dependent: :destroy
 
   has_many :game_invites, foreign_key: 'receiver_id', dependent: :destroy
 
   def winrate
-    ((wins_count / Float(games_count)) * 100).round(1)
+    value = ((wins_count / Float(games_count)) * 100).round(1)
+    value.nan? ? 0 : value
   end
 
   def notifications

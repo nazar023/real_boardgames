@@ -24,9 +24,7 @@
     <h4>
     <div>Games played <%= @user.games_count%> </div>
     <div>Wins <%= @user.wins_count%> </div>
-    <% if !@winrate.nan?%>
-      <div>Winrate <%= @winrate %>% </div>
-    <% end %>
+    <div>Winrate <%= @winrate %>% </div>
     </h4>
 </div>
 

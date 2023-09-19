@@ -53,6 +53,24 @@ RSpec.describe 'User', type: :model do
     end
   end
 
+  describe '#winrate' do
+    it 'returns int value' do
+      game = create(:game)
+      create(:participant, game:)
+      participant = create(:participant, game:)
+      creator = game.creator
+      game.finish(participant)
+
+      expect(creator.winrate.class).to be(Integer)
+    end
+
+    it 'return 0 when User has 0 played games' do
+      user = create(:user)
+      expect(user.winrate).to eq(0)
+    end
+
+  end
+
   # try shoulda_matchers
 end
 
