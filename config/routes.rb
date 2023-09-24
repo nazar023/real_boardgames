@@ -6,10 +6,15 @@ Rails.application.routes.draw do
 
   root to: redirect('games')
 
-
-  get 'api/v1/games', to: 'api/v1/games#index'
-  get 'api/v1/games/:id', to: 'api/v1/games#show'
-  get 'api/v1/id/:id', to: 'api/v1/profiles#show'
+  namespace :api do
+    namespace :v1 do
+      defaults format: :json do
+        get 'games', to: 'games#index'
+        get 'games/:id', to: 'games#show'
+        get 'id/:id', to: 'profiles#show'
+      end
+    end
+  end
 
   patch '/games/:id/choose_winner', to: 'games#choose_winner', as: :choose_winner
   post '/games/:id', to: 'participants#create', as: :game_participants
