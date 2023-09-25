@@ -11,6 +11,7 @@ class User < ApplicationRecord # :nodoc:
   has_many :games, inverse_of: :creator, foreign_key: 'creator_id', dependent: :destroy
   has_one_attached :avatar, dependent: :destroy
   has_many :participants, dependent: :destroy
+  enum status: [:offline, :online]
 
   has_many :friendships, ->(user) { unscope(where: :sender_id).where(status: :accepted).where('sender_id = ? OR receiver_id = ?', user.id, user.id) }, class_name: 'Friendship',
                                                                                                                                                        foreign_key: 'sender_id',
