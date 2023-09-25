@@ -11,6 +11,7 @@
   </head>
 
   <body>
+    <%= turbo_stream_from 'online_users', channel: OnlineChannel%>
     <header style="text-align:center;">
       <div>
         <%= link_to image_tag('yellowboardgamelogo.png', width: "150", height: "150"), games_path%>
