@@ -26,6 +26,8 @@ class User < ApplicationRecord # :nodoc:
 
   has_many :game_invites, foreign_key: 'receiver_id', dependent: :destroy
 
+  has_many :api_tokens
+
   def winrate
     value = ((wins_count / Float(games_count)) * 100).round(1)
     value.nan? ? 0 : value
