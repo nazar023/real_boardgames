@@ -4,11 +4,9 @@ module Api
   module V1
     class ProfilesController < BaseController # :nodoc:
       def show
-        profile = User.find(params[:id])
-        friends = profile.friendships.each do |friend|
-                    friend.sender_id == profile.id ? friend.receiver : friend.sender
-                  end
-        render json: profile, include: :friendships
+        user_profile = User.find(params[:id])
+        friends = user_profile.friendships_users
+        render json: {User: user_profile, Friends: friends}
       end
     end
   end

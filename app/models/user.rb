@@ -28,6 +28,12 @@ class User < ApplicationRecord # :nodoc:
 
   has_many :api_tokens
 
+  def friendships_users
+    friendships.map do |friendship|
+      friendship.sender.id == id ? friendship.receiver : friendship.sender
+    end
+  end
+
   def winrate
     value = ((wins_count / Float(games_count)) * 100).round(1)
     value.nan? ? 0 : value
