@@ -82,3 +82,5 @@ gem "pundit", "~> 2.3"
 
 # gem "noticed", "~> 1.6"
 
+
+gem "tailwindcss-rails", "~> 2.0"

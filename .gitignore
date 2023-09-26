@@ -36,3 +36,6 @@
 
 # Allows RSpec to persist some state between runs
 /spec/examples.txt
+
+/app/assets/builds/*
+!/app/assets/builds/.keep
