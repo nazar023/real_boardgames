@@ -1,15 +1,12 @@
 <%= turbo_frame_tag dom_id(participant) do %>
-  <div>
-  <% if participant.game.creator.number == participant.number%>
-    <%= image_tag "crown.png", style: "display: height:30px;
-                                                width: 30px;"%>
-  <% end %>
-
+  <div class = 'flex flex-col justify-center items-center'>
+  <%# 'flex flex-row' for game/id view %>
   <% if participant.user.present?%>
-    <%= render "participants/autorized_avatar", user: participant.user %>
+    <%= render "participants/autorized_avatar", user: participant.user, class: 'align-middle' %>
   <% else %>
     <%= render "participants/guest_avatar" %>
   <% end %>
-  <%= participant.name%> - <%= participant.number%>
+
+  <%= participant.name%>
   </div>
 <% end %>

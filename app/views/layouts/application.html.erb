@@ -13,13 +13,12 @@
 
   <body>
     <%= turbo_stream_from 'online_users', channel: OnlineChannel%>
-    <header style="text-align:center;">
-      <div>
-        <%= link_to image_tag('yellowboardgamelogo.png', width: "150", height: "150"), games_path%>
+    <nav class = "flex flex-initial bg-gradient-to-tl from-gray-500 to-yellow-400 ">
+      <div class = 'flex flex-auto items-center justify-around p-6'>
+        <%= link_to image_tag('yellowboardgamelogo.png', class: 'shrink-0 h-36 w-36'), games_path%>
+        <%= render "layouts/session_manager", user: current_user%>
       </div>
-      <%# TODO: Add notification Noticed Gem %>
-      <%= render "layouts/session_manager"%>
-    </header>
+    </nav>
     <%= turbo_frame_tag 'flash_messages' do %>
       <%= render "layouts/flash_messages", alert: alert, notice: notice %>
     <% end %>

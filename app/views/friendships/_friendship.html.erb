@@ -1,21 +1,22 @@
+
     <% if friendship.receiver == user %>
       <%= turbo_frame_tag "#{dom_id(friendship)}" do %>
-      <div>
+      <div class = 'flex flex-initial items-center p-2 pr-10'>
       <% if friendship.sender&.avatar&.attached? %>
-          <%= link_to (image_tag friendship.sender.avatar, class: "avatar"), "/id/#{friendship.sender_id}", data: { turbo: :false }%>
+          <%= link_to (image_tag friendship.sender.avatar, class: "rounded-md border-2 border-#{friendship.sender.online? ? 'green' : 'gray'}-500 object-cover w-12 h-12 "), "/id/#{friendship.sender_id}", data: { turbo: :false }%>
         <% else %>
-          <%= link_to (image_tag "guestavatar1.png", class: "avatar"), "/id/#{friendship.sender_id}", data: { turbo: :false }%>
+          <%= link_to (image_tag "guestavatar1.png", class: "rounded-md border-2 border-#{friendship.sender.online? ? 'green' : 'gray'}-500 object-cover w-12 h-12 "), "/id/#{friendship.sender_id}", data: { turbo: :false }%>
         <% end %>
       <%= friendship.sender.username %>
       </div>
       <% end %>
     <% else %>
       <%= turbo_frame_tag "#{dom_id(friendship)}" do %>
-      <div>
+      <div class = 'flex items-center p-2 pr-10'>
         <% if friendship.receiver&.avatar&.attached? %>
-          <%= link_to (image_tag friendship.receiver.avatar, class: "avatar"), "/id/#{friendship.receiver_id}", data: { turbo: :false }%>
+          <%= link_to (image_tag friendship.receiver.avatar, class: "rounded-md border-2 border-#{friendship.receiver.online? ? 'green' : 'gray'}-500 object-cover w-12 h-12 "), "/id/#{friendship.receiver_id}", data: { turbo: :false }%>
         <% else %>
-          <%= link_to (image_tag "guestavatar1.png", class: "avatar"), "/id/#{friendship.receiver_id}", data: { turbo: :false }%>
+          <%= link_to (image_tag "guestavatar1.png", class: "rounded-md border-2 border-#{friendship.receiver.online? ? 'green' : 'gray'}-500 object-cover w-12 h-12 "), "/id/#{friendship.receiver_id}", data: { turbo: :false }%>
         <% end %>
       <%= friendship.receiver.username %>
       </div>

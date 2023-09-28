@@ -9,13 +9,13 @@ class ProfilesController < ApplicationController # :nodoc:
     @friends = @user.friendships
     @requests = @user.friendships_reqs
 
-    return unless current_user == @user
-
-    @notifications = @user.notifications
-
     return unless params[:query].present?
 
     @users = User.where('username LIKE ?', "#{params[:query].squish}%").or(User.where(number: "#{params[:query]}"))
+
+    return unless current_user == @user
+
+    @notifications = @user.notifications
   end
 
   private

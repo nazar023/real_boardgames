@@ -1,9 +1,9 @@
 <% if user&.avatar&.attached? %>
   <%=link_to (image_tag (user.avatar),
-                            class: "avatar"),
+                            class: "w-16 h-16"),
                             "/id/#{user.id}", data: { turbo: :false } %>
 <% else %>
   <%= link_to (image_tag "guestavatar1.png",
-                           class: "avatar"),
+                           class: "w-16 h-16"),
                            "/id/#{user.id}", data: { turbo: :false }%>
 <% end %>

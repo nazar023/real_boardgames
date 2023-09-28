@@ -7,18 +7,6 @@ class OnlineChannel < Turbo::StreamsChannel
   end
 
   def unsubscribed
-    puts current_user
-    puts current_user
-    puts current_user
-    puts current_user
-    puts current_user
-    puts current_user
-    puts current_user
-    puts current_user
-    puts current_user
-    puts current_user
-    puts current_user
-    puts current_user
     current_user&.offline!
     super
   end

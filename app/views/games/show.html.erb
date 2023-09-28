@@ -1,23 +1,26 @@
-<div>
-  <%= turbo_stream_from "#{dom_id(@game)}" %>
+<%= turbo_stream_from "#{dom_id(@game)}" %>
+<div class = 'mx-auto max-w-6xl items-center justify-between p-6 lg:px-8 bg-black bg-opacity-40'>
   <div>
 
+    <div class = ''>
     <%= turbo_frame_tag 'joining' do %>
         <%= render "games/join", game: @game, user: current_user, friends: @eligible_friends%>
     <% end %>
+    </div>
 
-    <h2>
+    <div>
       <%= @game.name %>
-    </h2>
+    </div>
 
-    <h4>
+
+
+    <div>
       <%= @game.desc if @game.desc%>
-    </h4>
+    </div>
 
-
-    <h4>
+    <div>
       Members: <span id = 'participants_counter'><%= @game.participants.count %></span>/<%= @game.members%>
-    </h4>
+    </div>
 
     <div id = 'winner' >
       <%= render '/participants/winner', winner: @game.winner%>
@@ -26,8 +29,13 @@
     <div id = 'participants'>
       <%= render @participants, game: @game%>
     </div>
-  </div>
 
+
+  <div>
+    <%= link_to "Edit this game", edit_game_path(@game) if policy(@game).update?%>
+    <%= button_to "Destroy this game", @game, method: :delete if policy(@game).destroy? %>
+    <%= link_to "Back to games", games_path %>
+  </div>
 
   <%# TODO: Add little popups of User's profiles with info %>
   <br/>
@@ -41,11 +49,6 @@
     </div>
   <% end %>
 
-  <div>
-    <%= link_to "Edit this game", edit_game_path(@game) if policy(@game).update?%>
-    <%= button_to "Destroy this game", @game, method: :delete if policy(@game).destroy? %>
-    <%= link_to "Back to games", games_path %>
-  </div>
 
 </div>
 <br/>

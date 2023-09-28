@@ -15,6 +15,14 @@ class Game < ApplicationRecord # :nodoc:
 
   scope :with_participants, -> { includes(:participants) }
 
+  def user_participants
+    participants.pluck(:user_id).compact
+  end
+
+  def remain_places
+    members - participants.count
+  end
+
   def finish(winner_participant)
     self.winner = winner_participant
 

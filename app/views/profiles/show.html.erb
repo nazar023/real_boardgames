@@ -1,52 +1,70 @@
-<h3> <%= link_to "Back to games", games_path %> </h3>
-<h2><%= @user.username %> Profile </h2>
-<div>
-  <aside>
-    <%= form_with method: :get do |form| %>
-      <%= form.label :query, "Search for player:" %>
-      <%= form.text_field :query, value: params[:query] %>
-      <%= form.submit "Search" %>
-    <% end %>
-    <% if @users.present? %>
-      <%= render 'profiles/profile_search', users: @users %>
-    <% end %>
-  </aside>
-  <% if @user&.avatar&.attached? %>
-    <%= image_tag(@user.avatar, style: "display: height: 200px;
-                                                 width: 200px;
-                                                 object-fit: cover;")%>
-  <% else %>
-    <%= image_tag "guestavatar1.png",style: "display: height: 200px;
-                                                      width: 200px;
-                                                      object-fit: cover;" %>
-  <% end %>
+<div class="flex flex-wrap columns-2 gap-10 mx-auto max-w-6xl items-center justify-between p-6 lg:px-8 bg-black bg-opacity-40">
 
-    <h4>
-    <div>Games played <%= @user.games_count%> </div>
-    <div>Wins <%= @user.wins_count%> </div>
-    <div>Winrate <%= @winrate %>% </div>
-    </h4>
-</div>
+  <div id = 'left_column' class = 'flex flex-col shrink-0'>
+    <div class = "text-4xl font-bold "><%= @user.username %> Profile </div>
+    <div> <%= @user.status %> </div>
 
-
-<h4> <%= @user.username%> Friends </h4>
-<%= turbo_stream_from "#{dom_id(@user)}_friendships"%>
-<div id = "friendships">
-  <%= render @friends, user: @user%>
-</div>
-
-<div>
-  <% if policy(@user).friends? %>
-    <%= render 'friendships/add_friend', user: @user%>
-  <% end %>
-</div>
-
-<% if current_user == @user%>
-  <%= turbo_stream_from "#{dom_id(@user)}_notifications" %>
-  <div id = 'notifications'>
-      <h4> You got <span id ='notification_counter'> <%= @user.notifications.count %> </span> notifications! </h4>
-      <% if policy(@user).has_notifications? %>
-        <%= render "notifications/notifications", user: @user, notifications: @notifications%>
+    <div id = 'avatar' class = 'flex shrink-0' >
+      <% if @user&.avatar&.attached? %>
+        <%= image_tag(@user.avatar, class: "shrink-0 border-2 border-#{@user.online? ? 'green' : 'gray'}-500 rounded-md object-cover w-44 h-44")%>
+      <% else %>
+        <%= image_tag "guestavatar1.png", class: "shrink-0 border-2 border-#{@user.online? ? 'green' : 'gray'}-500 border-gray-300 rounded-md object-cover w-44 h-44" %>
       <% end %>
+    </div>
+
+  <% if current_user == @user%>
+    <%= turbo_stream_from "#{dom_id(@user)}_notifications" %>
+    <div id = 'notifications' class = 'flex flex-col'>
+        <h4> You got <span id ='notification_counter'> <%= @user.notifications.count %> </span> notifications! </h4>
+        <% if policy(@user).has_notifications? %>
+          <%= render "notifications/notifications", user: @user, notifications: @user.notifications%>
+        <% end %>
+    </div>
+  <% end %>
+
   </div>
-<% end %>
+
+
+  <div id = 'right_column'>
+    <div id = 'game_stat' class = 'pt-2 pr-10' >
+      <div>Games played <%= @user.games_count%> </div>
+      <div>Wins <%= @user.wins_count%> </div>
+      <div>Winrate <%= @winrate %>% </div>
+    </div>
+
+    <%= turbo_stream_from "#{dom_id(@user)}_friendships"%>
+    <div id = "friendships" class = 'pt-2' >
+      <div class = 'flex flex-initial items-center pt-2 pr-10'> <%= @user.username%> Friends </div>
+      <%= render @friends, user: @user%>
+    </div>
+
+    <% if policy(@user).friends? %>
+      <div class = 'pt-2'  >
+        <%= render 'friendships/add_friend', user: @user%>
+      </div>
+    <% end %>
+
+    <div id = 'profile_search' class = 'flex flex-col pt-3'>
+      <%= form_with method: :get do |form| %>
+        <div>
+          <%= form.label :query, "Search for player:" %>
+        </div>
+        <%= form.text_field :query, value: params[:query] %>
+        <div>
+        <%= form.submit "Search" %>
+        </div>
+      <% end %>
+      <% if @users.present? %>
+        <%= render 'profiles/profile_search', users: @users %>
+      <% end %>
+    </div>
+  </div>
+
+
+
+
+
+
+</div>
+
+

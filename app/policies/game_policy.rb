@@ -39,6 +39,10 @@ class GamePolicy < ApplicationPolicy # :nodoc:
     record.participants.pluck(:user_id).include?(user.id)
   end
 
+  def finished?
+    record.winner.present?
+  end
+
   private
 
   def creator?

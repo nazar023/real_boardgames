@@ -1,9 +1,11 @@
-<h1>New game</h1>
+<div class = ' mx-auto max-w-6xl items-center justify-between p-6 lg:px-8 bg-black bg-opacity-40'>
+  <h1>New game</h1>
 
-<%= render "form", game: @game %>
+  <%= render "form", game: @game %>
 
-<br>
+  <br>
 
-<div>
-  <%= link_to "Back to games", games_path %>
+  <div>
+    <%= link_to "Back to games", games_path %>
+  </div>
 </div>

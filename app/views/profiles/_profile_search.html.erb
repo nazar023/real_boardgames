@@ -1,11 +1,9 @@
-
 <% users.each do |user| %>
-  <div>
+  <div class = 'flex flex-initial items-center p-2 pr-10'>
     <% if user&.avatar&.attached? %>
-      <%=link_to (image_tag (user.avatar),
-                  class: "avatar"), "/id/#{user.id}" %>
+      <%=link_to (image_tag (user.avatar), class: "rounded-md object-cover border-2 border-#{user.online? ? 'green' : 'gray'}-500 w-12 h-12"), "/id/#{user.id}" %>
     <% else %>
-      <%= link_to (image_tag "guestavatar1.png",class: "avatar"), "/id/#{user.id}"%>
+      <%= link_to (image_tag "guestavatar1.png", class: "rounded-md object-cover border-2 border-#{user.online? ? 'green' : 'gray'}-500 w-12 h-12"), "/id/#{user.id}"%>
     <% end %>
     <%= user.username %>
   </div>
