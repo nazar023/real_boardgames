@@ -1,4 +1,4 @@
-<div class = 'px-4'>
+<div class = 'py-2'>
   <div id = "<%= dom_id(friendship.sender)%>_avatar" class = 'flex flex-row items-center '>
   <% if friendship.sender&.avatar&.attached? %>
       <%= link_to (image_tag friendship.sender.avatar, class: "avatar"), "/id/#{friendship.sender_id}"%>
@@ -11,11 +11,11 @@
   <div id = "<%= dom_id(friendship.sender)%>_buttons" class = 'flex flex-row'>
   <%= form_with(model: friendship, method: "patch", url: accept_friendship_path(friendship)) do |form| %>
       <div><%= form.hidden_field :status, value: 1 %></div>
-      <%= form.submit 'Accept', class: 'mx-4'%>
+      <%= form.submit 'Accept', class: 'transition ease-in-out delay-50 px-4 py-1 ml-16 mr-16 rounded-none bg-green-600 hover:scale-110 hover:bg-green-500 duration-300'%>
     <% end %>
   <%= form_with(model: friendship, method: "patch", url: decline_friendship_path(friendship)) do |form| %>
       <div><%= form.hidden_field :status, value: 0%></div>
-      <%= form.submit 'Decline' %>
+      <%= form.submit 'Decline', type: 'button' ,class: 'transition ease-in-out delay-50 px-4 py-1 mx-4 rounded-none bg-red-500 hover:scale-110 hover:bg-red-600 duration-300' %>
     <% end %>
   </div>
 </div>

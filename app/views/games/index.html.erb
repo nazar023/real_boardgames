@@ -1,4 +1,4 @@
-<div class = 'mx-auto max-w-6xl py-8' >
+<div class = 'mx-auto max-w-5xl py-8' >
   Boardgames right now!
 </div>
 <%= turbo_stream_from 'games'%>
@@ -6,7 +6,7 @@
   <div class = ' justify-between p-6 '>
     <p class = ' text-right' > <%= link_to "New game", new_game_path%> </p>
   </div>
-  <div id = 'games-list'>
+  <div id = 'games-list' class = 'mx-auto max-w-3xl'>
     <%= render @games, user: current_user%>
   </div>
 
