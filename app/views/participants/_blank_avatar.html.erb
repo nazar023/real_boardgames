@@ -1,0 +1,5 @@
+<% if user && user.avatar.attached? %>
+    <%= link_to((image_tag 'empty-spot.png', class: "object-cover w-16 h-16", data: { controller: "hover", hover_avatar_value: "#{url_for(user&.avatar)}", action: "mouseover->hover#mouseOver mouseout->hover#mouseOut" }), game)%>
+<% else %>
+    <%= link_to((image_tag 'empty-spot.png', class: "object-cover w-16 h-16", data: { controller: "hover", hover_avatar_value: "/assets/guestavatar1.png", action: "mouseover->hover#mouseOver mouseout->hover#mouseOut" }), game)%>
+<% end %>

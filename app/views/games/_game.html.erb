@@ -26,14 +26,15 @@
   </div>
 
 
-  <div class = 'flex flex-row space-x-3 mr-4'>
-    <%= render game.participants%>
-    <% if !policy(game).finished? && (!current_user || !game.user_participants.include?(current_user.id))%>
-    <div class = 'flex flex-col justify-center items-center'>
-      <%= link_to((image_tag 'empty-spot.png', class: "Sirv image-main w-16 h-16", data: { controller: "hover", action: "mouseover->hover#mouseOver mouseout->hover#mouseOut" }), game)%>
-      <%= %>
-      Join?
+  <div id = 'participants-container' class = 'flex flex-row '>
+    <div id = "<%= dom_id game%>_participants" class = 'flex flex-row justify-center items-center'>
+      <%= render game.participants %>
     </div>
+    <% if game.participants.count < game.members%>
+      <div id = "<%= dom_id game%>_join_icon" class = 'flex flex-col justify-center items-center mr-4'>
+          <%= render 'participants/blank_avatar', user: user, game: game %>
+          Join?
+      </div>
     <% end %>
   </div>
 </div>

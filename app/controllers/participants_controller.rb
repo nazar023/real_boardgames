@@ -18,12 +18,9 @@ class ParticipantsController < ApplicationController # :nodoc:
             guest_form_frame_tag
           ]
         end
-        participants_list_stream
-        win_selector_stream
+        game_participants_list_stream
         game_member_counter_stream
-        remove_joining_aside_stream if policy(@game).full? && @game.winner.present?
-        remove_user_invite_stream if @participant.user
-        remove_join_user_button_stream if @participant.user
+        remove_join_responsive_icon if @game.participants.count == @game.members
       else
         format.turbo_stream do
           render turbo_stream:
@@ -68,6 +65,10 @@ class ParticipantsController < ApplicationController # :nodoc:
     Turbo::StreamsChannel.broadcast_append_to "#{dom_id(@game)}", target: 'participants', partial: 'participants/participant', locals: { participant: @participant, game: @game }
   end
 
+  def game_participants_list_stream
+    Turbo::StreamsChannel.broadcast_append_to "games", target: "#{dom_id(@game)}_participants", partial: 'participants/participant', locals: { participant: @participant, game: @game }
+  end
+
   def win_selector_stream
     Turbo::StreamsChannel.broadcast_update_to "#{dom_id(@game)}", target: 'win_selector', partial: 'participants/win_selector', locals: { participants: @game.participants , game: @game }
   end
@@ -87,5 +88,9 @@ class ParticipantsController < ApplicationController # :nodoc:
 
   def remove_join_user_button_stream
     Turbo::StreamsChannel.broadcast_remove_to "#{dom_id(@game)}", target: "#{dom_id(@game)}_#{dom_id(@participant.user)}_join_button"
+  end
+
+  def remove_join_responsive_icon
+    Turbo::StreamsChannel.broadcast_remove_to "games", target: "#{dom_id(@game)}_join_icon"
   end
 end

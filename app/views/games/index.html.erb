@@ -1,12 +1,13 @@
 <div class = 'mx-auto max-w-6xl py-8' >
   Boardgames right now!
 </div>
-<div id = 'games_list' class = 'mx-auto max-w-6xl items-center justify-between p-6 lg:px-8 bg-black bg-opacity-40'>
+<%= turbo_stream_from 'games'%>
+<div id = 'games_conatiner' class = 'mx-auto max-w-6xl items-center justify-between p-6 lg:px-8 bg-black bg-opacity-40'>
   <div class = ' justify-between p-6 '>
     <p class = ' text-right' > <%= link_to "New game", new_game_path%> </p>
   </div>
-
-    <%= turbo_stream_from 'games', id: 'games'%>
-    <%= render @games, user: current_user %>
+  <div id = 'games-list'>
+    <%= render @games, user: current_user%>
+  </div>
 
 </div>

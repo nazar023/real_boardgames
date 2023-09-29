@@ -38,6 +38,7 @@ class GamesController < ApplicationController # :nodoc:
     authorize Game
     @game = Game.new(game_params)
     @game.creator = current_user
+    @user = current_user
 
     respond_to do |format|
       if @game.save
@@ -97,11 +98,11 @@ class GamesController < ApplicationController # :nodoc:
   private
 
   def broadcast_new_game
-    Turbo::StreamsChannel.broadcast_append_to 'games', target: 'games', partial: 'games/game', locals: { game: @game }
+    Turbo::StreamsChannel.broadcast_prepend_to 'games', target: 'games-list', partial: 'games/game', locals: { game: @game, user: current_user}
   end
 
   def broadcast_updated_info
-    Turbo::StreamsChannel.broadcast_replace_to 'games', target: 'games' ,partial: 'games/game', locals: { game: @game }
+    Turbo::StreamsChannel.broadcast_replace_to 'games', target: "game_#{@game.id}", partial: 'games/game', locals: { game: @game, user: current_user }
   end
 
   def broadcast_winner_info
@@ -114,7 +115,7 @@ class GamesController < ApplicationController # :nodoc:
   end
 
   def broadcast_game_remove
-    Turbo::StreamsChannel.broadcast_remove_to "games", target: "#{dom_id(@game)}"
+    Turbo::StreamsChannel.broadcast_remove_to 'games', target: "#{dom_id(@game)}"
   end
 
   # Use callbacks to share common setup or constraints between actions.
