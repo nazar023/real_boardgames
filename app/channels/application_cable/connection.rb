@@ -12,8 +12,8 @@ module ApplicationCable
       if user = User.find_by(id: cookies.encrypted[:user_id])
         user
       else
-        reject_unauthorized_connection
-        # nil
+        # reject_unauthorized_connection
+        nil
       end
     end
   end
