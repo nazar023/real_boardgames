@@ -5,19 +5,9 @@ class NotificationsController < ApplicationController # :nodoc:
 
   before_action :authenticate_user!
 
-  # def destroy
-  #   @game = @notification.params[:message].game
-  #   @user = @game.creator
-  #   @notifications = @user.notifications.newest_first
-
-  #   respond_to do |format|
-  #     format.turbo_stream if @notification.destroy
-  #   end
-  # end
-
   def create_user_invite
     @notification = GameInvite.create!(user_invite_params)
-    @user = @notification.sender
+    @user = @notification.receiver
     @game = @notification.game
     @eligible_friends = []
 
@@ -27,6 +17,7 @@ class NotificationsController < ApplicationController # :nodoc:
       if @notification
         update_notification_counter
         send_notification_to_receiver
+        add_pulsive_element
         remove_notification_possibility_for_users
         format.turbo_stream
         # format.html { redirect_to @notification.game, notice: "Successfully send to #{@notification.receiver.username}" }
@@ -44,6 +35,7 @@ class NotificationsController < ApplicationController # :nodoc:
 
     respond_to do |format|
       if @participant
+        stream_remove_pulsive_element if @user.notifications.count.zero?
         format.html { redirect_to @game, notice: 'Successfully accepted invite', data: { turbo: false } }
         participants_list_stream
         win_selector_stream
@@ -62,6 +54,10 @@ class NotificationsController < ApplicationController # :nodoc:
 
     respond_to do |format|
       if @notification.decline
+        puts @user.notifications.count
+        puts @user.notifications.count.zero?
+
+        stream_remove_pulsive_element if @user.notifications.count.zero?
         format.turbo_stream do
           render turbo_stream: [
             update_local_notification_counter,
@@ -81,6 +77,7 @@ class NotificationsController < ApplicationController # :nodoc:
       if @notification.save
         send_notification_to_receiver
         update_notification_counter
+        add_pulsive_element
         format.html { redirect_to "/id/#{@user.id}", notice: 'Friend request was successfully send', data: { turbo: false } }
       end
     end
@@ -96,6 +93,7 @@ class NotificationsController < ApplicationController # :nodoc:
 
     respond_to do |format|
       if @notification.accepted?
+        stream_remove_pulsive_element if @user.notifications.count.zero?
         format.turbo_stream do
           render turbo_stream: [
             remove_user_notification,
@@ -114,18 +112,33 @@ class NotificationsController < ApplicationController # :nodoc:
     authorize @user, :user?
 
     @notification.decline
+    @user = User.find(@notification.receiver.id)
 
     respond_to do |format|
+      puts @user.notifications.count
+      puts @user.notifications.count.zero?
+
+      stream_remove_pulsive_element if @user.notifications.count.zero?
       format.turbo_stream do
         render turbo_stream: [
-          update_local_notification_counter,
-          remove_user_notification
+          remove_user_notification,
+          update_local_notification_counter
         ]
       end
     end
   end
 
   private
+
+  def add_pulsive_element
+    if @user.notifications.count <= 1
+      Turbo::StreamsChannel.broadcast_prepend_to "#{dom_id(@user)}_notifications", target: 'notification_button', partial: 'layouts/pulsive_element'
+    end
+  end
+
+  def stream_remove_pulsive_element
+    Turbo::StreamsChannel.broadcast_remove_to "#{dom_id(@user)}_notifications", target: 'notification_pulsing_element'
+  end
 
   def participants_list_stream
     Turbo::StreamsChannel.broadcast_append_to "#{dom_id(@game)}", target: 'participants', partial: 'participants/participant', locals: { participant: @participant, game: @game }
@@ -141,11 +154,11 @@ class NotificationsController < ApplicationController # :nodoc:
   end
 
   def send_notification_to_receiver
-    Turbo::StreamsChannel.broadcast_append_to "#{dom_id(@notification.receiver)}_notifications", target: 'notifications', partial: "notifications/notification_classifying", locals: { notification: @notification }
+    Turbo::StreamsChannel.broadcast_append_to "#{dom_id(@user)}_notifications", target: 'notifications', partial: "notifications/notification_classifying", locals: { notification: @notification }
   end
 
   def update_notification_counter
-    Turbo::StreamsChannel.broadcast_update_to "#{dom_id(@notification.receiver)}_notifications", target: 'notification_counter', html: @notification.receiver.notifications.count
+    Turbo::StreamsChannel.broadcast_update_to "#{dom_id(@user)}_notifications", target: 'notification_counter', html: @user.notifications.count
   end
 
   def update_local_notification_counter
@@ -168,9 +181,9 @@ class NotificationsController < ApplicationController # :nodoc:
   end
 
   def remove_notification_possibility_for_users
-    @notification.receiver.friends_who_participates_in_game(@game).each do |id|
+    @user.friends_who_participates_in_game(@game).each do |id|
       user = User.find(id)
-      Turbo::StreamsChannel.broadcast_remove_to "#{dom_id(@game)}_#{dom_id(user)}_friends", target: "#{dom_id(@notification.receiver)}"
+      Turbo::StreamsChannel.broadcast_remove_to "#{dom_id(@game)}_#{dom_id(user)}_friends", target: "#{dom_id(@user)}"
     end
   end
 

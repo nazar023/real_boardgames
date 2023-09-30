@@ -7,7 +7,15 @@
 
   <%= turbo_stream_from "#{dom_id(current_user)}_notifications" %>
    <div data-controller="notification-dropdown" class="relative">
-      <button id = 'notification_button' type="button" data-action="notification-dropdown#toggle click@window->notification-dropdown#hide"><%= image_tag('notifications.png', class: 'h-6 w-6')%></button>
+      <button id = 'notification_button' type="button"
+              data-action="notification-dropdown#toggle
+                           click@window->notification-dropdown#hide">
+      <% if current_user.notifications.present?%>
+        <div id = 'notification_pulsing_element' class = 'absolute right-0 animate-pulse bg-red-600 rounded-full h-2 w-2'>
+        </div>
+      <% end %>
+        <%= image_tag('notifications.png', class: 'h-6 w-6')%>
+      </button>
       <div
         id = "notification_window"
         data-notification-dropdown-target="menu"
@@ -18,7 +26,9 @@
         data-transition-leave-to="opacity-0 scale-95"
       >
         <div id = 'notifications' class = 'flex flex-col px-4'>
-            You got <%= current_user.notifications.count %> notifications
+            <div id = notifications_message>
+              You got <span id = notification_counter> <%= current_user.notifications.count %> </span> notifications
+            </div>
             <% if policy(current_user).has_notifications? %>
               <%= render "notifications/notifications", user: current_user, notifications: current_user.notifications%>
             <% end %>

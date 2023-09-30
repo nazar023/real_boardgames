@@ -27,15 +27,15 @@
 
 
   <div id = 'participants-container' class = 'flex flex-row '>
-    <div id = "<%= dom_id game%>_participants" class = 'flex flex-row justify-center items-center'>
+    <div id = "<%= dom_id game%>_participants" class = 'flex flex-row flex-wrap justify-center items-center'>
       <%= render game.participants %>
-    </div>
     <% if game.participants.count < game.members%>
       <div id = "<%= dom_id game%>_join_icon" class = 'flex flex-col justify-center items-center mr-4'>
           <%= render 'participants/blank_avatar', user: user, game: game %>
           Join?
       </div>
     <% end %>
+    </div>
   </div>
 </div>
 
