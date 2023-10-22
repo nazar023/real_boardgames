@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_09_25_170521) do
+ActiveRecord::Schema[7.0].define(version: 2023_10_22_203219) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -86,15 +86,13 @@ ActiveRecord::Schema[7.0].define(version: 2023_09_25_170521) do
   end
 
   create_table "notifications", force: :cascade do |t|
-    t.string "recipient_type", null: false
-    t.bigint "recipient_id", null: false
-    t.string "type", null: false
-    t.jsonb "params"
-    t.datetime "read_at"
+    t.bigint "user_id", null: false
+    t.string "subject_type", null: false
+    t.bigint "subject_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["read_at"], name: "index_notifications_on_read_at"
-    t.index ["recipient_type", "recipient_id"], name: "index_notifications_on_recipient"
+    t.index ["subject_type", "subject_id"], name: "index_notifications_on_subject"
+    t.index ["user_id"], name: "index_notifications_on_user_id"
   end
 
   create_table "participants", force: :cascade do |t|
@@ -121,7 +119,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_09_25_170521) do
     t.integer "games_count", default: 0
     t.integer "wins_count", default: 0
     t.integer "status", default: 0
-    t.datetime "last_time_online_at", precision: nil, default: "2023-09-25 17:07:17"
+    t.datetime "last_time_online_at", precision: nil, default: "2023-10-22 20:30:09"
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
@@ -135,6 +133,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_09_25_170521) do
   add_foreign_key "game_invites", "users", column: "receiver_id"
   add_foreign_key "game_invites", "users", column: "sender_id"
   add_foreign_key "games", "users", column: "creator_id"
+  add_foreign_key "notifications", "users"
   add_foreign_key "participants", "games"
   add_foreign_key "participants", "users"
 end
