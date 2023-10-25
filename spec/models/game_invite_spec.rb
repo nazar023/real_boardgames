@@ -3,12 +3,10 @@
 require 'rails_helper'
 
 RSpec.describe GameInvite, type: :model do
-
   context 'validations' do
-    subject { create(:game_invite) }
-    it { should belong_to(:receiver).class_name('User') }
-    it { should belong_to(:sender).class_name('User') }
-    it { should belong_to(:game).class_name('Game') }
+    it { is_expected.to belong_to(:receiver).class_name('User') }
+    it { is_expected.to belong_to(:sender).class_name('User') }
+    it { is_expected.to belong_to(:game).class_name('Game') }
   end
 
   describe '#accept' do
@@ -20,18 +18,17 @@ RSpec.describe GameInvite, type: :model do
       )
     end
 
-    it 'not creates participant when game is full' do
-      invite = create(:game_invite)
-      game = invite.game
-      create(:participant, game:)
-      create(:participant, game:)
-      create(:participant, game:)
-      create(:participant, game:)
-      create(:participant, game:)
+    it 'does not create participant when game is full' do
+      game = create(:game, members: 4)
+      create_list(:participant, 3, game:)
+      expect(game.participants.count).to be(4)
 
+      invite = create(:game_invite, game:)
       expect(invite.accept).to be_nil
     end
+  end
 
+  context '#decline' do
     it 'destroys game invite' do
       invite = create(:game_invite)
       expect { invite.decline }.to(

@@ -6,16 +6,27 @@ RSpec.describe Game, type: :model do
   let(:game) { create(:game) }
 
   context 'validations' do
-    subject { game }
-    it { should validate_presence_of(:name) }
-    it { should validate_presence_of(:members) }
-    it { should have_many(:participants) }
-    it { should have_many(:game_invites) }
-    it { should belong_to(:creator).class_name('User') }
-    it { expect(game.participants.count).to be(1) }
-    it { expect(game.creator).to eq(game.participants.first.user) }
-    it { expect(game.winner).to be_blank }
+    it { is_expected.to validate_presence_of(:name) }
+    it { is_expected.to validate_presence_of(:members) }
   end
+
+  context 'associations' do
+    it { is_expected.to have_many(:participants) }
+    it { is_expected.to have_many(:game_invites) }
+    it { is_expected.to belong_to(:creator).class_name('User') }
+  end
+
+  it "creates creator's participant on create" do
+    game = build(:game)
+    expect(game.participants.count).to be(0)
+
+    expect { game.save }.to(
+      change { game.participants.count }.from(0).to(1)
+    )
+    expect(game.participants.first.user).to eq(game.creator)
+  end
+
+  it { expect(game.winner).to be_blank }
 
   describe '#destroy' do
     it 'destroys releted participants' do
@@ -72,6 +83,4 @@ RSpec.describe Game, type: :model do
       )
     end
   end
-
-  # try shoulda_matchers gem instead
 end
