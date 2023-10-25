@@ -7,6 +7,6 @@
     <%= render "participants/guest_avatar" %>
   <% end %>
 
-  <%= participant.name%>
+  <%= participant.name.truncate(8) %>
   </div>
 <% end %>

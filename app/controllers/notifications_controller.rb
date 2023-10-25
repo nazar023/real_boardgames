@@ -84,15 +84,16 @@ class NotificationsController < ApplicationController # :nodoc:
   end
 
   def accept_friendship
-    @notification = Friendship.find(params[:id])
-    @user = @notification.receiver
+    @friendship = Friendship.find(params[:id])
+    @notification = @friendship.notification
+    @user = @friendship.receiver
 
     authorize @user, :user?
 
-    @notification.accept
+    @friendship.accept
 
     respond_to do |format|
-      if @notification.accepted?
+      if @friendship.accepted?
         stream_remove_pulsive_element if @user.notifications.count.zero?
         format.turbo_stream do
           render turbo_stream: [
@@ -106,18 +107,17 @@ class NotificationsController < ApplicationController # :nodoc:
   end
 
   def decline_friendship
-    @notification = Friendship.find(params[:id])
-    @user = @notification.receiver
+    @friendship = Friendship.find(params[:id])
+    @notification = @friendship.notification
+
+    @user = @friendship.receiver
 
     authorize @user, :user?
 
-    @notification.decline
-    @user = User.find(@notification.receiver.id)
+    @friendship.decline
+    @user = User.find(@friendship.receiver.id)
 
     respond_to do |format|
-      puts @user.notifications.count
-      puts @user.notifications.count.zero?
-
       stream_remove_pulsive_element if @user.notifications.count.zero?
       format.turbo_stream do
         render turbo_stream: [
@@ -170,7 +170,7 @@ class NotificationsController < ApplicationController # :nodoc:
   end
 
   def add_new_friendship_to_list
-    Turbo::StreamsChannel.broadcast_append_to "#{dom_id(@notification.receiver)}_friendships", target: "friendships", partial: "friendships/friendship", locals: { friendship: @notification, user: @user }
+    Turbo::StreamsChannel.broadcast_append_to "#{dom_id(@friendship.receiver)}_friendships", target: "friendships", partial: "friendships/friendship", locals: { friendship: @friendship, user: @user }
   end
 
   def add_notification_possibility_for_users

@@ -18,6 +18,10 @@ class ProfilesController < ApplicationController # :nodoc:
     @notifications = @user.notifications
   end
 
+  def friends
+    @friends = @user.friendships
+  end
+
   private
 
   def set_user

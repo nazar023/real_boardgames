@@ -23,7 +23,9 @@
 
     <%= turbo_stream_from "#{dom_id(@user)}_friendships"%>
     <div id = "friendships" class = 'pt-2' >
-      <div class = 'flex flex-initial items-center pt-2 pr-10'> <%= @user.username%> Friends </div>
+      <div class = 'inline-block items-center pt-2 pr-10'>
+        <p><%= link_to "Friends", user_friends_path(@user)%> <%= @user.friendships.count %></p>
+      </div>
       <%= render @friends, user: @user%>
     </div>
 

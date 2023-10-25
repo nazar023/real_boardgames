@@ -7,6 +7,9 @@ class GameInvite < ApplicationRecord # :nodoc:
 
   scope :with_users_avatars, -> { includes(receiver: :avatar_attachment, sender: :avatar_attachment) }
 
+  after_create_commit { create_notification }
+
+
   def accept
     return unless game && game.winner.blank? && GamePolicy.new(nil, game).full?
 
@@ -18,5 +21,12 @@ class GameInvite < ApplicationRecord # :nodoc:
   def decline
     destroy
   end
+
+  private
+
+  def create_notification
+    Notification.create(user_id: receiver.id, subject_type: self.class, subject_id: id)
+  end
+
 end
 

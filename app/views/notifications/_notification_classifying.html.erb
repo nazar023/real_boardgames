@@ -1,11 +1,11 @@
 <%= turbo_frame_tag "#{dom_id(notification)}_notification" do %>
-  <% if notification.class == Friendship %>
+  <% if notification.subject_type == "Friendship" %>
     <%= render 'notifications/friendship_notification',
-        friendship: notification %>
-  <% elsif notification.class == GameInvite %>
+        friendship: notification.subject %>
+  <% elsif notification.subject_type == "GameInvite" %>
     <%= render 'notifications/game_invite_notification',
-        sender: notification.sender,
-        game: notification.game,
-        notification: notification%>
+        sender: notification.subject.sender,
+        game: notification.subject.game,
+        notification: notification.subject%>
   <% end %>
 <% end %>

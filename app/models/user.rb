@@ -28,6 +28,7 @@ class User < ApplicationRecord # :nodoc:
   has_many :game_invites, foreign_key: 'receiver_id', dependent: :destroy
 
   has_many :api_tokens
+  has_many :notifications
 
   def friendships_users
     friendships.map do |friendship|
@@ -40,9 +41,6 @@ class User < ApplicationRecord # :nodoc:
     value.nan? ? 0 : value
   end
 
-  def notifications
-    game_invites + friendships_reqs
-  end
 
   def send_friendship_request(user)
     Friendship.create!(sender_id: id, receiver_id: user.id)

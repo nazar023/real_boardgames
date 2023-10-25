@@ -23,6 +23,7 @@ Rails.application.routes.draw do
   patch '/games/:id/choose_winner', to: 'games#choose_winner', as: :choose_winner
   post '/games/:id', to: 'participants#create', as: :game_participants
   get '/id/:id', to: 'profiles#show', as: :user_profile
+  get '/id/:id/friends', to: 'profiles#friends', as: :user_friends
   post '/id/:id', to: 'friendships#create', as: :user_friendships
   patch '/id/:id', to: 'friendships#update', as: :friendship
   delete '/notification/:id', to: 'notifications#destroy', as: :notification_destroy
