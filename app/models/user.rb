@@ -28,7 +28,7 @@ class User < ApplicationRecord # :nodoc:
   has_many :game_invites, foreign_key: 'receiver_id', dependent: :destroy
 
   has_many :api_tokens
-  has_many :notifications
+  has_many :notifications, dependent: :destroy
 
   def friendships_users
     friendships.map do |friendship|
