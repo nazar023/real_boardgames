@@ -6,15 +6,16 @@ Rails.application.routes.draw do
   #                                 sessions: 'users/sessions'
   #                               }
 
-  resources :session
-  resources :registration
+  resources :registrations
+  resources :sessions
   resources :password
   resources :password_reset
 
+  patch '/id/:id/edit', to: 'registrations#update', as: :edit_user_info
 
   resources :games
 
-  root to: redirect('games')
+  root to: "application#home", as: :home
 
   namespace :api do
     namespace :v1 do
@@ -25,6 +26,7 @@ Rails.application.routes.draw do
       end
     end
   end
+
 
   patch '/games/:id/choose_winner', to: 'games#choose_winner', as: :choose_winner
   post '/games/:id', to: 'participants#create', as: :game_participants

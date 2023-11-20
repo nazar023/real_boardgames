@@ -2,12 +2,12 @@
 
 class GamesController < ApplicationController # :nodoc:
   include ActionView::RecordIdentifier
-  before_action :authenticate_user!, only: %i[new edit create update destroy]
+  before_action :authenticate_user, only: %i[new edit create update destroy]
   before_action :set_game, only: %i[show edit update destroy winner create_user_invite choose_winner]
   # GET /games or /games.json
   def index
     authorize Game
-    @games = Game.all.with_participants
+    @games = Game.all.with_participants.on_going
     @user = current_user
   end
 
@@ -130,5 +130,11 @@ class GamesController < ApplicationController # :nodoc:
 
   def user_invite_params
     params.require(:game_invite).permit(:sender_id, :receiver_id, :game_id, :desc)
+  end
+
+  def authenticate_user
+    return if user_signed_in?
+
+    redirect_to new_session_path, status: :found, alert: 'You must be loged in to perform this action'
   end
 end

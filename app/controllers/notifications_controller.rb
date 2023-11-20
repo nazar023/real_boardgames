@@ -3,35 +3,37 @@
 class NotificationsController < ApplicationController # :nodoc:
   include ActionView::RecordIdentifier
 
-  before_action :authenticate_user!
+  before_action :authenticate_user
 
   def create_user_invite
-    @notification = GameInvite.create!(user_invite_params)
-    @user = @notification.receiver
-    @game = @notification.game
+    @game_invite = GameInvite.create!(user_invite_params)
+    @notification = @game_invite.notification
+    @user = @game_invite.receiver
+    @game = @game_invite.game
     @eligible_friends = []
 
     @eligible_friends = @user.find_eligible_friends_for_game(@game) if @user
 
     respond_to do |format|
-      if @notification
+      if @game_invite
         update_notification_counter
         send_notification_to_receiver
         add_pulsive_element
         remove_notification_possibility_for_users
         format.turbo_stream
-        # format.html { redirect_to @notification.game, notice: "Successfully send to #{@notification.receiver.username}" }
+        # format.html { redirect_to @game_invite.game, notice: "Successfully send to #{@game_invite.receiver.username}" }
       end
     end
 
   end
 
   def accept_invite
-    @notification = GameInvite.find(params[:id])
-    @user = @notification.receiver
-    @game = @notification.game
+    @game_invite = GameInvite.find(params[:id])
+    @notification = @game_invite.notification
+    @user = @game_invite.receiver
+    @game = @game_invite.game
 
-    @participant = @notification.accept
+    @participant = @game_invite.accept
 
     respond_to do |format|
       if @participant
@@ -41,19 +43,21 @@ class NotificationsController < ApplicationController # :nodoc:
         win_selector_stream
         game_member_counter_stream
       else
-        @notification.decline
+        @game_invite.decline
         format.html { redirect_to Game, alert: 'Game already full or end' }
       end
     end
   end
 
   def decline_invite
-    @notification = GameInvite.find(params[:id])
-    @user = @notification.receiver
-    @game = @notification.game
+    @game_invite = GameInvite.find(params[:id])
+    @notification = @game_invite.notification
+
+    @user = @game_invite.receiver
+    @game = @game_invite.game
 
     respond_to do |format|
-      if @notification.decline
+      if @game_invite.decline
         puts @user.notifications.count
         puts @user.notifications.count.zero?
 
@@ -69,12 +73,13 @@ class NotificationsController < ApplicationController # :nodoc:
   end
 
   def send_friendship_request
-    @notification = Friendship.new params.required(:friendship).permit(:receiver_id, :sender_id)
-    @notification.pending!
-    @user = @notification.receiver
+    @friendship = Friendship.new params.required(:friendship).permit(:receiver_id, :sender_id)
+    @friendship.pending!
+    @user = @friendship.receiver
 
     respond_to do |format|
-      if @notification.save
+      if @friendship.save
+        @notification = @friendship.notification
         send_notification_to_receiver
         update_notification_counter
         add_pulsive_element
@@ -193,6 +198,12 @@ class NotificationsController < ApplicationController # :nodoc:
 
   def full?(game)
     game.participants.count >= game.members
+  end
+
+  def authenticate_user
+    return if user_signed_in?
+
+    redirect_to new_session_path, status: :found, alert: 'You must be loged in to perform this action'
   end
 
 end

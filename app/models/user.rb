@@ -1,17 +1,19 @@
 # frozen_string_literal: true
 
 class User < ApplicationRecord # :nodoc:
-  # Include default devise modules. Others available are:
-  # :confirmable, :lockable, :timeoutable, :trackable and :omniauthable
-  devise :database_authenticatable, :registerable,
-         :recoverable, :rememberable, :validatable
+  has_secure_password
+  validates :email, :username, :number, presence: true
 
-  validates :username, :number, presence: true
+  normalizes :email, with: ->(email) { email.strip.downcase }
+  normalizes :number, with: ->(number) { number.strip }
 
   has_many :games, inverse_of: :creator, foreign_key: 'creator_id', dependent: :destroy
   has_one_attached :avatar, dependent: :destroy
   has_many :participants, dependent: :destroy
-  enum status: [:offline, :online]
+  has_many :notifications, dependent: :destroy
+  has_many :api_tokens
+  enum status: %i[offline online]
+
 
   has_many :friendships, ->(user) { unscope(where: :sender_id).where(status: :accepted).where('sender_id = ? OR receiver_id = ?', user.id, user.id) }, class_name: 'Friendship',
                                                                                                                                                        foreign_key: 'sender_id',
@@ -27,8 +29,6 @@ class User < ApplicationRecord # :nodoc:
 
   has_many :game_invites, foreign_key: 'receiver_id', dependent: :destroy
 
-  has_many :api_tokens
-  has_many :notifications, dependent: :destroy
 
   def friendships_users
     friendships.map do |friendship|
