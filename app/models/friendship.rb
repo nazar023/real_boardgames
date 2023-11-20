@@ -6,7 +6,7 @@ class Friendship < ApplicationRecord # :nodoc:
 
   enum status: %i[pending accepted]
 
-  has_one :notification, as: :subject
+  has_one :notification, as: :subject, dependent: :destroy
 
   scope :with_users_avatars, -> { includes(receiver: :avatar_attachment, sender: :avatar_attachment) }
   # scope :not_request, -> { where(request: false) }

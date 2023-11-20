@@ -8,12 +8,13 @@ class Game < ApplicationRecord # :nodoc:
   belongs_to :creator, class_name: 'User', foreign_key: 'creator_id'
   belongs_to :winner, class_name: 'Participant', foreign_key: 'winner_id', optional: true
 
-  has_many :participants, dependent: :delete_all
-  has_many :game_invites, dependent: :delete_all
+  has_many :participants, dependent: :destroy
+  has_many :game_invites, dependent: :destroy
 
   after_create_commit { create_creator_participant }
 
   scope :with_participants, -> { includes(:participants) }
+  scope :on_going, -> { where(winner: nil) }
 
   def user_participants
     participants.pluck(:user_id).compact
