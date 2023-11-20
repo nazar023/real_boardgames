@@ -1,5 +1,11 @@
-<% if user && user.avatar.attached? %>
-    <%= link_to((image_tag 'empty-spot.png', class: "object-cover w-16 h-16", data: { controller: "hover", hover_avatar_value: "#{url_for(user&.avatar)}", action: "mouseover->hover#mouseOver mouseout->hover#mouseOut" }), game)%>
-<% else %>
-    <%= link_to((image_tag 'empty-spot.png', class: "object-cover w-16 h-16", data: { controller: "hover", hover_avatar_value: "/assets/guestavatar1.png", action: "mouseover->hover#mouseOver mouseout->hover#mouseOut" }), game)%>
-<% end %>
+<div data-controller = "hover" class = 'relative'>
+  <div class = "flex flex-row relative">
+    <% if user && user.avatar.attached? %>
+      <%= link_to((image_tag 'guestavatar1.png', class: "object-cover w-16 h-16 duration-500 relative opacity-10 hover:opacity-60", data: { hover_target: "image", hover_avatar_value: "#{url_for(user.avatar.blob)}" }), game)%>
+      <%= link_to((image_tag current_user.avatar, class: "object-cover w-16 h-16"), game, class: "absolute transition ease-in-out duration-500 opacity-0 hover:opacity-60", data: { hover_target: "image", action: "mouseover->hover#mouseOver mouseout->hover#mouseOut"}) if current_user%>
+    <% else %>
+      <%= link_to((image_tag 'guestavatar1.png', class: "object-cover w-16 h-16 duration-500 relative opacity-10 hover:opacity-60", data: { hover_target: "image", hover_avatar_value: "/assets/guestavatar1.png" }), game)%>
+    <% end %>
+
+  </div>
+</div>

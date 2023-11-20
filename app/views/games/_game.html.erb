@@ -1,40 +1,36 @@
-<div id="<%= dom_id game %>" class = 'flex flex-row w-5xl mb-8 py-8 border-2 rounded-lg justify-between'>
-  <div class = 'px-5 '>
-      <p class = 'pb-2'>
-      <% if game.winner_id.present?%>
-        <h3> Finished </h3>
-      <% end %>
-      </p class = 'pb-2'>
+<div id="<%= dom_id game %>" class = "inline-block bg-[#c73d40] w-full h-full mb-8 py-8 rounded-3xl justify-between">
+  <div class = 'px-5'>
+    <p class = 'pb-2'>
+    <% if game.winner_id.present?%>
+      <h3> Finished </h3>
+    <% end %>
+    </p>
 
 
-      <p class = 'pb-2'>
-        <%= link_to game.name, game, class: 'pb-2'%>
-      </p class = 'pb-2'>
+    <p class = 'pb-5 text-left max-w-md truncate font-serif text-4xl tracking-tight font-bold antialiased'>
+      <%= link_to game.name, game, class: 'pb-2'%>
+    </p>
 
-      <% if game.desc.present? %>
-        <p class = 'pb-2'>
-          <strong>Desc:</strong>
-          <%= game.desc %>
-        </p class = 'pb-2'>
-      <% end %>
+    <% if game.desc.present? %>
+      <p class = 'pb-8 line-clamp-6 leading-5 text-lg text-left max-w-xs '>
+        <%= game.desc %>
+      </p>
+    <% end %>
 
-
-        <p class = 'pb-2'>
-          <strong>Members:</strong>
-          <span id = 'participants_counter'> <%= game.participants.count %></span>/<%= game.members %>
-        </p class = 'pb-2'>
+    <p class = 'pb-2 text-lg'>
+      <span id = 'participants_counter'> <%= game.participants.count %></span>/<%= game.members %>
+    </p>
   </div>
 
-
-  <div id = 'participants-container' class = 'flex flex-row '>
-    <div id = "<%= dom_id game%>_participants" class = 'flex flex-row flex-wrap justify-center items-center'>
+  <div id = 'participants-container' class = 'flex flex-row px-5 pt-5'>
+    <div id = "<%= dom_id game%>_participants" class = 'flex flex-row flex-auto flex-wrap justify-center items-center '>
       <%= render game.participants %>
-    <% if game.participants.count < game.members%>
-      <div id = "<%= dom_id game%>_join_icon" class = 'flex flex-col justify-center items-center mr-4'>
-          <%= render 'participants/blank_avatar', user: user, game: game %>
-          Join?
-      </div>
-    <% end %>
+      <% if game.participants.count < game.members && !policy(game).current_user_participates? %>
+        <div id = "<%= dom_id game%>_join_icon" class = 'flex flex-col justify-center items-center mr-4'>
+            <%= render 'participants/blank_avatar', user: user, game: game %>
+            Join?
+        </div>
+      <% end %>
     </div>
   </div>
 </div>

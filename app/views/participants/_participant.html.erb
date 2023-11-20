@@ -3,10 +3,11 @@
   <%# 'flex flex-row' for game/id view %>
   <% if participant.user.present?%>
     <%= render "participants/autorized_avatar", user: participant.user, class: 'align-middle' %>
+    <%= participant.user.username.truncate(8) %>
   <% else %>
     <%= render "participants/guest_avatar" %>
+    <%= participant.name.truncate(8) %>
   <% end %>
 
-  <%= participant.name.truncate(8) %>
   </div>
 <% end %>

@@ -1,13 +1,26 @@
-<div class = 'mx-auto max-w-5xl py-8' >
-  Boardgames right now!
-</div>
 <%= turbo_stream_from 'games'%>
-<div id = 'games_conatiner' class = 'mx-auto max-w-6xl items-center justify-between p-6 lg:px-8 bg-black bg-opacity-40'>
+<div id = 'games_conatiner' class = 'flex flex-col p-6 px-8 lg:px-32 xl:px-40 2xl:px-52 '>
+  <div class = 'mx-auto py-8' >
+    Boardgames right now!
+  </div>
   <div class = ' justify-between p-6 '>
     <p class = ' text-right' > <%= link_to "New game", new_game_path%> </p>
   </div>
-  <div id = 'games-list' class = 'mx-auto max-w-3xl'>
+  <div id = 'games-list' class = 'sm:columns-1 md:columns-2 lg:columns-2 max-w-auto gap-20 justify-center'>
     <%= render @games, user: current_user%>
   </div>
-
 </div>
+<%#
+<div data-controller = 'hello'>
+  <button type = 'button' data-action = "hello#toggle click@window->hello#hide">
+  ds
+  </button>
+  <div data-hello-target = 'menu' class = 'transition ease-in-out delay-50 bg-slate-600'
+        data-transition-enter-from="opacity-0 scale-95"
+        data-transition-enter-to="opacity-100 scale-100"
+        data-transition-leave-from="opacity-100 scale-100"
+        data-transition-leave-to="opacity-0 scale-95">
+
+    dasd
+  </div>
+</div> %>

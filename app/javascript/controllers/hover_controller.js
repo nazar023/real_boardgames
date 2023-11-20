@@ -7,13 +7,13 @@ export default class extends Controller {
     avatar: String
   }
 
-  mouseOver() {
-    this.element.src = this.avatarValue;
-    this.element.classList.add('opacity-70')
+  async mouseOver() {
+    this.imageTarget.classList.add("opacity-5")
+    this.imageTarget.classList.remove("hover:opacity-10")
   }
 
-  mouseOut() {
-    this.element.classList.remove('opacity-70')
-    this.element.src = "/assets/empty-spot.png";
+  async mouseOut() {
+    this.imageTarget.classList.remove("opacity-5")
+    this.imageTarget.classList.add("hover:opacity-10")
   }
 }

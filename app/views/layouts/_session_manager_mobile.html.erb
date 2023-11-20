@@ -1,0 +1,83 @@
+  <% if !user_signed_in? %>
+    <li>
+      <%= link_to "Log in", new_session_path %> |  <%= link_to "Sign up", new_registration_path %>
+    </li>
+     <li>
+      <%= link_to games_path, class: "group text-black transition duration-300" do %>
+        <div>
+          Games
+          <span class="block max-w-0 group-hover:max-w-full transition-all duration-500 h-0.5 bg-black"></span>
+        </div>
+      <% end %>
+    </li>
+  <% else %>
+    <li class = 'flex justify-center pl-4'>
+      <%= turbo_stream_from "#{dom_id(current_user)}_notifications" %>
+      <div data-controller="notification-dropdown" class="relative pt-2">
+        <button id = 'notification_button' type="button"
+                data-action="notification-dropdown#toggle
+                            click@window->notification-dropdown#hide">
+        <% if current_user.notifications.present?%>
+          <div id = 'notification_pulsing_element' class = 'absolute right-0 animate-pulse bg-[#edc0c1] rounded-full h-2 w-2'> </div>
+        <% end %>
+          <%= image_tag('notifications.png', class: 'h-6 w-6')%>
+        </button>
+        <div
+          id = "notification_window"
+          data-notification-dropdown-target="menu"
+          class="hidden rounded-2xl transition transform origin-top-right duration-300 absolute w-56 right-0 bg-slate-500 py-5"
+          data-transition-enter-from="opacity-0 scale-95"
+          data-transition-enter-to="opacity-100 scale-100"
+          data-transition-leave-from="opacity-100 scale-100"
+          data-transition-leave-to="opacity-0 scale-95"
+        >
+          <div id = 'notifications' class = 'flex flex-col px-4'>
+              <div id = notifications_message>
+                You got <span id = notification_counter> <%= current_user.notifications.count %> </span> notifications
+              </div>
+              <% if policy(current_user).has_notifications? %>
+                <%= render "notifications/notifications", user: current_user, notifications: current_user.notifications%>
+              <% end %>
+          </div>
+        </div>
+      </div>
+
+      <div class="outline-none focus:outline-none pr-4 pl-6 text-black font-semibold rounded inline-flex items-center"> <%= current_user.username%> </div>
+
+      <div id = 'avatar' class = 'shrink-0'>
+        <% if current_user&.avatar&.attached? %>
+          <%= link_to(image_tag(current_user.avatar, class: "navbar_avatar"), "/id/#{current_user.id}") %>
+        <% else %>
+          <%= link_to(image_tag("guestavatar1.png", class: "navbar_avatar"), "/id/#{current_user.id}") %>
+        <% end %>
+      </div>
+    </li>
+
+    <li>
+      <%= link_to games_path, class: "group text-black transition duration-300" do %>
+        <div>
+          Games
+          <span class="block max-w-0 group-hover:max-w-full transition-all duration-500 h-0.5 bg-black"></span>
+        </div>
+      <% end %>
+    </li>
+
+    <li>
+      <%= link_to edit_registration_path(current_user), class: "group text-black transition duration-300" do %>
+        <div>
+          Edit
+          <span class="block max-w-0 group-hover:max-w-full transition-all duration-500 h-0.5 bg-black"></span>
+        </div>
+      <% end%>
+    </li>
+
+    <li>
+      <%= button_to session_path(current_user), method: :delete, class: "group text-black transition duration-300" do %>
+        <div>
+          Exit
+          <span class="block max-w-0 group-hover:max-w-full transition-all duration-500 h-0.5 bg-black"></span>
+        </div>
+      <% end%>
+    </li>
+
+  <% end %>

@@ -1,17 +1,30 @@
-<% if sender&.avatar&.attached? %>
-  <%=link_to (image_tag (sender.avatar),
-                     class: "avatar"),
-                     "/id/#{sender.id}",
-                     data: { turbo: :false } %>
-<% else %>
-  <%= link_to (image_tag "guestavatar1.png",
-                           class: "avatar"),
-                           "/id/#{sender.id}",
-                           data: { turbo: :false }%>
-<% end %>
-<%= sender.username%> invited you to play
+<div>
+  <div class = 'flex flex-row'>
 
-<%= link_to game.name, game, data: { turbo: :false }%>
+  <div id = 'avatar'>
+  <% if sender&.avatar&.attached? %>
+    <%=link_to (image_tag (sender.avatar),
+                      class: "avatar"),
+                      "/id/#{sender.id}",
+                      data: { turbo: :false } %>
+  <% else %>
+    <%= link_to (image_tag "guestavatar1.png",
+                            class: "avatar"),
+                            "/id/#{sender.id}",
+                            data: { turbo: :false }%>
+  <% end %>
+  </div>
 
-<%= button_to "Accpet", accept_invite_path(notification.id), data: { turbo: :false }%>
-<%= button_to "Decline", decline_invite_path(notification.id), method: :delete%>
+  <span id = 'text' class = 'pl-2'>
+    <%= sender.username%> invited you to play
+    <%= link_to game.name, game, data: { turbo: :false }%>
+  </span>
+
+  </div>
+
+  <div id = 'buttons' class = 'flex flex-row'>
+  <%= button_to "Accpet", accept_invite_path(notification.id), data: { turbo: :false }, class: 'transition ease-in-out delay-50 px-4 py-1 ml-16 mr-16 rounded-none bg-green-600 hover:scale-110 hover:bg-green-500 duration-300'%>
+
+  <%= button_to "Decline", decline_invite_path(notification.id), method: :delete, class: 'transition ease-in-out delay-50 px-4 py-1 mx-4 rounded-none bg-red-500 hover:scale-110 hover:bg-red-600 duration-300'%>
+  </div>
+</div>

@@ -1,0 +1,62 @@
+<div class = 'mx-auto max-w-6xl items-center justify-between p-6 lg:px-8 bg-black bg-opacity-40'>
+  <div class = 'flex flex-wrap columns-2 justify-between px-10 gap-5'>
+    <div id = 'column-1'>
+    <%= form_with model: @user, url: registrations_path, class: 'space-y-4' do |f| %>
+
+      <% if f.object.errors.any? %>
+        <% f.object.errors.full_messages.each do |message| %>
+        <div> <%= message%> </div>
+        <% end %>
+      <% end %>
+      <h2><%= f.label "Registration"%></h2>
+
+      <div class="field">
+        <%= f.label :email %><br />
+        <%= f.email_field :email %>
+      </div>
+
+      <div class="field">
+        <%= f.label :username %><br />
+        <%= f.text_field :username, class: "bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" %>
+      </div>
+
+      <div class="field">
+        <%= f.label :number %><br />
+        <%= f.text_field :number %>
+      </div>
+
+      <div class="field">
+        <%= f.label :password %> <br />
+        <%= f.password_field :password %>
+      </div>
+
+      <div class="field">
+        <%= f.label :password_confirmation %><br />
+        <%= f.password_field :password_confirmation %>
+      </div>
+
+      <div class="field">
+        <%= f.label :avatar %><br />
+        <%= f.file_field :avatar, accept: 'image/png,image/jpg,image/jpeg' ,class: "w-64" %>
+      </div>
+
+      <div>
+      <%= button_tag(type: 'submit', class: "submit actions relative inline-flex items-center justify-start inline-block px-5 py-3 overflow-hidden font-bold rounded-full group", id: 'validForm') do %>
+        <span class="w-32 h-32 rotate-45 translate-x-12 -translate-y-2 absolute left-0 top-0 bg-white opacity-[3%]"></span>
+        <span class="absolute top-0 left-0 w-48 h-48 -mt-1 transition-all duration-500 ease-in-out rotate-45 -translate-x-56 -translate-y-24 bg-white opacity-100 group-hover:-translate-x-8"></span>
+        <span class="relative w-full text-left text-white transition-colors duration-200 ease-in-out group-hover:text-gray-900">Join journey!</span>
+        <span class="absolute inset-0 border-2 border-white rounded-full"></span>
+      <% end %>
+      </div>
+
+    <% end %>
+    </div>
+
+    <div id = 'column-2' class = 'self-center'>
+      <div class = ' text-center'> Become one of the greatest warriors! </div>
+        <%= image_tag('mighty-warriors.gif', class: 'h-80 ')%>
+      </div>
+    </div>
+  </div>
+</div>
+

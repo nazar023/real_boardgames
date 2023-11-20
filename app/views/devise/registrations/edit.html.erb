@@ -3,7 +3,14 @@
   <h2>Edit <%= resource_name.to_s.humanize %></h2>
 
   <%= form_for(resource, as: resource_name, url: registration_path(resource_name), html: { method: :put }) do |f| %>
-    <%= render "devise/shared/error_messages", resource: resource %>
+
+    <%= f.object.errors.any? %>
+
+    <% if f.object.errors.any? %>
+      <% f.object.errors.full_messages.each do |message| %>
+      <div> <%= message%> </div>
+      <% end %>
+    <% end %>
 
     <div class="field">
       <strong> <%= f.label :avatar %></strong>
