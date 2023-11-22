@@ -10,6 +10,18 @@ class UserPolicy < ApplicationPolicy # :nodoc:
       record.friendships_reqs.find_by(receiver_id: record.id, sender_id: user.id).blank?
   end
 
+  def edit?
+    user?
+  end
+
+  def update?
+    edit?
+  end
+
+  def destroy?
+    edit?
+  end
+
   def user?
     profile_owner
   end
