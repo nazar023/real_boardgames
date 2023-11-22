@@ -24,7 +24,6 @@ RSpec.describe 'Game', type: :request do
   describe 'edit' do
     context 'add another user' do
       let(:user) { create(:user) }
-
       it 'gets success when creator' do
         sign_in game.creator
         get edit_game_path(game)

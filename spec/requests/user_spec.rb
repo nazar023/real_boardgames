@@ -9,12 +9,13 @@ RSpec.describe 'User', type: :request do
   describe 'get' do
     it 'edit when User ?' do
       sign_in user
-      get '/users/edit'
+      get "/registrations/#{user.id}/edit"
       expect(response).to have_http_status(:success)
     end
 
     it 'edit when not User ?' do
-      get '/users/edit'
+      sign_in user1
+      get "/registrations/#{user.id}/edit"
       expect(response).to have_http_status(:found)
     end
   end
