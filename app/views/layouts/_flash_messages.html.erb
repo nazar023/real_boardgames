@@ -1,5 +1,73 @@
 <% if notice.present? %>
-  <p class="notice", style ="color: green"><%= notice %></p>
+
+  <div
+  data-controller="flash-messages"
+  data-flash-messages-delay-value="2000"
+  class="absolute right-6 bottom-10 md:right-20 transition justify-center rounded-xl shadow-2xl p-4 bg-[#edbfc0] text-black transform duration-1000 hidden max-w-xs md:max-w-md w-full pointer-events-auto shadow-xs overflow-hidden"
+  data-transition-enter-from="opacity-0 translate-x-6"
+  data-transition-enter-to="opacity-100 translate-x-0"
+  data-transition-leave-from="opacity-100 translate-x-0"
+  data-transition-leave-to="opacity-0 translate-x-6"
+  >
+
+    <div class="flex items-center">
+      <svg viewBox="0 0 24 24" fill="none" class = "h-12 mt-0.5" xmlns="http://www.w3  .org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M16.0303 10.0303C16.3232 9.73744 16.3232 9.26256 16.0303 8.96967C15.7374 8.67678 15.2626 8.67678 14.9697 8.96967L10.5 13.4393L9.03033 11.9697C8.73744 11.6768 8.26256 11.6768 7.96967 11.9697C7.67678 12.2626 7.67678 12.7374 7.96967 13.0303L9.96967 15.0303C10.2626 15.3232 10.7374 15.3232 11.0303 15.0303L16.0303 10.0303Z" fill="#000000"></path> <path fill-rule="evenodd" clip-rule="evenodd" d="M12 1.25C6.06294 1.25 1.25 6.06294 1.25 12C1.25 17.9371 6.06294 22.75 12 22.75C17.9371 22.75 22.75 17.9371 22.75 12C22.75 6.06294 17.9371 1.25 12 1.25ZM2.75 12C2.75 6.89137 6.89137 2.75 12 2.75C17.1086 2.75 21.25 6.89137 21.25 12C21.25 17.1086 17.1086 21.25 12 21.25C6.89137 21.25 2.75 17.1086 2.75 12Z" fill="#000000"></path> </g></svg>
+
+
+      <div class="ml-3 w-0 flex-1 flex-wrap pt-0.5">
+        <p class="text-md font-medium line-clamp-2 text-gray-900 break-words">
+          <%= notice %>
+        </p>
+      </div>
+
+      <div class="ml-4 flex-shrink-0 flex place-self-start">
+        <button data-action="flash-messages#hide" >
+          <span class="sr-only">Close</span>
+          <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+            <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path>
+          </svg>
+        </button>
+      </div>
+    </div>
+
+
+  </div>
+
 <% elsif alert.present? %>
-  <p class="alert", style ="color: red"><%= alert %></p>
+
+
+  <div
+  data-controller="flash-messages"
+  data-flash-messages-delay-value="2000"
+  class="absolute right-6 bottom-10 md:right-20 transition justify-center rounded-xl shadow-2xl p-4 bg-[#edbfc0] text-black transform duration-1000 hidden max-w-xs md:max-w-md w-full pointer-events-auto shadow-xs overflow-hidden"
+  data-transition-enter-from="opacity-0 translate-x-6"
+  data-transition-enter-to="opacity-100 translate-x-0"
+  data-transition-leave-from="opacity-100 translate-x-0"
+  data-transition-leave-to="opacity-0 translate-x-6"
+  >
+
+    <div class="flex items-center">
+    <svg fill="#000000" viewBox="0 0 16 16" class = "h-12 mt-0.5" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"><title>icn/error</title><path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0-2A5 5 0 1 0 8 3a5 5 0 0 0 0 10zm0-9a1 1 0 0 1 1 1v3a1 1 0 1 1-2 0V5a1 1 0 0 1 1-1zm0 8a1 1 0 1 1 0-2 1 1 0 0 1 0 2z" id="a"></path></g></svg>
+
+      <div class="ml-3 w-0 flex-1 items-center flex-wrap pt-0.5">
+        <p class="text-md font-medium line-clamp-2 text-gray-900 break-words">
+          <%= alert %>
+        </p>
+      </div>
+
+      <div class="ml-4 flex-shrink-0 flex place-self-start">
+        <button data-action="flash-messages#hide" >
+          <span class="sr-only">Close</span>
+          <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+            <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path>
+          </svg>
+        </button>
+      </div>
+    </div>
+
+
+  </div>
+
+
 <% end %>
+
