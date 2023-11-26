@@ -15,12 +15,14 @@ class ApplicationController < ActionController::Base # :nodoc:
   def login(user)
     Current.user = user
     reset_session
+    cookies.encrypted[:user_id] = user.id
     session[:user_id] = user.id
   end
 
   def logout(user)
     Current.user = nil
     reset_session
+    cookies.delete(:user_id)
   end
 
   def current_user
