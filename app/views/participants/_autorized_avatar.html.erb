@@ -1,9 +1,18 @@
+<div data-controller = "popover"
+     class = "group inline-block relative">
 <% if user&.avatar&.attached? %>
-  <%=link_to (image_tag (user.avatar),
-                            class: "object-cover w-16 h-16"),
-                            "/id/#{user.id}", data: { turbo: :false } %>
+    <%=link_to (image_tag (user.avatar),
+                              class: "object-cover w-16 h-16"),
+                              "/id/#{user.id}", data: { action: "mouseenter->popover#show mouseout->popover#hide mouseleave->popover#hide" ,
+                                                        turbo: :false } %>
+    <%= render "profiles/mini_profile", user: user %>
+
 <% else %>
-  <%= link_to (image_tag "guestavatar1.png",
-                           class: "object-cover w-16 h-16"),
-                           "/id/#{user.id}", data: { turbo: :false }%>
+    <%= link_to (image_tag "guestavatar1.png",
+                            class: "object-cover w-16 h-16"),
+                            "/id/#{user.id}", data: { action: "mouseenter->popover#show mouseout->popover#hide mouseleave->popover#hide",
+                                                      turbo: :false }%>
+    <%= render "profiles/mini_profile", user: user %>
 <% end %>
+</div>
+

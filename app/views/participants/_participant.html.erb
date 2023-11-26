@@ -1,5 +1,5 @@
 <%= turbo_frame_tag dom_id(participant) do %>
-  <div class = 'flex flex-col justify-center items-center mr-4'>
+  <div class = 'flex flex-col justify-center relative items-center mr-4'>
   <%# 'flex flex-row' for game/id view %>
   <% if participant.user.present?%>
     <%= render "participants/autorized_avatar", user: participant.user, class: 'align-middle' %>

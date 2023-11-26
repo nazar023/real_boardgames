@@ -1,0 +1,18 @@
+<div data-popover-target = "card"
+     class = "max-w-sm rounded shadow-lg bg-white absolute opacity-0 transition delay-300 duration-400 ease-linear text-black pt-1 transform -left-24 z-20 origin-top min-w-32 "
+     style=" width: max-content;"
+>
+  <div class="px-6 py-4 flex">
+    <% if user.avatar.attached?%>
+      <%= image_tag user.avatar, class: "rounded-full object-cover h-16 w-16" %>
+    <% else %>
+      <%=image_tag "guestavatar1.png", class: "rounded-full object-cover w-16 h-16" %>
+    <% end%>
+    <div class="ml-4">
+      <div class="font-bold text-xl mb-2 text-black"> <%= user.username.truncate(18)%> </div>
+      <p class="text-gray-500 text-sm"> winrate - <%= user.winrate %>% </p>
+    </div>
+  </div>
+</div>
+
+
