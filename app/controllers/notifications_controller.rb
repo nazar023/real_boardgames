@@ -24,7 +24,6 @@ class NotificationsController < ApplicationController # :nodoc:
         # format.html { redirect_to @game_invite.game, notice: "Successfully send to #{@game_invite.receiver.username}" }
       end
     end
-
   end
 
   def accept_invite

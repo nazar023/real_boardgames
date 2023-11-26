@@ -5,7 +5,6 @@ export default class extends Dropdown {
 
   connect() {
     super.connect()
-    console.log('Notifications dropdown')
   }
 
   toggle(event) {

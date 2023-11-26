@@ -15,7 +15,7 @@ Rails.application.routes.draw do
 
   resources :games
 
-  root to: "application#home", as: :home
+  root to: 'home#home', as: :home
 
   namespace :api do
     namespace :v1 do

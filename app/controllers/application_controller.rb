@@ -5,11 +5,6 @@ class ApplicationController < ActionController::Base # :nodoc:
 
   rescue_from Pundit::NotAuthorizedError, with: :user_not_authorized
 
-
-  def home
-
-  end
-
   private
 
   def login(user)
