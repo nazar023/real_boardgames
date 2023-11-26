@@ -36,7 +36,7 @@ class GamePolicy < ApplicationPolicy # :nodoc:
   end
 
   def current_user_participates?
-    record.participants.pluck(:user_id).include?(user&.id)
+    !!user && record.participants.pluck(:user_id).include?(user&.id)
   end
 
   def finished?
