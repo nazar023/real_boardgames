@@ -12,12 +12,16 @@ export default class extends Controller {
 
   show()
   {
-    this.cardTarget.classList.remove("opacity-0");
+    var card = this.cardTarget
+    setTimeout(() => { card.classList.remove("invisible"); }, 10);
+    card.classList.remove("opacity-0");
   }
 
   hide()
   {
-    this.cardTarget.classList.add("opacity-0");
+    var card = this.cardTarget
+    card.classList.add("opacity-0");
+    setTimeout(() => { card.classList.add("invisible"); }, 410);
 
   }
 
