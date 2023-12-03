@@ -51,10 +51,10 @@
             </svg>
           </span>
         </p>
-        <ul class= "absolute text-black pt-1 transform -right-5 scale-0 group-hover:scale-100 transition duration-250 ease-in-out origin-top min-w-32">
-          <li> <%= link_to "Profile", user_profile_path(current_user.id), class: 'rounded-t-2xl text-left bg-gray-200 hover:bg-gray-400 py-2 px-4 text-black block whitespace-no-wrap w-28'%> </li>
-          <li> <%= link_to "Edit", edit_registration_path(current_user), class: 'bg-gray-200 hover:bg-gray-400 text-left py-2 px-4 block whitespace-no-wrap w-28'%> </li>
-          <li> <%= button_to "Exit", session_path(current_user), method: :delete, class: 'rounded-b-2xl bg-gray-200 hover:bg-gray-400 text-left py-2 px-4 block whitespace-no-wrap w-28'%> </li>
+        <ul class= "absolute text-black pt-1 transform -right-5 scale-0 group-hover:scale-100 transition duration-250 z-50 ease-in-out origin-top min-w-32">
+          <li> <%= link_to "Profile", user_profile_path(current_user.id), class: 'rounded-t-2xl text-left bg-gray-200 hover:bg-gray-400  py-2 px-4 text-black block whitespace-no-wrap w-28'%> </li>
+          <li> <%= link_to "Edit", edit_registration_path(current_user), class: 'bg-gray-200 hover:bg-gray-400  text-left py-2 px-4 block whitespace-no-wrap w-28'%> </li>
+          <li> <%= button_to "Exit", session_path(current_user), method: :delete, class: 'rounded-b-2xl bg-gray-200 hover:bg-gray-400  text-left py-2 px-4 block whitespace-no-wrap w-28'%> </li>
         </ul>
       </div>
     </div>

@@ -1,0 +1,60 @@
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+<meta http-equiv="Pragma" content="no-cache" />
+<meta http-equiv="Expires" content="0" />
+
+<div data-controller = "home"
+     data-action = "scroll@window->home#drawing scroll@window->home#checking"
+     class = "min-h-[2000px] flex gap-96 flex-col bg-cover container mx-auto relative">
+
+
+  <svg class = "absolute h-full -z-20 bottom-0 -top-32 w-96 mx-auto left-0 right-0 opacity-50 "><path data-home-target = "svgPath" class = "invisible" stroke="#ae3235" stroke-width="4px" stroke-dasharray="20, 10" fill="none" d="M268,106C293.6990093311958,156.98197064989517,319.39801866239156,207.96394129979035,282,250C244.6019813376084,292.03605870020965,144.10693468162947,325.1262054507337,89,388C33.89306531837054,450.8737945492663,24.174242611090563,543.5312368972745,18,666C11.82575738890944,788.4687631027255,9.196094874008299,940.7488469601676,13,1056C16.8039051259917,1171.2511530398324,27.04137789287624,1249.4733752620546,71,1351C114.95862210712376,1452.5266247379454,192.6383935544868,1577.3576519916141,242,1659C291.3616064455132,1740.6423480083859,312.40504788917667,1779.0960167714886,268,1879C223.59495211082336,1978.9039832285114,113.74141488880667,2140.258280922432,88,2337C62.25858511119333,2533.741719077568,120.62929255559666,2765.8708595387843,179,2998"></path>
+  </svg>
+
+
+  <div class = "pt-32 bold text-7xl fade-up text-center">
+    Welcome adventurer
+  </div>
+
+    <div class = "text-start opacity-0"
+        data-home-target = "text1"
+    >
+      Do you seek wealth ?
+    </div>
+
+    <div class = "text-end my-64 opacity-0"
+        data-home-target = "text2"
+    >
+      Or glory ?
+    </div>
+
+  <div class = " bottom-0 md:bottom-32  w-full">
+    <div class = "flex flex-row flex-wrap justify-center gap-64 mx-auto">
+      <div class = "flex flex-col bg-gray-500 text-center border-4 border-black w-max h-max">
+        <p>Lots of fights</p>
+        <%= image_tag "bg-warriors-low.gif", class: "h-full w-full object-cover"%>
+      </div>
+
+      <div class = "flex flex-col bg-gray-500 text-center border-4 border-black w-max h-max">
+        <p>Loyal knights</p>
+        <%= image_tag "white-knight.gif", class: "h-full w-full object-cover"%>
+      </div>
+
+      <div class = "flex flex-col bg-gray-500 object-cover text-center border-4 border-black w-max h-max">
+        <p>And friends</p>
+        <%= image_tag "red-knight.gif", class: "h-full w-full object-cover"%>
+      </div>
+    </div>
+
+    <div class = "text-center my-24 opacity-0"
+         data-home-target = "text3"
+    >
+      <p>Are waiting for you!</p>
+      <%= link_to "Join", games_path, class: "underline hover:text-gray-700"%>
+    </div>
+  </div>
+
+
+</div>
+
+<%# bg-[url('bg-warriors-one.gif')] %>
+<%# Lots of knight, loyal knight, and friends %>
