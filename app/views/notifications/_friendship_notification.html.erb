@@ -1,9 +1,9 @@
 <div class = 'py-2'>
   <div id = "<%= dom_id(friendship.sender)%>_avatar" class = 'flex flex-row items-center '>
   <% if friendship.sender&.avatar&.attached? %>
-      <%= link_to (image_tag friendship.sender.avatar, class: "avatar"), "/id/#{friendship.sender_id}"%>
+      <%= link_to (image_tag friendship.sender.avatar, class: "avatar"), "/id/#{friendship.sender_id}", data: {turbo: false}%>
     <% else %>
-      <%= link_to (image_tag "guestavatar1.png", class: "avatar"), "/id/#{friendship.sender_id}" %>
+      <%= link_to (image_tag "guestavatar1.png", class: "avatar"), "/id/#{friendship.sender_id}", data: {turbo: false} %>
     <% end %>
   <span class = 'ml-2'> <%= friendship.sender.username %> send you a friendship request! </span>
   </div>
