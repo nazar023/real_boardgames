@@ -44,4 +44,10 @@ Rails.application.routes.draw do
   post  '/frienships/create', to: 'notifications#send_friendship_request', as: :send_friendship_request
   patch '/friendships/:id/accept', to: 'notifications#accept_friendship', as: :accept_friendship
   patch '/friendships/:id/decline', to: 'notifications#decline_friendship', as: :decline_friendship
+
+
+  # oauth
+
+  get '/auth/discord/callback', to: 'omniauth#discord', as: :discord_login
+  get '/auth/github/callback', to: 'omniauth#github', as: :github_login
 end

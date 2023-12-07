@@ -2,7 +2,7 @@
 
 class User < ApplicationRecord # :nodoc:
   has_secure_password
-  validates :email, :username, :number, presence: true
+  validates :email, :username, presence: true
 
   normalizes :email, with: ->(email) { email.strip.downcase }
   normalizes :number, with: ->(number) { number.strip }
@@ -29,7 +29,6 @@ class User < ApplicationRecord # :nodoc:
 
   has_many :game_invites, foreign_key: 'receiver_id', dependent: :destroy
 
-
   def friendships_users
     friendships.map do |friendship|
       friendship.sender.id == id ? friendship.receiver : friendship.sender
@@ -40,7 +39,6 @@ class User < ApplicationRecord # :nodoc:
     value = ((wins_count / Float(games_count)) * 100).round(1)
     value.nan? ? 0 : value
   end
-
 
   def send_friendship_request(user)
     Friendship.create!(sender_id: id, receiver_id: user.id)
@@ -66,5 +64,4 @@ class User < ApplicationRecord # :nodoc:
     eligible_friendships -= friends_who_participates_in_game(game)
     friendships.where(receiver_id: eligible_friendships).or(friendships.where(sender_id: eligible_friendships))
   end
-
 end

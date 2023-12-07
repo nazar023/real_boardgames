@@ -80,7 +80,8 @@ gem "pundit", "~> 2.3"
 
 # TODO: Replace Active Storage with Shrine gem
 
-# gem "noticed", "~> 1.6"
-
-
 gem "tailwindcss-rails", "~> 2.0"
+
+gem 'omniauth-github'
+gem 'omniauth-discord'
+gem "omniauth-rails_csrf_protection"
