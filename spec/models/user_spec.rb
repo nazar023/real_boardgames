@@ -6,7 +6,6 @@ RSpec.describe 'User', type: :model do
   describe 'validations' do
     subject { create(:user) }
     it { should validate_presence_of(:username) }
-    it { should validate_presence_of(:number) }
     it { should validate_presence_of(:email) }
     it { should validate_presence_of(:password) }
     it { should have_many(:games) }
@@ -101,6 +100,25 @@ RSpec.describe 'User', type: :model do
       expect(creator.find_eligible_friends_for_game(game)).to include(friendship3)
       expect(friendship2.sender.find_eligible_friends_for_game(game).count).to eq(0)
       expect(friendship2.sender.find_eligible_friends_for_game(game)).to be_blank
+    end
+  end
+
+  describe '#login_from_omniauth' do
+    it 'logins with discord' do
+      current_user = sign_in_omniauth get_omniauth_discord
+
+      expect(current_user).to be_persisted
+      expect(current_user.email).to be_present
+      expect(current_user.username).to be_present
+      expect(current_user.avatar).to be_attached
+    end
+
+    it 'handling bad input' do
+      current_user = sign_in_omniauth get_bad_email_omniauth_github
+      expect(current_user).to be_blank
+
+      current_user = sign_in_omniauth get_bad_provider_omniauth_github
+      expect(current_user).to be_blank
     end
   end
   # try shoulda_matchers

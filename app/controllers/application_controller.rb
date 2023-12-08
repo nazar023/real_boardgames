@@ -14,6 +14,28 @@ class ApplicationController < ActionController::Base # :nodoc:
     session[:user_id] = user.id
   end
 
+  def login_omniauth(auth_hash)
+    provider = auth_hash.provider
+
+    email = auth_hash.info.email
+    oauth_failure unless email
+
+    @user = User.find_or_create_by(email:)
+
+    unless @user.persisted?
+      case provider
+      when 'discord'
+        assign_user_variables(auth_hash.info.name, auth_hash.info.image)
+      when 'github'
+        assign_user_variables(auth_hash.info.nickname, auth_hash.info.image)
+      else
+        oauth_failure
+      end
+    end
+
+    login @user
+  end
+
   def logout(user)
     Current.user = nil
     reset_session
@@ -34,9 +56,25 @@ class ApplicationController < ActionController::Base # :nodoc:
   end
   helper_method :user_signed_in?
 
-
   def user_not_authorized
     flash[:alert] = 'You are not authorized to perform this action.'
     redirect_back(fallback_location: home_path)
   end
+
+  def assign_user_variables(username, url)
+    @user.username = username
+    @user.password = Digest::MD5.hexdigest(SecureRandom.hex)
+
+    if url.present?
+      downloaded_image = URI.parse(url).open
+      @user.avatar.attach(io: downloaded_image, filename: 'foo.jpg')
+    end
+
+    oauth_failure unless @user.save
+  end
+
+  def oauth_failure
+    redirect_to home_path, alert: 'Something went wrong', status: :found
+  end
+
 end
