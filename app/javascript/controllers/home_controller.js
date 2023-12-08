@@ -16,7 +16,15 @@ export default class extends Controller {
     length = this.svgPathTarget.getTotalLength()
     this.svgPathTarget.style.strokeDasharray = length;
     this.svgPathTarget.style.strokeDashoffset = length;
-    var scrollpercent = (document.body.scrollTop + document.documentElement.scrollTop) / (document.documentElement.scrollHeight - document.documentElement.clientHeight);
+
+    var clientHeightCommon;
+
+    if (document.documentElement.clientWidth >= 1800)
+      clientHeightCommon = document.documentElement.clientHeight;
+    else
+      clientHeightCommon = 1700;
+
+    var scrollpercent = (document.body.scrollTop + document.documentElement.scrollTop) / (document.documentElement.scrollHeight - clientHeightCommon);
     var draw = length * scrollpercent;
     // Reverse the drawing when scroll upwards
     this.svgPathTarget.style.strokeDashoffset = length - draw;
