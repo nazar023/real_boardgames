@@ -48,6 +48,19 @@
   animation: fade-left 2s
 }
 
+.blink
+{
+  animation: blink 8s infinite
+}
+
+ @keyframes blink{
+  0%, 24%, 27%, 100%{
+    transform: scaleY(1);
+  }
+  25%, 26%{
+    transform: scaleY(0);
+  }
+}
 
 @keyframes fade-up
 {
@@ -61,6 +74,7 @@
     transform: translateY(0px) scale(1);
   }
 }
+
 
 @keyframes fade-down
 {
@@ -98,5 +112,83 @@
   100%{
     opacity: 1;
     transform: translateX(0px) scale(1);
+  }
+}
+
+@keyframes live-fire
+{
+  0%,100%{
+    transform: rotate(-45deg) scale(1.5,1.5);
+  }
+
+  25%{
+    transform: rotate(-50deg) scale(1.5,1.5);
+  }
+
+  75%{
+    transform: rotate(-40deg) scale(1.5,1.5);
+  }
+
+}
+
+.flame {
+  bottom: 0;
+  position: absolute;
+  border-bottom-right-radius: 50%;
+  border-bottom-left-radius: 50%;
+  border-top-left-radius: 50%;
+  animation: live-fire 10s infinite;
+}
+
+.white {
+  left: 15px;
+  bottom: -4px;
+  width: 40px;
+  height: 40px;
+  background: white;
+  box-shadow: 0px 0px 9px 4px white;
+}
+
+.yellow {
+  left: 15px;
+  width: 40px;
+  height: 40px;
+  background: #b35d5e;
+  box-shadow: 0px 0px 9px 4px #b35d5e;
+}
+
+.orange {
+  left: 10px;
+  width: 50px;
+  height: 50px;
+  background: #c73d40;
+  box-shadow: 0px 0px 9px 4px #c73d40;
+}
+
+.red {
+  left: 5px;
+  width: 60px;
+  height: 60px;
+  background: #971e1e;
+  box-shadow: 0px 0px 5px 4px #971e1e;
+}
+
+.fire-hidden
+{
+  transform: translateY(120px);
+}
+
+.fire-out-animation
+{
+  animation: appearing 500ms forwards;
+}
+
+@keyframes appearing{
+  0%{
+    transform: translateY(120px);
+  }
+
+  100%{
+    transform: translateY(0px);
   }
 }
