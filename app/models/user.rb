@@ -29,6 +29,10 @@ class User < ApplicationRecord # :nodoc:
 
   has_many :game_invites, foreign_key: 'receiver_id', dependent: :destroy
 
+  generates_token_for (:password_reset), expires_in: 15.minutes do
+    password_salt&.last(10)
+  end
+
   def friendships_users
     friendships.map do |friendship|
       friendship.sender.id == id ? friendship.receiver : friendship.sender

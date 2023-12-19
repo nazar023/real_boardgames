@@ -9,7 +9,7 @@ Rails.application.routes.draw do
   resources :registrations
   resources :sessions
   resources :password
-  resources :password_reset
+  resource :password_reset
 
   patch '/id/:id/edit', to: 'registrations#update', as: :edit_user_info
 

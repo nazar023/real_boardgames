@@ -7,6 +7,10 @@ class ApplicationController < ActionController::Base # :nodoc:
 
   private
 
+  def authenticate_user!
+    redirect_to home_path, alert: 'Log in to perform this action' unless user_signed_in?
+  end
+
   def login(user)
     Current.user = user
     reset_session
