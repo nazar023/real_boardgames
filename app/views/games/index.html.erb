@@ -15,12 +15,13 @@
      class = "ml-12 mb-12 w-20 fixed bottom-0 fire-hidden translate-y-32 "
      data-little-fire-man-target = 'anchor'
      data-action = "mouseover->little-fire-man#appear"
+     draggable = "false"
 >
   <div class = "bg-black blink w-5 h-5 z-50 absolute rounded-3xl bottom-0">
-    <%= image_tag "eye.jpg", class: "rounded-full h-4 w-4 aboslute m-auto p-auto bottom-0", data: { little_fire_man_target: "eye"} %>
+    <%= image_tag "eye.jpg", class: "rounded-full h-4 w-4 aboslute m-auto p-auto bottom-0", data: { little_fire_man_target: "eye"}, draggable: false %>
   </div>
   <div class = "bg-black blink w-5 h-5 z-50 absolute rounded-3xl bottom-0 right-0">
-    <%= image_tag "eye.jpg", class: "rounded-full h-4 w-4 aboslute m-auto p-auto bottom-0", data: { little_fire_man_target: "eye"} %>
+    <%= image_tag "eye.jpg", class: "rounded-full h-4 w-4 aboslute m-auto p-auto bottom-0", data: { little_fire_man_target: "eye"}, draggable: false %>
   </div>
   <div class="red flame"></div>
   <div class="orange flame"></div>
