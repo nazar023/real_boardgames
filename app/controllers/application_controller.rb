@@ -8,7 +8,7 @@ class ApplicationController < ActionController::Base # :nodoc:
   private
 
   def authenticate_user!
-    redirect_to home_path, alert: 'Log in to perform this action' unless user_signed_in?
+    redirect_to root_path, alert: 'Log in to perform this action' unless user_signed_in?
   end
 
   def login(user)
@@ -62,7 +62,7 @@ class ApplicationController < ActionController::Base # :nodoc:
 
   def user_not_authorized
     flash[:alert] = 'You are not authorized to perform this action.'
-    redirect_back(fallback_location: home_path)
+    redirect_back(fallback_location: root_path)
   end
 
   def assign_user_variables(username, url)
@@ -78,7 +78,7 @@ class ApplicationController < ActionController::Base # :nodoc:
   end
 
   def oauth_failure
-    redirect_to home_path, alert: 'Something went wrong', status: :found
+    redirect_to root_path, alert: 'Something went wrong', status: :found
   end
 
 end

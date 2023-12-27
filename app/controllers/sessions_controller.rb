@@ -11,7 +11,7 @@ class SessionsController < ApplicationController # :nodoc:
 
     if user = User.authenticate_by(email: params[:email], password: params[:password])
       login user
-      redirect_to home_path
+      redirect_to root_path
     else
       flash[:alert] = 'Wrong email or password'
       render :new, status: :unprocessable_entity
@@ -21,6 +21,6 @@ class SessionsController < ApplicationController # :nodoc:
   def destroy
     logout current_user
     flash[:notice] = 'Signed out successfully'
-    redirect_to home_path
+    redirect_to root_path
   end
 end

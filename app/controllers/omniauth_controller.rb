@@ -7,17 +7,17 @@ class OmniauthController < ApplicationController # :nodoc:
     auth_hash = request.env['omniauth.auth']
     login_omniauth auth_hash
 
-    redirect_to home_path, notice: 'Signed in successfully'
+    redirect_to root_path, notice: 'Signed in successfully'
   end
 
   def github
     auth_hash = request.env['omniauth.auth']
     login_omniauth auth_hash
 
-    redirect_to home_path, notice: 'Signed in successfully'
+    redirect_to root_path, notice: 'Signed in successfully'
   end
 
   def oauth_failure
-    redirect_to home_path, alert: 'Something went wrong', status: :found
+    redirect_to root_path, alert: 'Something went wrong', status: :found
   end
 end

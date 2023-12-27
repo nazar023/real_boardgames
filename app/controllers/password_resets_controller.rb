@@ -14,7 +14,7 @@ class PasswordResetsController < ApplicationController # :nodoc:
         token: user.generate_token_for(:password_reset)
       ).password_reset.deliver_later
     end
-    redirect_to home_path, notice: 'Check your email to reset password'
+    redirect_to root_path, notice: 'Check your email to reset password'
   end
 
   def edit

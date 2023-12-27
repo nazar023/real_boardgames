@@ -11,7 +11,7 @@ class PasswordController < ApplicationController # :nodoc:
   def update
     authorize @user
     if(@user.update(password_params))
-      redirect_to home_path, notice: 'Updated successfully'
+      redirect_to root_path, notice: 'Updated successfully'
     else
       render :edit, status: :unprocessable_entity
     end

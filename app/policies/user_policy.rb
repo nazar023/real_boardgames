@@ -34,6 +34,10 @@ class UserPolicy < ApplicationPolicy # :nodoc:
     profile_owner && record.notifications.present?
   end
 
+  def has_number?
+    user&.number.present?
+  end
+
 
   private
 

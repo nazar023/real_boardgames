@@ -25,6 +25,7 @@ class GamesController < ApplicationController # :nodoc:
   # GET /games/new
   def new
     authorize Game
+    authorize current_user, :has_number?
     @game = Game.new
   end
 
