@@ -7,7 +7,7 @@
 
     <div id = 'navbar-buttons' class = 'hidden md:flex flex-auto md:ml-8 lg:ml-12 xl:ml-20 gap-x-10 shrink-0'>
 
-      <%= link_to home_path, class: "group text-black transition duration-300" do %>
+      <%= link_to root_path, class: "group text-black transition duration-300" do %>
       <div>Home</div>
       <span class="block max-w-0 group-hover:max-w-full transition-all duration-500 h-0.5 bg-black"></span>
       <% end %>
@@ -17,9 +17,10 @@
         <span class="block max-w-0 group-hover:max-w-full transition-all duration-500 h-0.5 bg-black"></span>
       <% end %>
 
-      <div>
-      Store
-      </div>
+      <%= link_to pricing_path, class: "group text-black transition duration-300" do %>
+        <div>Shop</div>
+        <span class="block max-w-0 group-hover:max-w-full transition-all duration-500 h-0.5 bg-black"></span>
+      <% end %>
 
       <div>
       About us

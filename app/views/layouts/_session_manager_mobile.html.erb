@@ -63,6 +63,13 @@
     </li>
 
     <li>
+      <%= link_to pricing_path, class: "group text-black transition duration-300" do %>
+        <div>Shop</div>
+        <span class="block max-w-0 group-hover:max-w-full transition-all duration-500 h-0.5 bg-black"></span>
+      <% end %>
+    </li>
+
+    <li>
       <%= link_to edit_registration_path(current_user), class: "group text-black transition duration-300" do %>
         <div>
           Edit
@@ -70,6 +77,7 @@
         </div>
       <% end%>
     </li>
+
 
     <li>
       <%= button_to session_path(current_user), method: :delete, class: "group text-black transition duration-300" do %>

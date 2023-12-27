@@ -15,7 +15,7 @@ Rails.application.routes.draw do
 
   resources :games
 
-  root to: 'home#home', as: :home
+  root to: 'home#home'
 
   namespace :api do
     namespace :v1 do
@@ -45,9 +45,16 @@ Rails.application.routes.draw do
   patch '/friendships/:id/accept', to: 'notifications#accept_friendship', as: :accept_friendship
   patch '/friendships/:id/decline', to: 'notifications#decline_friendship', as: :decline_friendship
 
-
   # oauth
-
   get '/auth/discord/callback', to: 'omniauth#discord', as: :discord_login
   get '/auth/github/callback', to: 'omniauth#github', as: :github_login
+
+  # webhooks
+
+  get 'pricing', to: 'stripe/checkout#pricing'
+  post 'stripe/webhooks', to: 'stripe/webhooks#create'
+  post 'stripe/checkout', to: 'stripe/checkout#create'
+  get 'stripe/success', to: 'stripe/checkout#success'
+  get 'stripe/failure', to: 'stripe/checkout#failure'
+  post 'stripe/billing_portal', to: 'stripe/billing_portal#create'
 end

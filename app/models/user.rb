@@ -11,9 +11,12 @@ class User < ApplicationRecord # :nodoc:
   has_one_attached :avatar, dependent: :destroy
   has_many :participants, dependent: :destroy
   has_many :notifications, dependent: :destroy
-  has_many :api_tokens
+  has_many :api_tokens, dependent: :destroy
   enum status: %i[offline online]
+  enum subscription_type: %i[no_subscription knight king]
 
+  after_create { add_stripe_customer_id }
+  before_destroy { delete_stripe_customer }
 
   has_many :friendships, ->(user) { unscope(where: :sender_id).where(status: :accepted).where('sender_id = ? OR receiver_id = ?', user.id, user.id) }, class_name: 'Friendship',
                                                                                                                                                        foreign_key: 'sender_id',
@@ -67,5 +70,15 @@ class User < ApplicationRecord # :nodoc:
     eligible_friendships -= invited_to_game
     eligible_friendships -= friends_who_participates_in_game(game)
     friendships.where(receiver_id: eligible_friendships).or(friendships.where(sender_id: eligible_friendships))
+  end
+
+  private
+
+  def add_stripe_customer_id
+    update(stripe_customer_id: Stripe::Customer.create(email:))
+  end
+
+  def delete_stripe_customer
+    Stripe::Customer.delete(stripe_customer_id)
   end
 end

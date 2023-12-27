@@ -9,7 +9,12 @@
       <%=image_tag "guestavatar1.png", class: "rounded-full object-cover w-16 h-16" %>
     <% end%>
     <div class="ml-4">
-      <div class="font-bold text-xl mb-2 text-black"> <%= user.username.truncate(18)%> </div>
+      <div class="flex flex-row font-bold text-xl mb-2 text-black">
+        <% if user.king? %>
+          <%= image_tag "crown.png", class: "h-4 w-4 self-center"%>
+        <% end %>
+        <%= user.username.truncate(18)%>
+      </div>
       <p class="text-gray-500 text-sm"> winrate - <%= user.winrate %>% </p>
     </div>
   </div>

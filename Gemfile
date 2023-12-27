@@ -85,3 +85,7 @@ gem "tailwindcss-rails", "~> 2.0"
 gem 'omniauth-github'
 gem 'omniauth-discord'
 gem "omniauth-rails_csrf_protection"
+
+# Stripe
+
+gem 'stripe'

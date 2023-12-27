@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2023_10_26_121725) do
+ActiveRecord::Schema[7.1].define(version: 2023_12_27_192539) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -117,6 +117,10 @@ ActiveRecord::Schema[7.1].define(version: 2023_10_26_121725) do
     t.integer "wins_count", default: 0
     t.integer "status", default: 0
     t.datetime "last_time_online_at", precision: nil, default: "2023-10-26 12:27:56"
+    t.string "stripe_customer_id"
+    t.string "subscription_status"
+    t.integer "subscription_type", default: 0
+    t.datetime "subscription_ends_at"
   end
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
