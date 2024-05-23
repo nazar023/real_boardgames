@@ -42,7 +42,7 @@ class GamesController < ApplicationController # :nodoc:
     @user = current_user
 
     respond_to do |format|
-      if @game.save
+      if @game.save && verify_recaptcha(model: @game)
         # format.turbo_stream
         format.html { redirect_to game_url(@game), notice: 'Game was successfully created.' }
         # format.turbo_stream
