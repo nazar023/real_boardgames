@@ -92,4 +92,5 @@ gem 'stripe'
 
 # invisible-captcha
 
-gem 'invisible_captcha'
+# gem 'invisible_captcha'
+gem "recaptcha"
