@@ -121,6 +121,8 @@ GEM
     importmap-rails (1.2.1)
       actionpack (>= 6.0.0)
       railties (>= 6.0.0)
+    invisible_captcha (2.3.0)
+      rails (>= 5.2)
     io-console (0.6.0)
     irb (1.7.0)
       reline (>= 0.3.0)
@@ -310,6 +312,7 @@ DEPENDENCIES
   debug
   factory_bot_rails
   importmap-rails
+  invisible_captcha
   jbuilder
   omniauth-discord
   omniauth-github

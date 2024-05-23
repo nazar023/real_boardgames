@@ -89,3 +89,7 @@ gem "omniauth-rails_csrf_protection"
 # Stripe
 
 gem 'stripe'
+
+# invisible-captcha
+
+gem 'invisible_captcha'
